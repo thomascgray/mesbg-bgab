@@ -1,6 +1,7 @@
 export const wargear = {
   Dagger: { name: "Dagger" },
   Bow: { name: "Bow" },
+  Longbow: { name: "Longbow" },
   HornOfGondor: { name: "HornOfGondor" },
   TheOneRing: { name: "The One Ring" },
   MithrilCoat: { name: "Mithril Coat" },
@@ -22,6 +23,7 @@ export const wargear = {
   HandAndAHalfSword: { name: "HandAndAHalfSword" },
   HandAndAHalfClub: { name: "HandAndAHalfClub" },
   BannerOfArwenEvenstar: { name: "BannerOfArwenEvenstar" },
+  TheBannerOfMinasTirith: { name: "TheBannerOfMinasTirith" },
   HeavyDwarfArmour: { name: "HeavyDwarfArmour" },
   MasterForgedTwoHandedAxe: {
     name: "MasterForgedTwoHandedAxe",
@@ -48,6 +50,9 @@ export const wargear = {
   ArmouredHorse: { name: "ArmouredHorse" },
   Horse: { name: "Horse" },
   Pony: { name: "Pony" },
+  WhiteSwordOfGondor: { name: "WhiteSwordOfGondor" },
+  SwapSpearForLongbow: { name: "SwapSpearForLongbow" },
+  SwapSpearForBanner: { name: "SwapSpearForBanner" },
   AndurilFlameOfTheWest: {
     name: "Anduril Flame Of The West",
   },

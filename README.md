@@ -1,9 +1,10 @@
-Middle Earth Strategy Battle Game
-Brother's Gray - Army Builder
+# The MESBG Brother's Gray Army Builder
 
-VERY WIP, check back soon
+### _An army list builder for the Middle Earth Strategy Battle Game_
 
-Features:
+**VERY WIP, check back soon**
+
+Features (eventually):
 
 - Accessible, clean, modern interface
 - Works well on mobile
