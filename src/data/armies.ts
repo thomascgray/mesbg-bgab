@@ -16,7 +16,15 @@ export const armies = {
   },
   TheShire: { name: "TheShire", mayField: [] },
   TheRangers: { name: "TheRangers", mayField: [] },
-  Numenor: { name: "Numenor", mayField: [] },
+  Numenor: {
+    name: "Numenor",
+    mayField: [
+      models.ElendilHighKingOfGondorAndArnor,
+      models.Isildur,
+      models.CaptainOfNumenor,
+      models.WarriorOfNumenor,
+    ],
+  },
   MinisTirith: { name: "MinisTirith", mayField: [] },
   TheFiefdoms: { name: "TheFiefdoms", mayField: [] },
   TheDeadOfDunharrow: { name: "TheDeadOfDunharrow", mayField: [] },

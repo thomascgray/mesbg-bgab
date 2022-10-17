@@ -24,6 +24,7 @@ export interface iModel {
 export interface iModelInArmy extends iModel {
   id: string;
   equippedWargear: any[];
+  quantity: number;
 }
 
 export interface iHeroModelInArmy extends iModelInArmy {

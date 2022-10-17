@@ -5,10 +5,14 @@ import * as _ from "lodash";
 import { nanoid } from "nanoid";
 import { produce } from "immer";
 import { iWargear } from "./data/wargear";
+import { HeroBuilder } from "./components/HeroBuilder";
+import { isWargearOptionEquipped } from "./utils";
+
+import "./index.css";
 
 function App() {
   const [selectedAddForceArmyKey, setSelectedAddForceArmyKey] =
-    useState<ArmyKey>(Object.keys(armies)[0] as ArmyKey);
+    useState<ArmyKey>("Numenor");
 
   const [armyForces, setArmyForces] = useState<ArmyKey[]>([]);
 
@@ -37,6 +41,7 @@ function App() {
           ...warriorModel,
           equippedWargear: [],
           id: nanoid(),
+          quantity: 1,
         });
 
         return draft;
@@ -80,151 +85,206 @@ function App() {
 
   const toggleWargearToWarbandWarrior = (
     isOn: boolean,
-    wargear: any,
-    warbandWarrior: any,
-    hero: any
-  ) => {};
-
-  const isWargearOptionEquipped = (
-    wargearOption: iWargear,
-    equippedWargear: iWargear[]
+    wargear: iWargear,
+    warbandWarrior: iModelInArmy,
+    hero: iHeroModelInArmy
   ) => {
-    const keysOfEquippedWargear = equippedWargear.map((w) => w.name);
-    return keysOfEquippedWargear.includes(wargearOption.name);
+    if (isOn) {
+      setYourArmyHeroes(
+        produce(yourArmyHeroes, (draft) => {
+          const heroIndex = draft.findIndex((h) => h.id === hero.id);
+          const warbandWarriorIndex = draft[heroIndex].warband.findIndex(
+            (x) => x.id === warbandWarrior.id
+          );
+
+          draft[heroIndex].warband[warbandWarriorIndex].equippedWargear.push({
+            ...wargear,
+          });
+
+          return draft;
+        })
+      );
+    } else {
+      setYourArmyHeroes(
+        produce(yourArmyHeroes, (draft) => {
+          const heroIndex = draft.findIndex((h) => h.id === hero.id);
+          const warbandWarriorIndex = draft[heroIndex].warband.findIndex(
+            (x) => x.id === warbandWarrior.id
+          );
+
+          draft[heroIndex].warband[warbandWarriorIndex].equippedWargear = draft[
+            heroIndex
+          ].warband[warbandWarriorIndex].equippedWargear.filter(
+            (w) => w.name !== wargear.name
+          );
+
+          return draft;
+        })
+      );
+    }
+  };
+
+  const increaseWarbandWarriorQuantity = (
+    warrior: iModelInArmy,
+    hero: iHeroModelInArmy
+  ) => {
+    setYourArmyHeroes(
+      produce(yourArmyHeroes, (draft) => {
+        const heroIndex = draft.findIndex((h) => h.id === hero.id);
+        const warbandWarriorIndex = draft[heroIndex].warband.findIndex(
+          (x) => x.id === warrior.id
+        );
+
+        draft[heroIndex].warband[warbandWarriorIndex].quantity += 1;
+
+        return draft;
+      })
+    );
+  };
+
+  const decreaseWarbandWarriorQuantity = (
+    warrior: iModelInArmy,
+    hero: iHeroModelInArmy
+  ) => {
+    setYourArmyHeroes(
+      produce(yourArmyHeroes, (draft) => {
+        const heroIndex = draft.findIndex((h) => h.id === hero.id);
+        const warbandWarriorIndex = draft[heroIndex].warband.findIndex(
+          (x) => x.id === warrior.id
+        );
+
+        draft[heroIndex].warband[warbandWarriorIndex].quantity -= 1;
+
+        return draft;
+      })
+    );
   };
 
   return (
-    <div>
-      <div className="add-force">
-        <select
-          onChange={(e) => {
-            setSelectedAddForceArmyKey(e.currentTarget.value as ArmyKey);
-          }}
-        >
-          {Object.keys(armies).map((ak) => {
-            return (
-              <option key={ak} value={ak}>
-                {armies[ak as ArmyKey].name}
-              </option>
-            );
-          })}
-        </select>
-        <button
-          onClick={() => {
-            setArmyForces([...armyForces, selectedAddForceArmyKey]);
-          }}
-        >
-          Add Force
-        </button>
+    <div className="container mx-auto">
+      <div>
+        <div className="flex flex-row space-x-4">
+          <label>
+            <span className="block text-sm">Roster Name</span>
+            <input
+              className="border border-solid border-stone-300 px-4 py-2"
+              placeholder="My Army"
+              type="input"
+            />
+          </label>
+          <label>
+            <span className="block text-sm">Max Points</span>
+            <input
+              className="border border-solid border-stone-300 px-4 py-2"
+              placeholder="0"
+              type="number"
+            />
+          </label>
+        </div>
       </div>
 
-      {armyForces.length >= 1 && (
+      <div>
+        <p className="text-sm">Forces in Roster</p>
+
+        {armyForces.length <= 0 && (
+          <p className="my-2 italic text-stone-400">No forces on this roster</p>
+        )}
+
         <React.Fragment>
           <div>
-            <p>
-              <strong>Forces</strong>
-            </p>
             {armyForces.map((ak) => {
               return <p>{ak}</p>;
             })}
           </div>
 
-          <div>
-            <p>
-              <strong>Heroes</strong>
-            </p>
+          <div className="flex flex-row space-x-4">
+            <div className="w-1/2">
+              <p className="font-bold">Available Heroes</p>
 
-            {allowedHeroes.map((hero) => {
-              return (
-                <button
-                  onClick={() => {
-                    setYourArmyHeroes([
-                      ...yourArmyHeroes,
-                      {
-                        ...hero,
-                        id: nanoid(),
-                        warband: [],
-                        equippedWargear: [],
-                      },
-                    ]);
+              <div className="flex flex-col space-y-2">
+                {allowedHeroes.map((hero) => {
+                  return (
+                    <button
+                      className="block bg-stone-200 px-4 py-2 hover:bg-stone-300"
+                      onClick={() => {
+                        setYourArmyHeroes([
+                          ...yourArmyHeroes,
+                          {
+                            ...hero,
+                            id: nanoid(),
+                            warband: [],
+                            equippedWargear: [],
+                            quantity: 1,
+                          },
+                        ]);
+                      }}
+                    >
+                      <p>{hero.name}</p>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* add forces to roster */}
+              <div className="mt-4 flex flex-row items-center space-x-4">
+                <select
+                  value={selectedAddForceArmyKey}
+                  className="border border-solid border-stone-300 px-4 py-2"
+                  onChange={(e) => {
+                    setSelectedAddForceArmyKey(
+                      e.currentTarget.value as ArmyKey
+                    );
                   }}
                 >
-                  <p>{hero.name}</p>
-                  <p>{hero.stats.Mv}''</p>
+                  {Object.keys(armies).map((ak) => {
+                    return (
+                      <option key={ak} value={ak}>
+                        {armies[ak as ArmyKey].name}
+                      </option>
+                    );
+                  })}
+                </select>
+                <button
+                  className="bg-stone-200 px-4 py-2 text-center"
+                  onClick={() => {
+                    setArmyForces([...armyForces, selectedAddForceArmyKey]);
+                  }}
+                >
+                  Add "{armies[selectedAddForceArmyKey].name}" To Roster
                 </button>
-              );
-            })}
+              </div>
+            </div>
+
+            <div className="w-1/2">
+              <strong>Your Army</strong>
+              <div className="space-y-4">
+                {yourArmyHeroes.map((hero) => {
+                  return (
+                    <HeroBuilder
+                      key={hero.id}
+                      addWarbandWarriorToHero={addWarbandWarriorToHero}
+                      hero={hero}
+                      toggleWargearToHero={toggleWargearToHero}
+                      toggleWargearToWarbandWarrior={
+                        toggleWargearToWarbandWarrior
+                      }
+                      warriorsInRoster={allowedWarriors}
+                      increaseWarbandWarriorQuantity={
+                        increaseWarbandWarriorQuantity
+                      }
+                      decreaseWarbandWarriorQuantity={
+                        decreaseWarbandWarriorQuantity
+                      }
+                    />
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
-          <div>
-            <strong>Your Army</strong>
-            {yourArmyHeroes.map((hero) => {
-              return (
-                <div>
-                  <p>{hero.name}</p>
-                  <p>
-                    <em>Options</em>
-                  </p>
-                  {hero.wargearOptions.map((wgo) => {
-                    return (
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={isWargearOptionEquipped(
-                            wgo,
-                            hero.equippedWargear
-                          )}
-                          onChange={(e) => {
-                            toggleWargearToHero(
-                              e.currentTarget.checked,
-                              wgo,
-                              hero
-                            );
-                          }}
-                        />
-                        {wgo.name} - {wgo.cost}pts
-                      </label>
-                    );
-                  })}
-
-                  <p>
-                    <em>Warband</em>
-                  </p>
-                  {hero.warband.length <= 0 && (
-                    <p>
-                      <em>No warband</em>
-                    </p>
-                  )}
-                  {hero.warband.length >= 1 && (
-                    <div>
-                      {hero.warband.map((w) => {
-                        return (
-                          <div>
-                            <p>{w.name}</p>
-                            <p>{w.stats.Mv}''</p>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                  {allowedWarriors.map((m) => {
-                    return (
-                      <button
-                        onClick={() => {
-                          addWarbandWarriorToHero(m, hero.id);
-                        }}
-                      >
-                        <p>{m.name}</p>
-                        <p>{m.stats.Mv}''</p>
-                      </button>
-                    );
-                  })}
-                </div>
-              );
-            })}
-          </div>
+          <p className="font-bold">Final Army Output</p>
         </React.Fragment>
-      )}
+      </div>
     </div>
   );
 }
