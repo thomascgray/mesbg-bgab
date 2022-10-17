@@ -1,4 +1,4 @@
-import { wargear } from "./wargear";
+import { iWargear, wargear, wargearSwap } from "./wargear";
 
 export interface iModel {
   heroLevel?: eHeroLevel;
@@ -17,8 +17,17 @@ export interface iModel {
     Fa?: number;
   };
   name: string;
-  wargear: any[];
-  wargearOptions: any[];
+  wargear: iWargear[];
+  wargearOptions: iWargear[];
+}
+
+export interface ISiegeEngine {
+  isVeteranUpgradedToCaptain: boolean;
+  stats: {
+    S: number;
+    D: number;
+    W: number;
+  };
 }
 
 export interface iModelInArmy extends iModel {
@@ -1156,7 +1165,7 @@ export const models = {
     wargear: [wargear.HeavyArmour, wargear.Sword, wargear.Spear],
     wargearOptions: [
       { ...wargear.Horse, cost: 7 },
-      { ...wargear.SwapSpearForLongbow, cost: 1 },
+      { ...wargearSwap.SpearForLongbow, cost: 1 },
     ],
   },
 
@@ -1175,7 +1184,7 @@ export const models = {
     },
     wargear: [wargear.HeavyArmour, wargear.Dagger, wargear.Spear],
     wargearOptions: [
-      { ...wargear.SwapSpearForBanner, cost: 25 },
+      { ...wargearSwap.SpearForBanner, cost: 25 },
       { ...wargear.Shield, cost: 1 },
     ],
   },

@@ -1,6 +1,6 @@
 import { iHeroModelInArmy, iModel, iModelInArmy } from "../data/models";
 import { iWargear } from "../data/wargear";
-import { isWargearOptionEquipped } from "../utils";
+import { getActiveWargear, isWargearOptionEquipped } from "../utils";
 
 export interface iHeroBuilderProps {
   hero: iHeroModelInArmy;
@@ -77,7 +77,11 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
                   <p>
                     {w.name} * {w.quantity}
                   </p>
-                  <p>{w.wargear.map((x) => x.name).join(", ")}</p>
+                  <p>
+                    {getActiveWargear(w.wargear, w.equippedWargear)
+                      .map((x) => x.name)
+                      .join(", ")}
+                  </p>
                   <fieldset className="border border-solid border-stone-300 p-2">
                     <legend className="text-sm italic">Wargear Options</legend>
                     {w.wargearOptions.map((wgo) => {

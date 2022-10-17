@@ -12,7 +12,7 @@ import "./index.css";
 
 function App() {
   const [selectedAddForceArmyKey, setSelectedAddForceArmyKey] =
-    useState<ArmyKey>("Numenor");
+    useState<ArmyKey>("MinisTirith");
 
   const [armyForces, setArmyForces] = useState<ArmyKey[]>([]);
 
