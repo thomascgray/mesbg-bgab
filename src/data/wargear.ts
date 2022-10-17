@@ -52,11 +52,15 @@ export const wargear = {
   Pony: { name: "Pony" },
   WhiteSwordOfGondor: { name: "WhiteSwordOfGondor" },
   SwapSpearForLongbow: { name: "SwapSpearForLongbow" },
-  SwapSpearForBanner: { name: "SwapSpearForBanner" },
+  SwapSpearForBanner: {
+    name: "SwapSpearForBanner",
+  },
   AndurilFlameOfTheWest: {
     name: "Anduril Flame Of The West",
   },
 };
+
+export const wargearEffects = {};
 
 export interface iWargear {
   name: string;
