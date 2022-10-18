@@ -7,8 +7,10 @@ export interface iWargear {
 }
 
 export const wargear: { [key: string]: iWargear } = {
+  AxeOfLossarnach: { id: "AxeOfLossarnach", name: "AxeOfLossarnach" },
   Dagger: { id: "Dagger", name: "Dagger" },
   Bow: { id: "Bow", name: "Bow" },
+  Broadsword: { id: "Broadsword", name: "Broadsword" },
   Longbow: { id: "Longbow", name: "Longbow" },
   HornOfGondor: { id: "HornOfGondor", name: "HornOfGondor" },
   TheOneRing: { id: "TheOneRing", name: "The One Ring" },
@@ -48,6 +50,7 @@ export const wargear: { [key: string]: iWargear } = {
   IronShodHooves: { id: "IronShodHooves", name: "IronShodHooves" },
   StranglingFingers: { id: "StranglingFingers", name: "StranglingFingers" },
   Pick: { id: "Pick", name: "Pick" },
+  Pike: { id: "Pike", name: "Pike" },
   Banner: { id: "Banner", name: "Banner" },
   OrcBow: { id: "OrcBow", name: "Orc Bow" },
   Shield: { id: "Shield", name: "Shield" },
@@ -69,18 +72,11 @@ export const wargear: { [key: string]: iWargear } = {
   Horse: { id: "Horse", name: "Horse" },
   Pony: { id: "Pony", name: "Pony" },
   WhiteSwordOfGondor: { id: "WhiteSwordOfGondor", name: "WhiteSwordOfGondor" },
-  SwapSpearForLongbow: {
-    id: "SwapSpearForLongbow",
-    name: "SwapSpearForLongbow",
-  },
-  SwapSpearForBanner: {
-    id: "SwapSpearForBanner",
-    name: "SwapSpearForBanner",
-  },
   AndurilFlameOfTheWest: {
     id: "AndurilFlameOfTheWest",
     name: "Anduril Flame Of The West",
   },
+  WarSpear: { id: "WarSpear", name: "WarSpear" },
 };
 export const wargearSwap: { [key: string]: iWargear } = {
   SpearForLongbow: {
@@ -93,6 +89,18 @@ export const wargearSwap: { [key: string]: iWargear } = {
     id: "SpearForBanner",
     name: "Banner (Replaces Spear)",
     swapFrom: wargear.Spear,
+    swapTo: wargear.Banner,
+  },
+  PikeForBanner: {
+    id: "PikeForBanner",
+    name: "Banner (Replaces Pike)",
+    swapFrom: wargear.Pike,
+    swapTo: wargear.Banner,
+  },
+  AxeOfLossarnachForBanner: {
+    id: "AxeOfLossarnachForBanner",
+    name: "Banner (Replaces Axe of Lossarnach)",
+    swapFrom: wargear.AxeOfLossarnach,
     swapTo: wargear.Banner,
   },
 };

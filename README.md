@@ -12,3 +12,7 @@ Features (eventually):
 - Saves rosters to your computer browser's local storage
 - Clean output for easy sharing of army lists
 - Can output to "TTS friendly" BBCode to allow easy copy & paste onto TTS models
+
+**Things I Know Are Missing (For Now!):**
+
+- siege engines
