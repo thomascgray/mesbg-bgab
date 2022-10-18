@@ -2005,6 +2005,43 @@ export const models: { [key: string]: iModel } = {
     wargearOptions: [],
   },
 
+  GhanBuriGhan: {
+    name: "GhanBuriGhan",
+    heroLevel: eHeroLevel.Valour,
+    cost: 65,
+    stats: {
+      Mv: 6,
+      F1: 4,
+      F2: 3,
+      S: 4,
+      D: 4,
+      A: 2,
+      W: 2,
+      C: 4,
+      Mi: 3,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [wargear.Dagger, wargear.Spear, wargear.PoisonedBlowpipe],
+    wargearOptions: [],
+  },
+  WosesWarriors: {
+    name: "WosesWarriors",
+    cost: 9,
+    stats: {
+      Mv: 6,
+      F1: 3,
+      F2: 3,
+      S: 3,
+      D: 3,
+      A: 1,
+      W: 1,
+      C: 3,
+    },
+    wargear: [wargear.Dagger, wargear.Spear, wargear.PoisonedBlowpipe],
+    wargearOptions: [],
+  },
+
   TheDarkLordSauron: {
     heroLevel: eHeroLevel.Valour,
     cost: 400,

@@ -27,6 +27,7 @@ export const wargear: { [key: string]: iWargear } = {
   Narsil: { id: "Narsil", name: "Narsil" },
   WalkingCaneClub: { id: "WalkingCaneClub", name: "WalkingCane (club)" },
   ElfBow: { id: "ElfBow", name: "Elf bow" },
+  PoisonedBlowpipe: { id: "PoisonedBlowpipe", name: "PoisonedBlowpipe" },
   ElvenCloak: { id: "ElvenCloak", name: "Elven Cloak" },
   ElvenMadeDaggers: { id: "ElvenMadeDaggers", name: "Elven made daggers" },
   Armour: { id: "Armour", name: "Armour" },
