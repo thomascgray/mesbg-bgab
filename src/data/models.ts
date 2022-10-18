@@ -1,4 +1,4 @@
-import { iWargear, wargear, wargearSwap } from "./wargear";
+import { iWargear, wargear, wargearSwap, wargearChoice } from "./wargear";
 
 export interface iModel {
   heroLevel?: eHeroLevel;
@@ -13,11 +13,12 @@ export interface iModel {
     W: number;
     C: number;
     Mi?: number;
-    Wo?: number;
+    Wi?: number;
     Fa?: number;
   };
   name: string;
   wargear: iWargear[];
+  wargearFromChoices?: iWargear[];
   wargearOptions: iWargear[];
 }
 
@@ -32,7 +33,7 @@ export interface ISiegeEngine {
 
 export interface iModelInArmy extends iModel {
   id: string;
-  equippedWargear: any[];
+  equippedWargear: iWargear[];
   quantity: number;
 }
 
@@ -48,7 +49,7 @@ export enum eHeroLevel {
   Independent,
 }
 
-export const models = {
+export const models: { [key: string]: iModel } = {
   FrodoBaggins: {
     name: "Frodo Baggins",
     heroLevel: eHeroLevel.Fortitude,
@@ -556,7 +557,7 @@ export const models = {
       W: 1,
       C: 3,
     },
-    wargear: [[wargear.Dagger, wargear.Axe, wargear.Hammer]],
+    wargear: [wargearChoice.DaggerOrAxeOrHammer],
     wargearOptions: [],
   },
 
@@ -1415,6 +1416,224 @@ export const models = {
     ],
   },
 
+  TheKingOfTheDead: {
+    name: "TheKingOfTheDead",
+    heroLevel: eHeroLevel.Valour,
+    cost: 100,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 4,
+      D: 8,
+      A: 2,
+      W: 2,
+      C: 7,
+      Mi: 1,
+      Wi: 6,
+      Fa: 3,
+    },
+    wargear: [wargear.Armour, wargearChoice.SwordOrAxe],
+    wargearOptions: [],
+  },
+
+  WarriorOfTheDead: {
+    name: "WarriorOfTheDead",
+    cost: 14,
+    stats: {
+      Mv: 6,
+      F1: 3,
+      F2: 4,
+      S: 3,
+      D: 7,
+      A: 1,
+      W: 1,
+      C: 6,
+    },
+    wargear: [wargear.Armour, wargearChoice.SwordOrAxe],
+    wargearOptions: [],
+  },
+
+  RidersOfTheDead: {
+    name: "RidersOfTheDead",
+    cost: 24,
+    stats: {
+      Mv: 6,
+      F1: 3,
+      F2: 4,
+      S: 3,
+      D: 8,
+      A: 1,
+      W: 1,
+      C: 6,
+    },
+    wargear: [
+      wargear.Armour,
+      wargear.Sword,
+      wargear.Shield,
+      wargear.SpectralSteed,
+    ],
+    wargearOptions: [],
+  },
+
+  ArveduiLastKingOfArnor: {
+    name: "ArveduiLastKingOfArnor",
+    cost: 80,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 4,
+      D: 6,
+      A: 3,
+      W: 2,
+      C: 5,
+      Mi: 3,
+      Wi: 2,
+      Fa: 1,
+    },
+    wargear: [wargear.HeavyArmour, wargear.Sword],
+    wargearOptions: [],
+  },
+
+  MalbethTheSeer: {
+    name: "MalbethTheSeer",
+    cost: 70,
+    stats: {
+      Mv: 6,
+      F1: 3,
+      F2: 4,
+      S: 3,
+      D: 4,
+      A: 1,
+      W: 2,
+      C: 5,
+      Mi: 1,
+      Wi: 2,
+      Fa: 1,
+    },
+    wargear: [wargear.Staff],
+    wargearOptions: [],
+  },
+
+  CaptainOfArnor: {
+    name: "CaptainOfArnor",
+    cost: 55,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 4,
+      D: 7,
+      A: 2,
+      W: 2,
+      C: 3,
+      Mi: 2,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [wargear.HeavyArmour, wargear.Sword, wargear.Shield],
+    wargearOptions: [],
+  },
+
+  WarriorOfArnor: {
+    name: "WarriorOfArnor",
+    cost: 8,
+    stats: {
+      Mv: 6,
+      F1: 4,
+      F2: 4,
+      S: 3,
+      D: 6,
+      A: 1,
+      W: 1,
+      C: 2,
+    },
+    wargear: [
+      wargear.HeavyArmour,
+      wargear.Sword,
+      wargear.Spear,
+      wargear.Shield,
+    ],
+    wargearOptions: [
+      {
+        ...wargearSwap.SpearAndShieldForBanner,
+        cost: 25,
+      },
+    ],
+  },
+
+  RangerOfArnor: {
+    name: "RangerOfArnor",
+    cost: 8,
+    stats: {
+      Mv: 6,
+      F1: 4,
+      F2: 3,
+      S: 3,
+      D: 4,
+      A: 1,
+      W: 1,
+      C: 3,
+    },
+    wargear: [wargear.Armour, wargear.Sword, wargear.Bow],
+    wargearOptions: [
+      {
+        ...wargear.Spear,
+        cost: 1,
+      },
+    ],
+  },
+
+  TheodenKingOfRohan: {
+    name: "TheodenKingOfRohan",
+    cost: 75,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 4,
+      D: 5,
+      A: 2,
+      W: 2,
+      C: 5,
+      Mi: 3,
+      Wi: 3,
+      Fa: 1,
+    },
+    wargear: [wargear.Armour, wargear.Herugrim],
+    wargearOptions: [
+      { ...wargear.ArmouredHorse, cost: 15 },
+      { ...wargear.Horse, cost: 10 },
+      { ...wargear.HeavyArmour, cost: 5 },
+      { ...wargear.Shield, cost: 5 },
+    ],
+  },
+
+  TheodredHeirOfRohan: {
+    name: "TheodredHeirOfRohan",
+    cost: 80,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 4,
+      D: 6,
+      A: 3,
+      W: 2,
+      C: 5,
+      Mi: 3,
+      Wi: 3,
+      Fa: 1,
+    },
+    wargear: [wargear.HeavyArmour, wargear.Sword],
+    wargearOptions: [
+      { ...wargear.Horse, cost: 10 },
+      { ...wargear.Shield, cost: 5 },
+      { ...wargear.ThrowingSpears, cost: 5 },
+    ],
+  },
+
   TheDarkLordSauron: {
     heroLevel: eHeroLevel.Valour,
     cost: 400,
@@ -1432,7 +1651,7 @@ export const models = {
       Fa: 2,
     },
     name: "The Dark Lord Sauron",
-    wargear: [wargear.Armour, [wargear.Sword, wargear.Pick]],
+    wargear: [wargear.Armour, wargearChoice.SwordOrPick],
     wargearOptions: [{ ...wargear.Warg, cost: 7 }],
   },
   OrcCaptain: {
@@ -1452,7 +1671,7 @@ export const models = {
       Fa: 2,
     },
     name: "Orc Captain",
-    wargear: [wargear.Armour, [wargear.Sword, wargear.Pick]],
+    wargear: [wargear.Armour, wargearChoice.SwordOrPick],
     wargearOptions: [{ ...wargear.Warg, cost: 7 }],
   },
   OrcWarrior: {
@@ -1468,7 +1687,7 @@ export const models = {
       C: 2,
     },
     name: "Orc Warrior",
-    wargear: [wargear.Armour, [wargear.Sword, wargear.Pick]],
+    wargear: [wargear.Armour, wargearChoice.SwordOrPick],
     wargearOptions: [
       { ...wargear.Banner, cost: 25 },
       { ...wargear.OrcBow, cost: 1 },
@@ -1490,7 +1709,7 @@ export const models = {
       C: 2,
     },
     name: "Orc Tracker",
-    wargear: [wargear.Armour, [wargear.Sword, wargear.Pick]],
+    wargear: [wargear.Armour, wargearChoice.SwordOrPick],
     wargearOptions: [{ ...wargear.Warg, cost: 7 }],
   },
   BlackNumenorian: {
@@ -1506,7 +1725,7 @@ export const models = {
       C: 2,
     },
     name: "Black Numenorian",
-    wargear: [wargear.Armour, [wargear.Sword, wargear.Pick]],
+    wargear: [wargear.Armour, wargearChoice.SwordOrPick],
     wargearOptions: [{ ...wargear.Warg, cost: 7 }],
   },
 };

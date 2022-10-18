@@ -31,6 +31,8 @@
 **TODO**
 
 - support `.wargearChoice` in the UI
+  half started this, need to finish
+  make it so when you add the person, the default option is selected
 
 **Things I Know Are Missing (For Now!):**
 

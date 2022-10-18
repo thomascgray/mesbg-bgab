@@ -1,3 +1,4 @@
+import React from "react";
 import { iHeroModelInArmy, iModel, iModelInArmy } from "../data/models";
 import { iWargear } from "../data/wargear";
 import { getActiveWargear, isWargearOptionEquipped } from "../utils";
@@ -45,23 +46,49 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
       <p className="font-bold">{hero.name}</p>
       <p>{hero.wargear.map((w) => w.name).join(", ")}</p>
       <fieldset className="border border-solid border-stone-300 px-3 pt-1 pb-2">
-        <legend className="text-sm italic">Options</legend>
-        {hero.wargearOptions.map((wgo) => {
-          return (
-            <label className="flex cursor-pointer flex-row items-center space-x-2">
-              <input
-                type="checkbox"
-                checked={isWargearOptionEquipped(wgo, hero.equippedWargear)}
-                onChange={(e) => {
-                  toggleWargearToHero(e.currentTarget.checked, wgo, hero);
-                }}
-              />
-              <span>
-                {wgo.name} - {wgo.cost}pts
-              </span>
-            </label>
-          );
-        })}
+        <div>
+          <legend className="text-sm italic">Options</legend>
+          {/* here we need to render out all the choices */}
+          {hero.wargear
+            .filter((w) => w.choices && w.choices.length >= 1)
+            .map((wc) => {
+              return (
+                <div>
+                  <span>{wc.name}</span>
+                  {wc.choices?.map((choice) => {
+                    return (
+                      <label className="flex cursor-pointer flex-row items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          // checked={isWargearOptionEquipped(wgo, hero.equippedWargear)}
+                          // onChange={(e) => {
+                          //   toggleWargearToHero(e.currentTarget.checked, wgo, hero);
+                          // }}
+                        />
+                        <span>{choice.name}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          {hero.wargearOptions.map((wgo) => {
+            return (
+              <label className="flex cursor-pointer flex-row items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={isWargearOptionEquipped(wgo, hero.equippedWargear)}
+                  onChange={(e) => {
+                    toggleWargearToHero(e.currentTarget.checked, wgo, hero);
+                  }}
+                />
+                <span>
+                  {wgo.name} - {wgo.cost}pts
+                </span>
+              </label>
+            );
+          })}
+        </div>
       </fieldset>
 
       <fieldset className="border border-solid border-stone-300 p-4">

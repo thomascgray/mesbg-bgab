@@ -2,12 +2,15 @@ export interface iWargear {
   id: string;
   name: string;
   cost?: number;
-  swapFrom?: iWargear;
+  swapFrom?: iWargear[];
   swapTo?: iWargear;
+  choices?: iWargear[];
 }
 
 export const wargear: { [key: string]: iWargear } = {
   AxeOfLossarnach: { id: "AxeOfLossarnach", name: "AxeOfLossarnach" },
+  Herugrim: { id: "Herugrim", name: "Herugrim" },
+  ThrowingSpears: { id: "ThrowingSpears", name: "ThrowingSpears" },
   Dagger: { id: "Dagger", name: "Dagger" },
   Bow: { id: "Bow", name: "Bow" },
   Broadsword: { id: "Broadsword", name: "Broadsword" },
@@ -77,31 +80,57 @@ export const wargear: { [key: string]: iWargear } = {
     name: "Anduril Flame Of The West",
   },
   WarSpear: { id: "WarSpear", name: "WarSpear" },
+  SpectralSteed: { id: "SpectralSteed", name: "SpectralSteed" },
 };
+
 export const wargearSwap: { [key: string]: iWargear } = {
   SpearForLongbow: {
     id: "SpearForLongbow",
     name: "Longbow (Replaces Spear)",
-    swapFrom: wargear.Spear,
+    swapFrom: [wargear.Spear],
     swapTo: wargear.Longbow,
   },
   SpearForBanner: {
     id: "SpearForBanner",
     name: "Banner (Replaces Spear)",
-    swapFrom: wargear.Spear,
+    swapFrom: [wargear.Spear],
     swapTo: wargear.Banner,
   },
   PikeForBanner: {
     id: "PikeForBanner",
     name: "Banner (Replaces Pike)",
-    swapFrom: wargear.Pike,
+    swapFrom: [wargear.Pike],
     swapTo: wargear.Banner,
   },
   AxeOfLossarnachForBanner: {
     id: "AxeOfLossarnachForBanner",
     name: "Banner (Replaces Axe of Lossarnach)",
-    swapFrom: wargear.AxeOfLossarnach,
+    swapFrom: [wargear.AxeOfLossarnach],
     swapTo: wargear.Banner,
+  },
+  SpearAndShieldForBanner: {
+    id: "SpearAndShieldForBanner",
+    name: "Banner (Replaces Spear & Shield)",
+    swapFrom: [wargear.Spear, wargear.Shield],
+    swapTo: wargear.Banner,
+  },
+};
+
+export const wargearChoice: { [key: string]: iWargear } = {
+  SwordOrAxe: {
+    id: "SwordOrAxe",
+    name: "Sword or Axe (Choose)",
+    choices: [wargear.Sword, wargear.Axe],
+  },
+  DaggerOrAxeOrHammer: {
+    id: "DaggerOrAxeOrHammer",
+    name: "Dagger or Axe or Hammer",
+    choices: [wargear.Dagger, wargear.Axe, wargear.Hammer],
+  },
+  SwordOrPick: {
+    id: "SwordOrPick",
+    name: "Sword or Pick",
+    choices: [wargear.Sword, wargear.Pick],
   },
 };
 
