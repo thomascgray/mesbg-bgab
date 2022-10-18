@@ -33,8 +33,16 @@ export const wargear: { [key: string]: iWargear } = {
   Sword: { id: "Sword", name: "Sword" },
   Shortbow: { id: "Shortbow", name: "Shortbow" },
   Warhorn: { id: "Warhorn", name: "Warhorn" },
+  HornOfTheHammerhand: {
+    id: "HornOfTheHammerhand",
+    name: "HornOfTheHammerhand",
+  },
   HandAndAHalfSword: { id: "HandAndAHalfSword", name: "HandAndAHalfSword" },
   HandAndAHalfClub: { id: "HandAndAHalfClub", name: "HandAndAHalfClub" },
+  RoyalStandardOfRohan: {
+    id: "RoyalStandardOfRohan",
+    name: "RoyalStandardOfRohan",
+  },
   BannerOfArwenEvenstar: {
     id: "BannerOfArwenEvenstar",
     name: "BannerOfArwenEvenstar",
@@ -59,6 +67,7 @@ export const wargear: { [key: string]: iWargear } = {
   Shield: { id: "Shield", name: "Shield" },
   Spear: { id: "Spear", name: "Spear" },
   TwoHandedWeapon: { id: "TwoHandedWeapon", name: "Two Handed Weapon" },
+  TwoHandedAxe: { id: "TwoHandedAxe", name: "TwoHandedAxe" },
   TwoHandedScythePick: {
     id: "TwoHandedScythePick",
     name: "Two Handed Scythe (pick)",
@@ -74,6 +83,7 @@ export const wargear: { [key: string]: iWargear } = {
   ArmouredHorse: { id: "ArmouredHorse", name: "ArmouredHorse" },
   Horse: { id: "Horse", name: "Horse" },
   Pony: { id: "Pony", name: "Pony" },
+  Felarof: { id: "Felarof", name: "Felarof" },
   WhiteSwordOfGondor: { id: "WhiteSwordOfGondor", name: "WhiteSwordOfGondor" },
   AndurilFlameOfTheWest: {
     id: "AndurilFlameOfTheWest",

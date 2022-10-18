@@ -18,8 +18,8 @@ export interface iModel {
   };
   name: string;
   wargear: iWargear[];
-  wargearFromChoices?: iWargear[];
   wargearOptions: iWargear[];
+  wargearFromChoices?: iWargear[];
 }
 
 export interface ISiegeEngine {
@@ -1213,6 +1213,7 @@ export const models: { [key: string]: iModel } = {
 
   PrinceImrahilOfDolAmroth: {
     name: "PrinceImrahilOfDolAmroth",
+    heroLevel: eHeroLevel.Legend,
     cost: 140,
     stats: {
       Mv: 6,
@@ -1236,6 +1237,7 @@ export const models: { [key: string]: iModel } = {
 
   ForlongTheFat: {
     name: "ForlongTheFat",
+    heroLevel: eHeroLevel.Valour,
     cost: 80,
     stats: {
       Mv: 6,
@@ -1261,6 +1263,7 @@ export const models: { [key: string]: iModel } = {
 
   AngborTheFearless: {
     name: "AngborTheFearless",
+    heroLevel: eHeroLevel.Valour,
     cost: 65,
     stats: {
       Mv: 6,
@@ -1281,6 +1284,7 @@ export const models: { [key: string]: iModel } = {
 
   Duinhir: {
     name: "Duinhir",
+    heroLevel: eHeroLevel.Valour,
     cost: 60,
     stats: {
       Mv: 6,
@@ -1301,6 +1305,7 @@ export const models: { [key: string]: iModel } = {
 
   CaptainOfDolAmroth: {
     name: "CaptainOfDolAmroth",
+    heroLevel: eHeroLevel.Fortitude,
     cost: 65,
     stats: {
       Mv: 6,
@@ -1434,7 +1439,7 @@ export const models: { [key: string]: iModel } = {
       Fa: 3,
     },
     wargear: [wargear.Armour, wargearChoice.SwordOrAxe],
-    wargearOptions: [{ ...wargear.HornOfGondor, cost: 5 }],
+    wargearOptions: [],
   },
 
   WarriorOfTheDead: {
@@ -1478,6 +1483,7 @@ export const models: { [key: string]: iModel } = {
 
   ArveduiLastKingOfArnor: {
     name: "ArveduiLastKingOfArnor",
+    heroLevel: eHeroLevel.Valour,
     cost: 80,
     stats: {
       Mv: 6,
@@ -1498,6 +1504,7 @@ export const models: { [key: string]: iModel } = {
 
   MalbethTheSeer: {
     name: "MalbethTheSeer",
+    heroLevel: eHeroLevel.Fortitude,
     cost: 70,
     stats: {
       Mv: 6,
@@ -1518,6 +1525,7 @@ export const models: { [key: string]: iModel } = {
 
   CaptainOfArnor: {
     name: "CaptainOfArnor",
+    heroLevel: eHeroLevel.Fortitude,
     cost: 55,
     stats: {
       Mv: 6,
@@ -1587,6 +1595,7 @@ export const models: { [key: string]: iModel } = {
 
   TheodenKingOfRohan: {
     name: "TheodenKingOfRohan",
+    heroLevel: eHeroLevel.Legend,
     cost: 75,
     stats: {
       Mv: 6,
@@ -1612,6 +1621,8 @@ export const models: { [key: string]: iModel } = {
 
   TheodredHeirOfRohan: {
     name: "TheodredHeirOfRohan",
+    heroLevel: eHeroLevel.Valour,
+
     cost: 80,
     stats: {
       Mv: 6,
@@ -1632,6 +1643,366 @@ export const models: { [key: string]: iModel } = {
       { ...wargear.Shield, cost: 5 },
       { ...wargear.ThrowingSpears, cost: 5 },
     ],
+  },
+
+  EomerMarshalOfTheRiddermark: {
+    name: "EomerMarshalOfTheRiddermark",
+    heroLevel: eHeroLevel.Valour,
+
+    cost: 100,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 4,
+      D: 6,
+      A: 3,
+      W: 3,
+      C: 5,
+      Mi: 3,
+      Wi: 3,
+      Fa: 3,
+    },
+    wargear: [wargear.HeavyArmour, wargear.Sword],
+    wargearOptions: [
+      { ...wargear.ArmouredHorse, cost: 15 },
+      { ...wargear.Horse, cost: 10 },
+      { ...wargear.Shield, cost: 5 },
+      { ...wargear.ThrowingSpears, cost: 5 },
+    ],
+  },
+
+  EowynShieldMaidenOfRohan: {
+    name: "EowynShieldMaidenOfRohan",
+    heroLevel: eHeroLevel.Minor,
+
+    cost: 40,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 3,
+      D: 3,
+      A: 2,
+      W: 2,
+      C: 5,
+      Mi: 2,
+      Wi: 2,
+      Fa: 2,
+    },
+    wargear: [wargear.Sword],
+    wargearOptions: [
+      { ...wargear.Horse, cost: 10 },
+      { ...wargear.Armour, cost: 5 },
+      { ...wargear.Shield, cost: 5 },
+      { ...wargear.ThrowingSpears, cost: 5 },
+    ],
+  },
+
+  MeriadocBrandybuckKnightOfTheMark: {
+    name: "MeriadocBrandybuckKnightOfTheMark",
+    heroLevel: eHeroLevel.Independent,
+
+    cost: 25,
+    stats: {
+      Mv: 4,
+      F1: 3,
+      F2: 3,
+      S: 2,
+      D: 4,
+      A: 1,
+      W: 1,
+      C: 4,
+      Mi: 1,
+      Wi: 1,
+      Fa: 2,
+    },
+    wargear: [wargear.Armour, wargear.Dagger],
+    wargearOptions: [
+      { ...wargear.ElvenCloak, cost: 5 },
+      { ...wargear.Pony, cost: 5 },
+      { ...wargear.Shield, cost: 5 },
+    ],
+  },
+
+  Erkenbrand: {
+    name: "Erkenbrand",
+    heroLevel: eHeroLevel.Fortitude,
+
+    cost: 75,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 4,
+      D: 7,
+      A: 2,
+      W: 2,
+      C: 4,
+      Mi: 3,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [
+      wargear.HeavyArmour,
+      wargear.Sword,
+      wargear.Shield,
+      wargear.HornOfTheHammerhand,
+    ],
+    wargearOptions: [{ ...wargear.Horse, cost: 10 }],
+  },
+
+  GamlingCaptainOfRohan: {
+    name: "GamlingCaptainOfRohan",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 55,
+    stats: {
+      Mv: 6,
+      F1: 4,
+      F2: 4,
+      S: 4,
+      D: 6,
+      A: 2,
+      W: 2,
+      C: 4,
+      Mi: 3,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [wargear.HeavyArmour, wargear.Sword],
+    wargearOptions: [
+      { ...wargear.RoyalStandardOfRohan, cost: 50 },
+      { ...wargear.Horse, cost: 10 },
+    ],
+  },
+
+  HamaCaptainOfRohan: {
+    name: "HamaCaptainOfRohan",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 55,
+    stats: {
+      Mv: 6,
+      F1: 4,
+      F2: 4,
+      S: 4,
+      D: 6,
+      A: 2,
+      W: 2,
+      C: 4,
+      Mi: 3,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [wargear.HeavyArmour, wargear.Sword],
+    wargearOptions: [
+      { ...wargear.Horse, cost: 10 },
+      { ...wargear.Shield, cost: 5 },
+    ],
+  },
+
+  GrimboldOfGrimslade: {
+    name: "GrimboldOfGrimslade",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 60,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 4,
+      D: 5,
+      A: 2,
+      W: 2,
+      C: 4,
+      Mi: 3,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [wargear.Armour, wargear.TwoHanded],
+    wargearOptions: [],
+  },
+
+  EorlTheYoung: {
+    name: "EorlTheYoung",
+    heroLevel: eHeroLevel.Valour,
+    cost: 115,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 4,
+      D: 7,
+      A: 3,
+      W: 3,
+      C: 5,
+      Mi: 3,
+      Wi: 2,
+      Fa: 2,
+    },
+    wargear: [
+      wargear.HeavyArmour,
+      wargear.Sword,
+      wargear.Shield,
+      wargear.Felarof,
+    ],
+    wargearOptions: [],
+  },
+
+  KingsHuntsman: {
+    name: "KingsHuntsman",
+    heroLevel: eHeroLevel.Minor,
+    cost: 50,
+    stats: {
+      Mv: 6,
+      F1: 3,
+      F2: 3,
+      S: 4,
+      D: 5,
+      A: 1,
+      W: 2,
+      C: 4,
+      Mi: 2,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [wargear.Armour, wargear.Sword, wargear.Longbow],
+    wargearOptions: [],
+  },
+
+  CaptainOfRohan: {
+    name: "CaptainOfRohan",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 45,
+    stats: {
+      Mv: 6,
+      F1: 4,
+      F2: 4,
+      S: 4,
+      D: 5,
+      A: 2,
+      W: 2,
+      C: 4,
+      Mi: 2,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [wargear.Armour, wargearChoice.SwordOrAxe],
+    wargearOptions: [
+      { ...wargear.Horse, cost: 10 },
+      { ...wargear.Bow, cost: 5 },
+      { ...wargear.HeavyArmour, cost: 5 },
+      { ...wargear.Shield, cost: 5 },
+      { ...wargear.ThrowingSpears, cost: 5 },
+    ],
+  },
+
+  WarriorOfRohan: {
+    name: "WarriorOfRohan",
+    cost: 6,
+    stats: {
+      Mv: 6,
+      F1: 3,
+      F2: 4,
+      S: 3,
+      D: 4,
+      A: 1,
+      W: 1,
+      C: 3,
+    },
+    wargear: [wargear.Armour, wargearChoice.SwordOrAxe],
+    wargearOptions: [
+      { ...wargear.Warhorn, cost: 30 },
+      { ...wargear.Banner, cost: 25 },
+      { ...wargear.ThrowingSpears, cost: 2 },
+      { ...wargear.Bow, cost: 1 },
+      { ...wargear.Shield, cost: 1 },
+    ],
+  },
+
+  RiderOfRohan: {
+    name: "RiderOfRohan",
+    cost: 14,
+    stats: {
+      Mv: 6,
+      F1: 3,
+      F2: 4,
+      S: 3,
+      D: 5,
+      A: 1,
+      W: 1,
+      C: 3,
+    },
+    wargear: [
+      wargear.Armour,
+      wargearChoice.SwordOrAxe,
+      wargear.Shield,
+      wargear.Bow,
+      wargear.Horse,
+    ],
+    wargearOptions: [
+      { ...wargear.Warhorn, cost: 30 },
+      { ...wargear.Banner, cost: 25 },
+      { ...wargear.ThrowingSpears, cost: 2 },
+    ],
+  },
+
+  RoyalRohanGuard: {
+    name: "RoyalRohanGuard",
+    cost: 10,
+    stats: {
+      Mv: 6,
+      F1: 4,
+      F2: 4,
+      S: 3,
+      D: 6,
+      A: 1,
+      W: 1,
+      C: 3,
+    },
+    wargear: [wargear.HeavyArmour, wargear.Sword, wargear.Shield],
+    wargearOptions: [
+      { ...wargear.Banner, cost: 25 },
+      { ...wargear.Horse, cost: 5 },
+      { ...wargear.ThrowingSpears, cost: 2 },
+    ],
+  },
+
+  RohanOutrider: {
+    name: "RohanOutrider",
+    cost: 8,
+    stats: {
+      Mv: 6,
+      F1: 3,
+      F2: 3,
+      S: 3,
+      D: 4,
+      A: 1,
+      W: 1,
+      C: 3,
+    },
+    wargear: [wargear.Armour, wargear.Sword, wargear.Bow],
+    wargearOptions: [{ ...wargear.Horse, cost: 5 }],
+  },
+
+  SonOfEorl: {
+    name: "SonOfEorl",
+    cost: 20,
+    stats: {
+      Mv: 6,
+      F1: 4,
+      F2: 4,
+      S: 4,
+      D: 6,
+      A: 1,
+      W: 1,
+      C: 4,
+    },
+    wargear: [
+      wargear.HeavyArmour,
+      wargear.Axe,
+      wargear.Shield,
+      wargear.ArmouredHorse,
+    ],
+    wargearOptions: [],
   },
 
   TheDarkLordSauron: {

@@ -185,7 +185,26 @@ function App() {
     ]);
   };
 
-  const setHeroChoiceWargear = (hero: iHeroModelInArmy) => {};
+  const setHeroChoiceWargear = (
+    choice: iWargear,
+    wargearChoice: iWargear,
+    hero: iHeroModelInArmy
+  ) => {
+    // remove all the choices from wargear choice on the hero
+    // then add in the choice
+
+    setYourArmyHeroes(
+      produce(yourArmyHeroes, (draft) => {
+        const heroIndex = draft.findIndex((h) => h.id === hero.id);
+
+        // TODO this will break if a model ever has more than 1 possible "choice" wargear!
+        draft[heroIndex].wargearFromChoices = [];
+        draft[heroIndex].wargearFromChoices = [{ ...choice }];
+
+        return draft;
+      })
+    );
+  };
 
   return (
     <div className="container mx-auto">
@@ -294,6 +313,7 @@ function App() {
                       decreaseWarbandWarriorQuantity={
                         decreaseWarbandWarriorQuantity
                       }
+                      setHeroChoiceWargear={setHeroChoiceWargear}
                     />
                   );
                 })}

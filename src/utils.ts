@@ -1,12 +1,27 @@
 import { iWargear, wargear } from "./data/wargear";
 import * as _ from "lodash";
-import { iModelInArmy } from "./data/models";
+import { iHeroModelInArmy, iModelInArmy } from "./data/models";
+
 export const isWargearOptionEquipped = (
   wargearOption: iWargear,
   equippedWargear: iWargear[]
 ) => {
   const keysOfEquippedWargear = equippedWargear.map((w) => w.name);
   return keysOfEquippedWargear.includes(wargearOption.name);
+};
+
+export const isWargearChoiceSelected = (
+  choice: iWargear,
+  wargearChoice: iWargear,
+  hero: iHeroModelInArmy
+) => {
+  if (hero.wargearFromChoices) {
+    return hero.wargearFromChoices.map((c) => c.id).includes(choice.id);
+  }
+  return false;
+
+  // const keysOfEquippedWargear = equippedWargear.map((w) => w.name);
+  // return keysOfEquippedWargear.includes(wargearOption.name);
 };
 
 export const getDefaultChoiceWargearChoices = (wargearChoices: iWargear[]) => {
@@ -19,6 +34,7 @@ export const getDefaultChoiceWargearChoices = (wargearChoices: iWargear[]) => {
 
 export const getActiveWargear = (model: iModelInArmy) => {
   const { wargear, equippedWargear, wargearFromChoices = [] } = model;
+
   let activeWargear = [
     // all the default stuff WITHOUT choices
     ...wargear.filter((dw) => dw.choices === undefined),

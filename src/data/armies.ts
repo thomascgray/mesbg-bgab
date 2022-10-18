@@ -43,7 +43,7 @@ export const armies = {
     mayField: [models.TheKingOfTheDead, models.WarriorOfTheDead],
   },
   Arnor: { name: "Arnor", mayField: [] },
-  Rohan: { name: "Rohan", mayField: [] },
+  Rohan: { name: "Rohan", mayField: [models.TheodenKingOfRohan] },
   WildmenOfDruadan: { name: "WildmenOfDruadan", mayField: [] },
   Rivendell: { name: "Rivendell", mayField: [] },
   Lothlorien: { name: "Lothlorien", mayField: [] },

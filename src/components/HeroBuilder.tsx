@@ -1,7 +1,11 @@
 import React from "react";
 import { iHeroModelInArmy, iModel, iModelInArmy } from "../data/models";
 import { iWargear } from "../data/wargear";
-import { getActiveWargear, isWargearOptionEquipped } from "../utils";
+import {
+  getActiveWargear,
+  isWargearChoiceSelected,
+  isWargearOptionEquipped,
+} from "../utils";
 
 export interface iHeroBuilderProps {
   hero: iHeroModelInArmy;
@@ -26,6 +30,11 @@ export interface iHeroBuilderProps {
     warrior: iModelInArmy,
     hero: iHeroModelInArmy
   ) => void;
+  setHeroChoiceWargear: (
+    choice: iWargear,
+    wargearChoice: iWargear,
+    hero: iHeroModelInArmy
+  ) => void;
 }
 export const HeroBuilder = (props: iHeroBuilderProps) => {
   const {
@@ -36,6 +45,7 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
     addWarbandWarriorToHero,
     increaseWarbandWarriorQuantity,
     decreaseWarbandWarriorQuantity,
+    setHeroChoiceWargear,
   } = props;
 
   console.log("hero", JSON.stringify(hero, null, 2));
@@ -59,20 +69,23 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
             .filter((w) => w.choices && w.choices.length >= 1)
             .map((wc) => {
               return (
-                <div key={wc.id}>
-                  <span>{wc.name}</span>
+                <div
+                  key={wc.id}
+                  className="flex flex-row items-center space-x-2"
+                >
                   {wc.choices?.map((choice) => {
                     return (
                       <label
                         key={choice.id}
-                        className="flex cursor-pointer flex-row items-center space-x-2"
+                        className="flex-inline cursor-pointer flex-row items-center space-x-2"
                       >
                         <input
-                          type="checkbox"
-                          // checked={isWargearOptionEquipped(wgo, hero.equippedWargear)}
-                          // onChange={(e) => {
-                          //   toggleWargearToHero(e.currentTarget.checked, wgo, hero);
-                          // }}
+                          type="radio"
+                          name={hero.id + wc.id}
+                          checked={isWargearChoiceSelected(choice, wc, hero)}
+                          onChange={(e) => {
+                            setHeroChoiceWargear(choice, wc, hero);
+                          }}
                         />
                         <span>{choice.name}</span>
                       </label>
