@@ -6,7 +6,10 @@ import { nanoid } from "nanoid";
 import { produce } from "immer";
 import { iWargear } from "./data/wargear";
 import { HeroBuilder } from "./components/HeroBuilder";
-import { isWargearOptionEquipped } from "./utils";
+import {
+  getDefaultChoiceWargearChoices,
+  isWargearOptionEquipped,
+} from "./utils";
 
 import "./index.css";
 
@@ -32,6 +35,7 @@ function App() {
 
   const [yourArmyHeroes, setYourArmyHeroes] = useState<iHeroModelInArmy[]>([]);
 
+  // add a warband warrior to a hero's warband
   const addWarbandWarriorToHero = (warriorModel: iModel, heroId: string) => {
     setYourArmyHeroes(
       produce(yourArmyHeroes, (draft) => {
@@ -49,6 +53,7 @@ function App() {
     );
   };
 
+  // adds or removes regular wargear on a hero
   const toggleWargearToHero = (
     isOn: boolean,
     wargear: iWargear,
@@ -83,6 +88,7 @@ function App() {
     }
   };
 
+  // adds or removes regular wargear on a warrior
   const toggleWargearToWarbandWarrior = (
     isOn: boolean,
     wargear: iWargear,
@@ -124,6 +130,7 @@ function App() {
     }
   };
 
+  // increases the quantity of a warband warrior
   const increaseWarbandWarriorQuantity = (
     warrior: iModelInArmy,
     hero: iHeroModelInArmy
@@ -142,6 +149,7 @@ function App() {
     );
   };
 
+  // decreases the quantity of a warband warrior
   const decreaseWarbandWarriorQuantity = (
     warrior: iModelInArmy,
     hero: iHeroModelInArmy
@@ -159,6 +167,25 @@ function App() {
       })
     );
   };
+
+  // add hero to army
+  const addHeroToArmy = (hero: iModel) => {
+    setYourArmyHeroes([
+      ...yourArmyHeroes,
+      {
+        ...hero,
+        id: nanoid(),
+        warband: [],
+        equippedWargear: [],
+        quantity: 1,
+        wargearFromChoices: getDefaultChoiceWargearChoices(
+          hero.wargear.filter((w) => w.choices)
+        ),
+      },
+    ]);
+  };
+
+  const setHeroChoiceWargear = (hero: iHeroModelInArmy) => {};
 
   return (
     <div className="container mx-auto">
@@ -193,7 +220,7 @@ function App() {
         <React.Fragment>
           <div>
             {armyForces.map((ak) => {
-              return <p>{ak}</p>;
+              return <p key={ak}>{ak}</p>;
             })}
           </div>
 
@@ -205,18 +232,10 @@ function App() {
                 {allowedHeroes.map((hero) => {
                   return (
                     <button
+                      key={hero.name}
                       className="block bg-stone-200 px-4 py-2 hover:bg-stone-300"
                       onClick={() => {
-                        setYourArmyHeroes([
-                          ...yourArmyHeroes,
-                          {
-                            ...hero,
-                            id: nanoid(),
-                            warband: [],
-                            equippedWargear: [],
-                            quantity: 1,
-                          },
-                        ]);
+                        addHeroToArmy(hero);
                       }}
                     >
                       <p>{hero.name}</p>

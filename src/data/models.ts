@@ -1434,7 +1434,7 @@ export const models: { [key: string]: iModel } = {
       Fa: 3,
     },
     wargear: [wargear.Armour, wargearChoice.SwordOrAxe],
-    wargearOptions: [],
+    wargearOptions: [{ ...wargear.HornOfGondor, cost: 5 }],
   },
 
   WarriorOfTheDead: {

@@ -1,5 +1,6 @@
 import { iWargear, wargear } from "./data/wargear";
-
+import * as _ from "lodash";
+import { iModelInArmy } from "./data/models";
 export const isWargearOptionEquipped = (
   wargearOption: iWargear,
   equippedWargear: iWargear[]
@@ -8,13 +9,21 @@ export const isWargearOptionEquipped = (
   return keysOfEquippedWargear.includes(wargearOption.name);
 };
 
-export const getActiveWargear = (
-  defaultWargear: iWargear[],
-  equippedWargear: iWargear[]
-) => {
+export const getDefaultChoiceWargearChoices = (wargearChoices: iWargear[]) => {
+  const defaultWargear = wargearChoices.map((wc) => {
+    return wc.choices ? wc.choices[0] : [];
+  });
+
+  return _.flatten(defaultWargear);
+};
+
+export const getActiveWargear = (model: iModelInArmy) => {
+  const { wargear, equippedWargear, wargearFromChoices = [] } = model;
   let activeWargear = [
-    // all the default stuff
-    ...defaultWargear,
+    // all the default stuff WITHOUT choices
+    ...wargear.filter((dw) => dw.choices === undefined),
+    // and THEN all the stuff from choices array
+    ...wargearFromChoices,
     // all the equipped wargear thats NOT a swap, just add it on
     ...equippedWargear.filter(
       (ew) => ew.swapFrom === undefined && ew.swapTo === undefined
@@ -44,13 +53,6 @@ export const getActiveWargear = (
           delete activeWargear[indexesToSwapOut[3]];
         }
       }
-
-      // const indexToSwap = activeWargear.findIndex(
-      //   (aw) => aw.id === swapWargear.swapFrom!.id
-      // );
-      // activeWargear[indexToSwap] = {
-      //   ...swapWargear.swapTo!,
-      // };
     });
 
   return activeWargear;

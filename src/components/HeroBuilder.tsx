@@ -38,13 +38,19 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
     decreaseWarbandWarriorQuantity,
   } = props;
 
+  console.log("hero", JSON.stringify(hero, null, 2));
+
   return (
     <div className="relative rounded-xl border-2 border-dashed border-stone-300 p-4">
       <button className="absolute top-2 right-2 bg-stone-200 text-sm hover:scale-105 hover:bg-stone-300 active:scale-90">
         Delete
       </button>
       <p className="font-bold">{hero.name}</p>
-      <p>{hero.wargear.map((w) => w.name).join(", ")}</p>
+      <p>
+        {getActiveWargear(hero)
+          .map((x) => x.name)
+          .join(", ")}
+      </p>
       <fieldset className="border border-solid border-stone-300 px-3 pt-1 pb-2">
         <div>
           <legend className="text-sm italic">Options</legend>
@@ -53,11 +59,14 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
             .filter((w) => w.choices && w.choices.length >= 1)
             .map((wc) => {
               return (
-                <div>
+                <div key={wc.id}>
                   <span>{wc.name}</span>
                   {wc.choices?.map((choice) => {
                     return (
-                      <label className="flex cursor-pointer flex-row items-center space-x-2">
+                      <label
+                        key={choice.id}
+                        className="flex cursor-pointer flex-row items-center space-x-2"
+                      >
                         <input
                           type="checkbox"
                           // checked={isWargearOptionEquipped(wgo, hero.equippedWargear)}
@@ -74,7 +83,10 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
             })}
           {hero.wargearOptions.map((wgo) => {
             return (
-              <label className="flex cursor-pointer flex-row items-center space-x-2">
+              <label
+                key={wgo.id}
+                className="flex cursor-pointer flex-row items-center space-x-2"
+              >
                 <input
                   type="checkbox"
                   checked={isWargearOptionEquipped(wgo, hero.equippedWargear)}
@@ -100,12 +112,12 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
           <div className="space-y-2">
             {hero.warband.map((w) => {
               return (
-                <div className="warband-warrior bg-stone-100 p-2">
+                <div key={w.id} className="warband-warrior bg-stone-100 p-2">
                   <p>
                     {w.name} * {w.quantity}
                   </p>
                   <p>
-                    {getActiveWargear(w.wargear, w.equippedWargear)
+                    {getActiveWargear(w)
                       .map((x) => x.name)
                       .join(", ")}
                   </p>
@@ -113,7 +125,10 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
                     <legend className="text-sm italic">Wargear Options</legend>
                     {w.wargearOptions.map((wgo) => {
                       return (
-                        <label className="inline-flex flex-row items-center space-x-2">
+                        <label
+                          key={wgo.id}
+                          className="inline-flex flex-row items-center space-x-2"
+                        >
                           <input
                             type="checkbox"
                             checked={isWargearOptionEquipped(
@@ -163,6 +178,7 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
         {warriorsInRoster.map((m) => {
           return (
             <button
+              key={`${hero.id}-${m.name}`}
               className="block bg-stone-200 px-4 py-2 hover:bg-stone-300"
               onClick={() => {
                 addWarbandWarriorToHero(m, hero.id);
