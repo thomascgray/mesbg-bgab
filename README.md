@@ -36,6 +36,8 @@
 
 - upgrading units based on them being inside a specific hero's warband
 
+- specific heroes are allowed soliders from OTHER armies in their warband; support this
+
 **Things I Know Are Missing (For Now!):**
 
 - siege engines
