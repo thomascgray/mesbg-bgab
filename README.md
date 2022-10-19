@@ -30,6 +30,12 @@
 
 **TODO**
 
+- supporting things with multiple profiles for 1 choice e.g the 2 elves together
+
+  - `ElladanAndElrohir`
+
+- upgrading units based on them being inside a specific hero's warband
+
 **Things I Know Are Missing (For Now!):**
 
 - siege engines
