@@ -30,19 +30,39 @@
 
 **TODO**
 
+- get rid of stats at model top level and make it ALL profiles
+
+  - painful, with the data, but gotta be done
+
+- models need some kind of "effective model count" cus some things can be purchased as they count as 2 models
+
+  - e.g dwarf vault warden teams
+
 - supporting things with multiple profiles for 1 choice e.g the 2 elves together
 
   - `ElladanAndElrohir`
+  - now check with the dwarfs with different profiles
 
 - upgrading units based on them being inside a specific hero's warband
 
-- specific heroes are allowed soliders from OTHER armies in their warband; support this
+  - durin
+    that elf man
 
 - upgrading units allowing changes to any of the stats of a unit
 
+- units allowing new HEROES to join the army (balin the dwarf) at new heroic tiers
+
+  - battlescribe doesnt support this
+
 - support buying increases in a heros might, will, and fate for different point costs
 
+  - started the data for this
+
 - i THINK mumakil can just be a hero and the warband is any units taht can ride on it, etc.
+
+- wargear needs a separate "summary name", as it can be useful to have 1 name in the listing, and 1 in the summary
+
+  - e.g swaps, the listing needs to say "X (replaces Y)" but the summary should probably just say "X"
 
 - things to put in data for easy access with TTS
   - spells

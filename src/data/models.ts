@@ -1,5 +1,33 @@
 import { iWargear, wargear, wargearSwap, wargearChoice } from "./wargear";
 
+// if a model has "profiles" it means that the model
+// is actually represented by more than 1 physical model
+// e.g those elf brothers
+// in this case, each profile should have a key and a name
+// if the profile has a "stats", it overwrites the main model's "stats"
+// otherwise the main models stats are used for all profiles
+// same for wargear and wargear options
+
+export interface iModelProfile {
+  key: string;
+  name?: string;
+  stats?: {
+    Mv: number;
+    F1: number;
+    F2: number;
+    S: number;
+    D: number;
+    A: number;
+    W: number;
+    C: number;
+    Mi?: number;
+    Wi?: number;
+    Fa?: number;
+  };
+  quantity?: number;
+  wargear?: iWargear[];
+}
+
 export interface iModel {
   heroLevel?: eHeroLevel;
   cost: number;
@@ -16,10 +44,13 @@ export interface iModel {
     Wi?: number;
     Fa?: number;
   };
+  profiles?: iModelProfile[];
   name: string;
   wargear: iWargear[];
   wargearOptions: iWargear[];
   wargearFromChoices?: iWargear[];
+  allowPurchaseMiWiFa?: boolean;
+  mayField?: iModel[]; // functions like army may fields, allows heroes to field armies from other lists
 }
 
 export interface ISiegeEngine {
@@ -32,9 +63,9 @@ export interface ISiegeEngine {
 }
 
 export interface iModelInArmy extends iModel {
-  id: string;
-  equippedWargear: iWargear[];
-  quantity: number;
+  id: string; // a unique ID
+  equippedWargear: iWargear[]; // wargear the user has equipped
+  quantity: number; // how many of the model with this wargear in this "squad"
 }
 
 export interface iHeroModelInArmy extends iModelInArmy {
@@ -49,8 +80,7 @@ export enum eHeroLevel {
   Independent,
 }
 
-// export const models: { [key: string]: iModel } = {
-export const models = {
+let _models: { [key: string]: iModel } = {
   FrodoBaggins: {
     name: "Frodo Baggins",
     heroLevel: eHeroLevel.Fortitude,
@@ -2044,7 +2074,7 @@ export const models = {
   },
 
   GilGaladHighKingOfTheElves: {
-    name: "GilGaladHighKingOfTheElves",
+    name: "Gil-Galad, High King of the Elves",
     heroLevel: eHeroLevel.Legend,
     cost: 170,
     stats: {
@@ -2068,7 +2098,7 @@ export const models = {
   },
 
   ElrondMasterOfRivendell: {
-    name: "ElrondMasterOfRivendell",
+    name: "Elrond, Master Of Rivendell",
     heroLevel: eHeroLevel.Legend,
     cost: 170,
     stats: {
@@ -2092,7 +2122,7 @@ export const models = {
   },
 
   GlorfindelLordOfTheWest: {
-    name: "GlorfindelLordOfTheWest",
+    name: "Glorfindel, Lord Of The West",
     heroLevel: eHeroLevel.Valour,
     cost: 145,
     stats: {
@@ -2137,7 +2167,7 @@ export const models = {
   },
 
   ArwenUndomiel: {
-    name: "ArwenUndomiel",
+    name: "Arwen Undomiel",
     heroLevel: eHeroLevel.Fortitude,
     cost: 60,
     stats: {
@@ -2162,9 +2192,19 @@ export const models = {
   },
 
   ElladanAndElrohir: {
-    name: "ElladanAndElrohir",
+    name: "Elladan And Elrohir",
     heroLevel: eHeroLevel.Fortitude,
     cost: 60,
+    profiles: [
+      {
+        name: "Elladan",
+        key: "Elladan",
+      },
+      {
+        name: "Elrohir",
+        key: "Elrohir",
+      },
+    ],
     stats: {
       Mv: 6,
       F1: 6,
@@ -2180,15 +2220,15 @@ export const models = {
     },
     wargear: [wargear.Armour, wargear.ElvenMadeSword],
     wargearOptions: [
-      { ...wargear.Horse, cost: 20 },
-      { ...wargear.ElfBow, cost: 10 },
-      { ...wargear.ElvenCloak, cost: 5 },
-      { ...wargear.HeavyArmour, cost: 10 },
+      { ...wargear.Horse, name: "Horses (for both)", cost: 20 },
+      { ...wargear.ElfBow, name: "Elf bows (for both)", cost: 10 },
+      { ...wargear.ElvenCloak, name: "Elven Cloaks (for both)", cost: 5 },
+      { ...wargear.HeavyArmour, name: "Heavy armour (for both)", cost: 10 },
     ],
   },
 
   LindirOfRivendell: {
-    name: "LindirOfRivendell",
+    name: "Lindir Of Rivendell",
     heroLevel: eHeroLevel.Fortitude,
     cost: 65,
     stats: {
@@ -2233,7 +2273,7 @@ export const models = {
   },
 
   GildorInglorion: {
-    name: "GildorInglorion",
+    name: "Gildor Inglorion",
     heroLevel: eHeroLevel.Fortitude,
     cost: 70,
     stats: {
@@ -2254,7 +2294,7 @@ export const models = {
   },
 
   HighElfCaptain: {
-    name: "HighElfCaptain",
+    name: "High Elf Captain",
     heroLevel: eHeroLevel.Fortitude,
     cost: 70,
     stats: {
@@ -2280,7 +2320,7 @@ export const models = {
   },
 
   HighElfStormCaller: {
-    name: "HighElfStormCaller",
+    name: "High Elf Storm Caller",
     heroLevel: eHeroLevel.Minor,
     cost: 60,
     stats: {
@@ -2306,7 +2346,7 @@ export const models = {
   },
 
   HighElfWarrior: {
-    name: "HighElfWarrior",
+    name: "High Elf Warrior",
     cost: 9,
     stats: {
       Mv: 6,
@@ -2329,7 +2369,7 @@ export const models = {
   },
 
   RivendellKnight: {
-    name: "RivendellKnight",
+    name: "Rivendell Knight",
     cost: 21,
     stats: {
       Mv: 6,
@@ -2447,6 +2487,613 @@ export const models = {
     ],
   },
 
+  GaladhrimCaptain: {
+    name: "GaladhrimCaptain",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 70,
+    stats: {
+      Mv: 6,
+      F1: 6,
+      F2: 3,
+      S: 4,
+      D: 6,
+      A: 2,
+      W: 2,
+      C: 6,
+      Mi: 2,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [wargear.HeavyArmour, wargear.ElvenMadeHandAndAHalfSword],
+    wargearOptions: [
+      { ...wargear.ArmouredHorse, cost: 15 },
+      { ...wargear.ElfBow, cost: 5 },
+      { ...wargear.Shield, cost: 5 },
+    ],
+  },
+
+  WoodElfCaptain: {
+    name: "WoodElfCaptain",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 65,
+    stats: {
+      Mv: 6,
+      F1: 6,
+      F2: 3,
+      S: 4,
+      D: 4,
+      A: 2,
+      W: 2,
+      C: 6,
+      Mi: 2,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [wargear.ElvenMadeSword, wargear.ElvenCloak],
+    wargearOptions: [
+      { ...wargear.ElfBow, cost: 5 },
+      { ...wargear.ThrowingDaggers, cost: 5 },
+      { ...wargear.WoodElfSpear, cost: 5 },
+    ],
+  },
+
+  GaladhrimStormcaller: {
+    name: "GaladhrimStormcaller",
+    heroLevel: eHeroLevel.Minor,
+    cost: 60,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 3,
+      S: 3,
+      D: 4,
+      A: 1,
+      W: 2,
+      C: 5,
+      Mi: 1,
+      Wi: 3,
+      Fa: 1,
+    },
+    wargear: [wargear.Armour, wargear.ElvenMadeSword, wargear.Staff],
+    wargearOptions: [
+      { ...wargear.ElfBow, cost: 5 },
+      { ...wargear.ThrowingDaggers, cost: 5 },
+      { ...wargear.WoodElfSpear, cost: 5 },
+    ],
+  },
+
+  GaladhrimWarrior: {
+    name: "GaladhrimWarrior",
+    cost: 9,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 3,
+      S: 3,
+      D: 5,
+      A: 1,
+      W: 1,
+      C: 5,
+    },
+    wargear: [wargear.HeavyArmour, wargear.ElvenMadeHandAndAHalfSword],
+    wargearOptions: [
+      { ...wargear.Warhorn, cost: 30 },
+      { ...wargear.Banner, cost: 25 },
+      { ...wargear.ElfBow, cost: 2 },
+      { ...wargear.Shield, cost: 1 },
+      { ...wargear.Spear, cost: 1 },
+    ],
+  },
+
+  GaladhrimKnight: {
+    name: "GaladhrimKnight",
+    cost: 18,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 3,
+      S: 3,
+      D: 5,
+      A: 1,
+      W: 1,
+      C: 5,
+    },
+    wargear: [
+      wargear.HeavyArmour,
+      wargear.ElvenMadeSword,
+      wargear.ArmouredHorse,
+    ],
+    wargearOptions: [
+      { ...wargear.Banner, cost: 25 },
+      { ...wargear.ElfBow, cost: 2 },
+      { ...wargear.Shield, cost: 1 },
+    ],
+  },
+
+  GuardOfTheGaladhrimCourt: {
+    name: "GuardOfTheGaladhrimCourt",
+    cost: 12,
+    stats: {
+      Mv: 6,
+      F1: 6,
+      F2: 3,
+      S: 3,
+      D: 5,
+      A: 1,
+      W: 1,
+      C: 6,
+    },
+    wargear: [wargear.HeavyArmour, wargear.Pike],
+    wargearOptions: [{ ...wargearSwap.PikeForBanner, cost: 25 }],
+  },
+
+  WoodElfWarrior: {
+    name: "WoodElfWarrior",
+    cost: 8,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 3,
+      S: 3,
+      D: 3,
+      A: 1,
+      W: 1,
+      C: 5,
+    },
+    wargear: [wargear.ElvenMadeHandAndAHalfSword, wargear.ElvenCloak],
+    wargearOptions: [
+      { ...wargear.Banner, cost: 25 },
+      { ...wargear.ElfBow, cost: 2 },
+      { ...wargear.ThrowingDaggers, cost: 2 },
+      { ...wargear.WoodElfSpear, cost: 1 },
+    ],
+  },
+
+  WoodElfSentinel: {
+    name: "WoodElfSentinel",
+    cost: 25,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 3,
+      S: 3,
+      D: 3,
+      A: 2,
+      W: 1,
+      C: 5,
+    },
+    wargear: [wargear.ElvenMadeSword, wargear.ElfBow, wargear.ElvenCloak],
+    wargearOptions: [],
+  },
+
+  Treebard: {
+    name: "Treebard",
+    heroLevel: eHeroLevel.Legend,
+    cost: 190,
+    stats: {
+      Mv: 6,
+      F1: 8,
+      F2: 4,
+      S: 8,
+      D: 8,
+      A: 3,
+      W: 3,
+      C: 7,
+      Mi: 3,
+      Wi: 6,
+      Fa: 3,
+    },
+    wargear: [wargear.RootsAndBranches],
+    wargearOptions: [{ ...wargear.MerryAndPippin, cost: 10 }],
+  },
+
+  Ent: {
+    name: "Ent",
+    cost: 190,
+    stats: {
+      Mv: 6,
+      F1: 7,
+      F2: 4,
+      S: 8,
+      D: 8,
+      A: 3,
+      W: 3,
+      C: 6,
+    },
+    wargear: [wargear.RootsAndBranches],
+    wargearOptions: [],
+  },
+
+  Gwaihir: {
+    name: "Gwaihir",
+    heroLevel: eHeroLevel.Legend,
+    cost: 150,
+    stats: {
+      Mv: 3,
+      F1: 8,
+      F2: 4,
+      S: 6,
+      D: 8,
+      A: 2,
+      W: 3,
+      C: 6,
+      Mi: 3,
+      Wi: 3,
+      Fa: 3,
+    },
+    wargear: [wargear.ClawsAndBeak],
+    wargearOptions: [],
+  },
+
+  GreatEagle: {
+    name: "GreatEagle",
+    cost: 100,
+    stats: {
+      Mv: 3,
+      F1: 7,
+      F2: 4,
+      S: 6,
+      D: 8,
+      A: 2,
+      W: 3,
+      C: 6,
+    },
+    wargear: [wargear.ClawsAndBeak],
+    wargearOptions: [],
+  },
+
+  DurinKingOfKhazadDum: {
+    name: "DurinKingOfKhazadDum",
+    heroLevel: eHeroLevel.Legend,
+    cost: 160,
+    stats: {
+      Mv: 5,
+      F1: 6,
+      F2: 4,
+      S: 4,
+      D: 9,
+      A: 3,
+      W: 3,
+      C: 6,
+      Mi: 3,
+      Wi: 3,
+      Fa: 1,
+    },
+    wargear: [
+      wargear.HeavyMithrilArmour,
+      wargear.DurinsAxe,
+      wargear.RingOfDurin,
+      wargear.CrownOfKings,
+      wargear.HornOfZirakzigil,
+    ],
+    wargearOptions: [],
+  },
+
+  Mardin: {
+    name: "Mardin",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 75,
+    stats: {
+      Mv: 5,
+      F1: 5,
+      F2: 4,
+      S: 4,
+      D: 7,
+      A: 2,
+      W: 2,
+      C: 5,
+      Mi: 3,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [wargear.DwarfArmour, wargear.Torozul],
+    wargearOptions: [],
+  },
+
+  FloiStonehand: {
+    name: "FloiStonehand",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 75,
+    stats: {
+      Mv: 5,
+      F1: 4,
+      F2: 4,
+      S: 4,
+      D: 6,
+      A: 2,
+      W: 2,
+      C: 5,
+      Mi: 1,
+      Wi: 3,
+      Fa: 1,
+    },
+    wargear: [wargear.HeavyDwarfArmour, wargear.Staff],
+    wargearOptions: [],
+  },
+
+  BalinTheDwarfKingOfMoria: {
+    name: "BalinTheDwarfKingOfMoria",
+    heroLevel: eHeroLevel.Legend,
+    cost: 110,
+    stats: {
+      Mv: 5,
+      F1: 6,
+      F2: 4,
+      S: 4,
+      D: 8,
+      A: 2,
+      W: 2,
+      C: 6,
+      Mi: 3,
+      Wi: 3,
+      Fa: 1,
+    },
+    wargear: [wargear.HeavyDwarfArmour, wargear.DurinsAxe],
+    wargearOptions: [],
+  },
+
+  DwarfKing: {
+    name: "DwarfKing",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 75,
+    stats: {
+      Mv: 5,
+      F1: 6,
+      F2: 4,
+      S: 4,
+      D: 8,
+      A: 2,
+      W: 2,
+      C: 6,
+      Mi: 2,
+      Wi: 2,
+      Fa: 1,
+    },
+    wargear: [wargear.HeavyDwarfArmour, wargear.Axe],
+    wargearOptions: [
+      { ...wargear.ThrowingAxes, cost: 5 },
+      { ...wargear.TwoHandedAxe, cost: 5 },
+    ],
+  },
+
+  DwarfCaptain: {
+    name: "DwarfCaptain",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 60,
+    stats: {
+      Mv: 5,
+      F1: 5,
+      F2: 4,
+      S: 4,
+      D: 7,
+      A: 2,
+      W: 2,
+      C: 5,
+      Mi: 2,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [wargear.DwarfArmour, wargear.Axe],
+    wargearOptions: [
+      { ...wargear.Shield, cost: 5 },
+      { ...wargear.ThrowingAxes, cost: 5 },
+      { ...wargear.TwoHandedAxe, cost: 5 },
+    ],
+  },
+
+  KingsChampion: {
+    name: "KingsChampion",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 140,
+    profiles: [
+      {
+        key: "KingsChampion",
+        name: `King's Champion`,
+        stats: {
+          Mv: 5,
+          F1: 6,
+          F2: 4,
+          S: 5,
+          D: 7,
+          A: 3,
+          W: 2,
+          C: 5,
+          Mi: 2,
+          Wi: 1,
+          Fa: 1,
+        },
+        wargear: [wargear.HeavyArmour, wargear.TwoAxes],
+      },
+      {
+        key: "Herald",
+        name: `Herald`,
+        quantity: 2,
+        stats: {
+          Mv: 5,
+          F1: 4,
+          F2: 4,
+          S: 4,
+          D: 7,
+          A: 1,
+          W: 1,
+          C: 4,
+          Mi: 0,
+          Wi: 1,
+          Fa: 2,
+        },
+        wargear: [
+          wargear.DwarfArmour,
+          wargear.Shield,
+          wargear.Axe,
+          wargear.Banner,
+        ],
+      },
+    ],
+    stats: {
+      Mv: 5,
+      F1: 5,
+      F2: 4,
+      S: 4,
+      D: 7,
+      A: 2,
+      W: 2,
+      C: 5,
+      Mi: 2,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [],
+    wargearOptions: [],
+  },
+
+  ShieldBearer: {
+    name: "ShieldBearer",
+    heroLevel: eHeroLevel.Minor,
+    cost: 60,
+    stats: {
+      Mv: 5,
+      F1: 5,
+      F2: 4,
+      S: 4,
+      D: 8,
+      A: 2,
+      W: 2,
+      C: 4,
+      Mi: 1,
+      Wi: 0,
+      Fa: 0,
+    },
+    wargear: [wargear.DwarfArmour, wargear.Shield, wargear.Axe],
+    wargearOptions: [],
+  },
+
+  DwarfWarrior: {
+    name: "DwarfWarrior",
+    cost: 8,
+    stats: {
+      Mv: 5,
+      F1: 4,
+      F2: 4,
+      S: 3,
+      D: 6,
+      A: 1,
+      W: 1,
+      C: 4,
+    },
+    wargear: [wargear.DwarfArmour, wargear.Axe],
+    wargearOptions: [
+      { ...wargear.Warhorn, cost: 30 },
+      { ...wargear.Banner, cost: 25 },
+      { ...wargear.DwarfBow, cost: 1 },
+      { ...wargear.Shield, cost: 1 },
+      { ...wargearSwap.AxeForTwoHandedAxeAndDagger, cost: 1 },
+    ],
+  },
+
+  KhazadGuard: {
+    name: "KhazadGuard",
+    cost: 11,
+    stats: {
+      Mv: 5,
+      F1: 4,
+      F2: 4,
+      S: 4,
+      D: 7,
+      A: 1,
+      W: 1,
+      C: 4,
+    },
+    wargear: [wargear.HeavyDwarfArmour, wargear.TwoHandedAxe, wargear.Axe],
+    wargearOptions: [],
+  },
+
+  IronGuard: {
+    name: "IronGuard",
+    cost: 15,
+    stats: {
+      Mv: 5,
+      F1: 4,
+      F2: 4,
+      S: 4,
+      D: 6,
+      A: 2,
+      W: 1,
+      C: 4,
+    },
+    wargear: [wargear.DwarfArmour, wargear.Sword, wargear.ThrowingAxes],
+    wargearOptions: [],
+  },
+
+  DwarfRanger: {
+    name: "DwarfRanger",
+    cost: 8,
+    stats: {
+      Mv: 5,
+      F1: 4,
+      F2: 3,
+      S: 3,
+      D: 5,
+      A: 1,
+      W: 1,
+      C: 4,
+    },
+    wargear: [wargear.Armour, wargear.Axe],
+    wargearOptions: [
+      { ...wargear.DwarfLongBow, cost: 1 },
+      { ...wargear.ThrowingAxes, cost: 1 },
+      { ...wargear.TwoHandedAxe, cost: 1 },
+    ],
+  },
+
+  VaultWardenTeam: {
+    name: "VaultWardenTeam",
+    cost: 25,
+    profiles: [
+      {
+        key: "IronShield",
+        name: "Iron Shield",
+        stats: {
+          Mv: 5,
+          F1: 4,
+          F2: 4,
+          S: 4,
+          D: 9,
+          A: 1,
+          W: 1,
+          C: 4,
+        },
+        wargear: [wargear.HeavyArmour, wargear.Axe, wargear.IronShield],
+      },
+      {
+        key: "FoeSpear",
+        name: "Foe Spear",
+        stats: {
+          Mv: 5,
+          F1: 4,
+          F2: 4,
+          S: 4,
+          D: 6,
+          A: 1,
+          W: 1,
+          C: 4,
+        },
+        wargear: [wargear.DwarfArmour, wargear.FoeSpear],
+      },
+    ],
+    stats: {
+      Mv: 5,
+      F1: 4,
+      F2: 3,
+      S: 3,
+      D: 5,
+      A: 1,
+      W: 1,
+      C: 4,
+    },
+    wargear: [],
+    wargearOptions: [],
+  },
+
   TheDarkLordSauron: {
     heroLevel: eHeroLevel.Valour,
     cost: 400,
@@ -2541,4 +3188,14 @@ export const models = {
     wargear: [wargear.Armour, wargearChoice.SwordOrPick],
     wargearOptions: [{ ...wargear.Warg, cost: 7 }],
   },
+};
+
+// add in the extra may fields
+_models.GildorInglorion = {
+  ..._models.GildorInglorion,
+  mayField: [_models.WoodElfWarrior],
+};
+
+export const models = {
+  ..._models,
 };
