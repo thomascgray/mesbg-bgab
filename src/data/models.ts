@@ -49,7 +49,8 @@ export enum eHeroLevel {
   Independent,
 }
 
-export const models: { [key: string]: iModel } = {
+// export const models: { [key: string]: iModel } = {
+export const models = {
   FrodoBaggins: {
     name: "Frodo Baggins",
     heroLevel: eHeroLevel.Fortitude,

@@ -38,6 +38,16 @@
 
 - specific heroes are allowed soliders from OTHER armies in their warband; support this
 
+- upgrading units allowing changes to any of the stats of a unit
+
+- support buying increases in a heros might, will, and fate for different point costs
+
+- i THINK mumakil can just be a hero and the warband is any units taht can ride on it, etc.
+
+- things to put in data for easy access with TTS
+  - spells
+  - special rules
+
 **Things I Know Are Missing (For Now!):**
 
 - siege engines
