@@ -83,6 +83,13 @@ export const armies = {
   Angmar: { name: "Angmar", mayField: [] },
   Mordor: { name: "Mordor", mayField: [] },
   Moria: { name: "Moria", mayField: [] },
+  Isengard: { name: "Isengard", mayField: [] },
+  TheEasterlings: { name: "TheEasterlings", mayField: [] },
+  VariagsOfKhand: { name: "VariagsOfKhand", mayField: [] },
+  TheSerpentHorde: { name: "TheSerpentHorde", mayField: [] },
+  FarHarad: { name: "FarHarad", mayField: [] },
+  CorsairsOfUmbar: { name: "CorsairsOfUmbar", mayField: [] },
+  SharkeysRogues: { name: "SharkeysRogues", mayField: [] },
 };
 
 export type ArmyKey = keyof typeof armies;
