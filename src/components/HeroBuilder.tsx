@@ -1,33 +1,45 @@
 import React from "react";
 import { iHeroModelInArmy, iModel, iModelInArmy } from "../data/models";
-import { iWargear } from "../data/wargear";
-import {
-  calculatePointsForWarband,
-  getActiveWargear,
-  isWargearChoiceSelected,
-  isWargearOptionEquipped,
-} from "../utils";
-import * as State from "../state";
+import { calculatePointsForWarband, hasPickableOptions } from "../utils";
 
-import { useSnapshot } from "valtio";
 import { ProfileRenderer } from "./ProfileRenderer";
-import { ActiveWargear } from "./ActiveWargear";
 import { WargearOptions } from "./WargearOptions";
 import { WarriorButtons } from "./WarriorButtons";
+import { AddWarriorsToWarband } from "./AddWarriorsToWarband";
 
 export interface iHeroBuilderProps {
   hero: iHeroModelInArmy;
   warriorsInRoster: iModel[];
 }
 export const HeroBuilder = (props: iHeroBuilderProps) => {
-  const stateView = useSnapshot(State.state);
-
   const { hero, warriorsInRoster } = props;
 
-  const allowedWarriorsInWarband = [
-    ...warriorsInRoster,
-    ...(hero.mayField ? hero.mayField : []),
-  ];
+  let allowedWarriorsInWarband = [...warriorsInRoster];
+
+  if (hero.mayField !== undefined && hero.mayField.length >= 1) {
+    // if theres any in the hero may field that are already in the allowed
+    // warriors, replace them with the ones from the may field
+
+    const replacedUnitKeys: string[] = [];
+    hero.mayField.forEach((model) => {
+      const indexOfMayfieldInsideRoster = allowedWarriorsInWarband.findIndex(
+        (w) => w.key === model.key
+      );
+
+      if (indexOfMayfieldInsideRoster > -1) {
+        // overwrite it in the roster
+        allowedWarriorsInWarband[indexOfMayfieldInsideRoster] = {
+          ...model,
+        };
+        replacedUnitKeys.push(model.key);
+      }
+    });
+
+    allowedWarriorsInWarband = [
+      ...allowedWarriorsInWarband,
+      ...hero.mayField.filter((w) => !replacedUnitKeys.includes(w.key)),
+    ];
+  }
 
   return (
     <div className="relative bg-stone-100 p-4">
@@ -36,8 +48,7 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
       </span>
 
       <ProfileRenderer model={hero} />
-      {(hero.wargearOptions.length >= 1 ||
-        (hero.wargearFromChoices && hero.wargearFromChoices.length >= 1)) && (
+      {hasPickableOptions(hero) && (
         <details>
           <summary className="cursor-pointer">Options</summary>
           <WargearOptions model={hero} />
@@ -58,28 +69,23 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
                     <ProfileRenderer model={warrior} />
                     <WarriorButtons model={warrior} hero={hero} />
                   </div>
-                  <details>
-                    <summary className="cursor-pointer">Options</summary>
-                    <WargearOptions model={warrior} hero={hero} />
-                  </details>
+                  {hasPickableOptions(warrior) && (
+                    <details>
+                      <summary className="cursor-pointer">Options</summary>
+                      <WargearOptions model={warrior} hero={hero} />
+                    </details>
+                  )}
                 </div>
               );
             })}
           </div>
         )}
-        {allowedWarriorsInWarband.map((m) => {
-          return (
-            <button
-              key={`${hero.id}-${m.name}`}
-              className="block bg-stone-200 px-4 py-2 hover:bg-stone-300"
-              onClick={() => {
-                State.addWarbandWarriorToHero(m, hero.id);
-              }}
-            >
-              <p>{m.name}</p>
-            </button>
-          );
-        })}
+        <div className="mt-2 border border-x-0 border-b-0 border-stone-400 py-2">
+          <AddWarriorsToWarband
+            choices={allowedWarriorsInWarband}
+            hero={hero}
+          />
+        </div>
       </fieldset>
     </div>
   );

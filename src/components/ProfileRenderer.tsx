@@ -33,14 +33,9 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
         {model.heroLevel === undefined && (
           <React.Fragment>
             <span>{model.quantity} * </span>
-            <span>{Pluralize(model.name, model.quantity)}</span>
+            <span>{model.name}</span>
             {activeWargearNames.length >= 1 && (
-              <span className="ml-1">
-                w/{" "}
-                {activeWargearNames
-                  .map((s) => Pluralize(s, model.quantity))
-                  .join(", ")}
-              </span>
+              <span className="ml-1">w/ {activeWargearNames.join(", ")}</span>
             )}
           </React.Fragment>
         )}
@@ -49,47 +44,55 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
       {model.profiles === undefined && (
         <div className="flex flex-row items-center space-x-8">
           <table className="table-fixed border-collapse border-spacing-0">
-            <tr className="text-sm font-normal">
-              <th className="w-6 text-left">Mv</th>
-              <th className="w-14 text-center">F</th>
-              <th className="w-8 text-left">S</th>
-              <th className="w-8 text-left">D</th>
-              <th className="w-8 text-left">A</th>
-              <th className="w-8 text-left">W</th>
-              <th className="w-8 text-left">C</th>
-            </tr>
-            <tr>
-              <td className="">{model.stats.Mv}''</td>
-              <td className="text-center">
-                {model.stats.F1}/{model.stats.F1}+
-              </td>
-              <td className="">{model.stats.S}</td>
-              <td className="">{model.stats.D}</td>
-              <td className="">{model.stats.A}</td>
-              <td className="">{model.stats.W}</td>
-              <td className="">{model.stats.C}</td>
-            </tr>
+            <thead>
+              <tr className="text-sm font-normal">
+                <th className="w-6 text-left">Mv</th>
+                <th className="w-14 text-center">F</th>
+                <th className="w-8 text-left">S</th>
+                <th className="w-8 text-left">D</th>
+                <th className="w-8 text-left">A</th>
+                <th className="w-8 text-left">W</th>
+                <th className="w-8 text-left">C</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="">{model.stats.Mv}''</td>
+                <td className="text-center">
+                  {model.stats.F1}/{model.stats.F1}+
+                </td>
+                <td className="">{model.stats.S}</td>
+                <td className="">{model.stats.D}</td>
+                <td className="">{model.stats.A}</td>
+                <td className="">{model.stats.W}</td>
+                <td className="">{model.stats.C}</td>
+              </tr>
+            </tbody>
           </table>
           {model.stats.Mi !== undefined &&
             model.stats.Wi !== undefined &&
             model.stats.Fa !== undefined && (
               <table>
-                <tr>
-                  <th className="">M</th>
-                  <th className="">W</th>
-                  <th className="">F</th>
-                </tr>
-                <tr>
-                  <td className="">
-                    <HeroAttributeRenderer value={model.stats.Mi} />
-                  </td>
-                  <td className="">
-                    <HeroAttributeRenderer value={model.stats.Wi} />
-                  </td>
-                  <td className="">
-                    <HeroAttributeRenderer value={model.stats.Fa} />
-                  </td>
-                </tr>
+                <thead>
+                  <tr>
+                    <th className="">M</th>
+                    <th className="">W</th>
+                    <th className="">F</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="">
+                      <HeroAttributeRenderer value={model.stats.Mi} />
+                    </td>
+                    <td className="">
+                      <HeroAttributeRenderer value={model.stats.Wi} />
+                    </td>
+                    <td className="">
+                      <HeroAttributeRenderer value={model.stats.Fa} />
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             )}
         </div>

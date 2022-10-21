@@ -66,7 +66,7 @@ function App() {
       )}
 
       {stateView.armyForces.length >= 1 &&
-        stateView.armyForces.map((af) => <p>{af}</p>)}
+        stateView.armyForces.map((af) => <p key={af}>{af}</p>)}
 
       <div className="flex flex-row items-center space-x-4">
         <select
@@ -106,12 +106,12 @@ function App() {
           {allowedHeroes.length >= 1 &&
             groupedHeroes.map((group) => {
               return (
-                <div>
+                <div key={group.name}>
                   <span>Heroes of {group.name}</span>
                   <div className="space-y-2">
                     {group.heroes &&
                       group.heroes.map((hero) => {
-                        return <AddHeroToArmy hero={hero} />;
+                        return <AddHeroToArmy key={hero.name} hero={hero} />;
                       })}
                   </div>
                   {group.heroes.length <= 0 && (

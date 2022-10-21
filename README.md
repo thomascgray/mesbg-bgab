@@ -30,10 +30,6 @@
 
 **TODO**
 
-- get rid of stats at model top level and make it ALL profiles
-
-  - painful, with the data, but gotta be done
-
 - models need some kind of "effective model count" cus some things can be purchased as they count as 2 models
 
   - e.g dwarf vault warden teams

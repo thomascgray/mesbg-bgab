@@ -1,4 +1,4 @@
-import { iWargear, wargear } from "./data/wargear";
+import { iOption, options } from "./data/wargear";
 import * as _ from "lodash";
 import {
   eHeroLevel,
@@ -9,16 +9,16 @@ import {
 } from "./data/models";
 
 export const isWargearOptionEquipped = (
-  wargearOption: iWargear,
-  equippedWargear: iWargear[]
+  wargearOption: iOption,
+  equippedWargear: iOption[]
 ) => {
   const keysOfEquippedWargear = equippedWargear.map((w) => w.name);
   return keysOfEquippedWargear.includes(wargearOption.name);
 };
 
 export const isWargearChoiceSelected = (
-  choice: iWargear,
-  wargearChoice: iWargear,
+  choice: iOption,
+  wargearChoice: iOption,
   hero: iModelInArmy
 ) => {
   if (hero.wargearFromChoices) {
@@ -30,7 +30,7 @@ export const isWargearChoiceSelected = (
   // return keysOfEquippedWargear.includes(wargearOption.name);
 };
 
-export const getDefaultChoiceWargearChoices = (wargearChoices: iWargear[]) => {
+export const getDefaultChoiceWargearChoices = (wargearChoices: iOption[]) => {
   const defaultWargear = wargearChoices.map((wc) => {
     return wc.choices ? wc.choices[0] : [];
   });
@@ -50,7 +50,7 @@ export const getActiveWargear = (
 
   const { excludeDefault = false } = options || {};
 
-  let activeWargear: iWargear[] = [];
+  let activeWargear: iOption[] = [];
 
   if (excludeDefault === false) {
     activeWargear = [
@@ -178,4 +178,11 @@ export const groupHeroes = (heroes: iModel[]) => {
       heroes: [...heroes.filter((h) => h.heroLevel === eHeroLevel.Independent)],
     },
   ];
+};
+
+export const hasPickableOptions = (model: iModelInArmy) => {
+  return (
+    model.wargearOptions.length >= 1 ||
+    (model.wargearFromChoices && model.wargearFromChoices.length >= 1)
+  );
 };

@@ -1,4 +1,10 @@
-import { iWargear, wargear, wargearSwap, wargearChoice } from "./wargear";
+import {
+  iOption,
+  options,
+  optionSwaps,
+  optionChoice,
+  optionUpgrades,
+} from "./wargear";
 
 // if a model has "profiles" it means that the model
 // is actually represented by more than 1 physical model
@@ -25,11 +31,12 @@ export interface iModelProfile {
     Fa?: number;
   };
   quantity?: number;
-  wargear?: iWargear[];
+  wargear?: iOption[];
 }
 
 export interface iModel {
   heroLevel?: eHeroLevel;
+  key: string;
   cost: number;
   stats: {
     Mv: number;
@@ -46,11 +53,16 @@ export interface iModel {
   };
   profiles?: iModelProfile[];
   name: string;
-  wargear: iWargear[];
-  wargearOptions: iWargear[];
-  wargearFromChoices?: iWargear[];
+  wargear: iOption[]; // the models starting options
+  wargearOptions: iOption[]; // any options that the model can optionally choose to take
+  wargearFromChoices?: iOption[]; // options that the model has taken from choices e.g they NEED to have one of the choices
+  wargearFromUpgrades?: iOption[]; // options that the model has taken that it is allowed via upgrades
   allowPurchaseMiWiFa?: boolean;
-  mayField?: iModel[]; // functions like army may fields, allows heroes to field armies from other lists
+
+  // functions like army may fields, allows heroes to field armies from other lists
+  // if a hero has a mayField or a unit that it is already allowed to field, the heros
+  // mayField OVERWRITES the "army" model
+  mayField?: iModel[];
 }
 
 export interface ISiegeEngine {
@@ -64,7 +76,7 @@ export interface ISiegeEngine {
 
 export interface iModelInArmy extends iModel {
   id: string; // a unique ID
-  equippedWargear: iWargear[]; // wargear the user has equipped
+  equippedWargear: iOption[]; // wargear the user has equipped
   quantity: number; // how many of the model with this wargear in this "squad"
 }
 
@@ -80,7 +92,7 @@ export enum eHeroLevel {
   Independent,
 }
 
-let _models: { [key: string]: iModel } = {
+let _models: { [key: string]: Omit<iModel, "key"> } = {
   FrodoBaggins: {
     name: "Frodo Baggins",
     heroLevel: eHeroLevel.Fortitude,
@@ -98,18 +110,18 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 3,
     },
-    wargear: [wargear.Dagger, wargear.TheOneRing],
+    wargear: [options.Dagger, options.TheOneRing],
     wargearOptions: [
       {
-        ...wargear.MithrilCoat,
+        ...options.MithrilCoat,
         cost: 15,
       },
       {
-        ...wargear.Sting,
+        ...options.Sting,
         cost: 5,
       },
       {
-        ...wargear.ElvenCloak,
+        ...options.ElvenCloak,
         cost: 5,
       },
     ],
@@ -131,10 +143,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 2,
       Fa: 2,
     },
-    wargear: [wargear.Dagger],
+    wargear: [options.Dagger],
     wargearOptions: [
       {
-        ...wargear.ElvenCloak,
+        ...options.ElvenCloak,
         cost: 5,
       },
     ],
@@ -156,10 +168,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 0,
       Fa: 1,
     },
-    wargear: [wargear.Dagger],
+    wargear: [options.Dagger],
     wargearOptions: [
       {
-        ...wargear.ElvenCloak,
+        ...options.ElvenCloak,
         cost: 5,
       },
     ],
@@ -181,10 +193,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 0,
       Fa: 1,
     },
-    wargear: [wargear.Dagger],
+    wargear: [options.Dagger],
     wargearOptions: [
       {
-        ...wargear.ElvenCloak,
+        ...options.ElvenCloak,
         cost: 5,
       },
     ],
@@ -206,10 +218,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 6,
       Fa: 3,
     },
-    wargear: [wargear.StaffOfPower, wargear.Glamdring, wargear.Narya],
+    wargear: [options.StaffOfPower, options.Glamdring, options.Narya],
     wargearOptions: [
-      { ...wargear.Cart, cost: 5 },
-      { ...wargear.Horse, cost: 10 },
+      { ...options.Cart, cost: 5 },
+      { ...options.Horse, cost: 10 },
     ],
   },
   AragornStrider: {
@@ -229,13 +241,13 @@ let _models: { [key: string]: iModel } = {
       Wi: 6,
       Fa: 3,
     },
-    wargear: [wargear.Sword],
+    wargear: [options.Sword],
     wargearOptions: [
-      { ...wargear.AndurilFlameOfTheWest, cost: 40 },
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.Armour, cost: 5 },
-      { ...wargear.Bow, cost: 5 },
-      { ...wargear.ElvenCloak, cost: 5 },
+      { ...options.AndurilFlameOfTheWest, cost: 40 },
+      { ...options.Horse, cost: 10 },
+      { ...options.Armour, cost: 5 },
+      { ...options.Bow, cost: 5 },
+      { ...options.ElvenCloak, cost: 5 },
     ],
   },
   BoromirOfGondor: {
@@ -255,11 +267,11 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 0,
     },
-    wargear: [wargear.Armour, wargear.Sword, wargear.HornOfGondor],
+    wargear: [options.Armour, options.Sword, options.HornOfGondor],
     wargearOptions: [
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.ElvenCloak, cost: 5 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.Horse, cost: 10 },
+      { ...options.ElvenCloak, cost: 5 },
+      { ...options.Shield, cost: 5 },
     ],
   },
   LegolasGreenleaf: {
@@ -279,11 +291,11 @@ let _models: { [key: string]: iModel } = {
       Wi: 2,
       Fa: 3,
     },
-    wargear: [wargear.ElvenMadeDaggers, wargear.ElfBow],
+    wargear: [options.ElvenMadeDaggers, options.ElfBow],
     wargearOptions: [
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.Armour, cost: 5 },
-      { ...wargear.ElvenCloak, cost: 5 },
+      { ...options.Horse, cost: 10 },
+      { ...options.Armour, cost: 5 },
+      { ...options.ElvenCloak, cost: 5 },
     ],
   },
   GimliSonOfGloin: {
@@ -304,12 +316,12 @@ let _models: { [key: string]: iModel } = {
       Fa: 2,
     },
     wargear: [
-      wargear.HeavyDwarfArmour,
-      wargear.MasterForgedTwoHandedAxe,
-      wargear.TwoAxes,
-      wargear.ThrowingAxes,
+      options.HeavyDwarfArmour,
+      options.MasterForgedTwoHandedAxe,
+      options.TwoAxes,
+      options.ThrowingAxes,
     ],
-    wargearOptions: [{ ...wargear.ElvenCloak, cost: 5 }],
+    wargearOptions: [{ ...options.ElvenCloak, cost: 5 }],
   },
   BillThePony: {
     name: "Bill the Pony",
@@ -328,7 +340,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.IronShodHooves],
+    wargear: [options.IronShodHooves],
     wargearOptions: [],
   },
   Smeagol: {
@@ -348,7 +360,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 0,
       Fa: 1,
     },
-    wargear: [wargear.StranglingFingers],
+    wargear: [options.StranglingFingers],
     wargearOptions: [],
   },
   FrodoOfTheNineFingers: {
@@ -368,10 +380,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 1,
     },
-    wargear: [wargear.MithrilCoat],
+    wargear: [options.MithrilCoat],
     wargearOptions: [
-      { ...wargear.ElvenCloak, cost: 5 },
-      { ...wargear.Pony, cost: 5 },
+      { ...options.ElvenCloak, cost: 5 },
+      { ...options.Pony, cost: 5 },
     ],
   },
   SamwiseTheBrave: {
@@ -391,10 +403,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 2,
       Fa: 3,
     },
-    wargear: [wargear.Sting],
+    wargear: [options.Sting],
     wargearOptions: [
-      { ...wargear.ElvenCloak, cost: 5 },
-      { ...wargear.Pony, cost: 5 },
+      { ...options.ElvenCloak, cost: 5 },
+      { ...options.Pony, cost: 5 },
     ],
   },
   MeriadocCaptainOfTheShire: {
@@ -414,11 +426,11 @@ let _models: { [key: string]: iModel } = {
       Wi: 2,
       Fa: 2,
     },
-    wargear: [wargear.Armour, wargear.Sword],
+    wargear: [options.Armour, options.Sword],
     wargearOptions: [
-      { ...wargear.ElvenCloak, cost: 5 },
-      { ...wargear.Pony, cost: 5 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.ElvenCloak, cost: 5 },
+      { ...options.Pony, cost: 5 },
+      { ...options.Shield, cost: 5 },
     ],
   },
   PeregrinCaptainOfTheShire: {
@@ -438,11 +450,11 @@ let _models: { [key: string]: iModel } = {
       Wi: 2,
       Fa: 2,
     },
-    wargear: [wargear.Armour, wargear.Sword],
+    wargear: [options.Armour, options.Sword],
     wargearOptions: [
-      { ...wargear.ElvenCloak, cost: 5 },
-      { ...wargear.Pony, cost: 5 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.ElvenCloak, cost: 5 },
+      { ...options.Pony, cost: 5 },
+      { ...options.Shield, cost: 5 },
     ],
   },
   PaladinTook: {
@@ -462,7 +474,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 2,
     },
-    wargear: [wargear.WalkingCaneClub],
+    wargear: [options.WalkingCaneClub],
     wargearOptions: [],
   },
 
@@ -483,7 +495,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 2,
       Fa: 2,
     },
-    wargear: [wargear.TwoHandedScythePick, wargear.GripFangAndWolf],
+    wargear: [options.TwoHandedScythePick, options.GripFangAndWolf],
     wargearOptions: [],
   },
 
@@ -504,7 +516,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 1,
     },
-    wargear: [wargear.Umbrella],
+    wargear: [options.Umbrella],
     wargearOptions: [],
   },
 
@@ -546,11 +558,11 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 3,
     },
-    wargear: [wargear.Dagger],
+    wargear: [options.Dagger],
     wargearOptions: [
-      { ...wargear.MithrilCoat, cost: 15 },
-      { ...wargear.Sting, cost: 5 },
-      { ...wargear.TheOneRing, cost: 0 },
+      { ...options.MithrilCoat, cost: 15 },
+      { ...options.Sting, cost: 5 },
+      { ...options.TheOneRing, cost: 0 },
     ],
   },
 
@@ -571,7 +583,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.Club, wargear.Horse],
+    wargear: [options.Club, options.Horse],
     wargearOptions: [],
   },
 
@@ -588,7 +600,7 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 3,
     },
-    wargear: [wargearChoice.DaggerOrAxeOrHammer],
+    wargear: [optionChoice.DaggerOrAxeOrHammer],
     wargearOptions: [],
   },
 
@@ -605,8 +617,8 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 3,
     },
-    wargear: [wargear.Dagger, wargear.Shortbow],
-    wargearOptions: [{ ...wargear.Warhorn, cost: 30 }],
+    wargear: [options.Dagger, options.Shortbow],
+    wargearOptions: [{ ...options.Warhorn, cost: 30 }],
   },
 
   HobbitShirriff: {
@@ -622,7 +634,7 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 3,
     },
-    wargear: [wargear.HandAndAHalfClub],
+    wargear: [options.HandAndAHalfClub],
     wargearOptions: [],
   },
 
@@ -644,7 +656,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 2,
       Fa: 1,
     },
-    wargear: [wargear.Armour, wargear.Sword, wargear.Bow],
+    wargear: [options.Armour, options.Sword, options.Bow],
     wargearOptions: [],
   },
   Halbarad: {
@@ -665,10 +677,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 2,
       Fa: 1,
     },
-    wargear: [wargear.Armour, wargear.Sword, wargear.Bow],
+    wargear: [options.Armour, options.Sword, options.Bow],
     wargearOptions: [
-      { ...wargear.BannerOfArwenEvenstar, cost: 40 },
-      { ...wargear.Horse, cost: 10 },
+      { ...options.BannerOfArwenEvenstar, cost: 40 },
+      { ...options.Horse, cost: 10 },
     ],
   },
   RangerOfTheNorth: {
@@ -688,10 +700,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.Armour, wargear.Sword, wargear.Bow],
+    wargear: [options.Armour, options.Sword, options.Bow],
     wargearOptions: [
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.Spear, cost: 1 },
+      { ...options.Horse, cost: 10 },
+      { ...options.Spear, cost: 1 },
     ],
   },
   Dunedain: {
@@ -711,8 +723,8 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.Sword, wargear.Bow],
-    wargearOptions: [{ ...wargear.Spear, cost: 1 }],
+    wargear: [options.Sword, options.Bow],
+    wargearOptions: [{ ...options.Spear, cost: 1 }],
   },
 
   ElendilHighKingOfGondorAndArnor: {
@@ -733,10 +745,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 1,
     },
-    wargear: [wargear.HeavyArmour, wargear.Narsil],
+    wargear: [options.HeavyArmour, options.Narsil],
     wargearOptions: [
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.Horse, cost: 10 },
+      { ...options.Shield, cost: 5 },
     ],
   },
 
@@ -758,11 +770,11 @@ let _models: { [key: string]: iModel } = {
       Wi: 2,
       Fa: 2,
     },
-    wargear: [wargear.HeavyArmour, wargear.HandAndAHalfSword],
+    wargear: [options.HeavyArmour, options.HandAndAHalfSword],
     wargearOptions: [
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.Shield, cost: 5 },
-      { ...wargear.TheOneRing, cost: 0 },
+      { ...options.Horse, cost: 10 },
+      { ...options.Shield, cost: 5 },
+      { ...options.TheOneRing, cost: 0 },
     ],
   },
 
@@ -784,13 +796,13 @@ let _models: { [key: string]: iModel } = {
       Wi: 2,
       Fa: 2,
     },
-    wargear: [wargear.Armour, wargear.Sword],
+    wargear: [options.Armour, options.Sword],
     wargearOptions: [
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.Bow, cost: 5 },
-      { ...wargear.HeavyArmour, cost: 5 },
-      { ...wargear.Lance, cost: 5 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.Horse, cost: 10 },
+      { ...options.Bow, cost: 5 },
+      { ...options.HeavyArmour, cost: 5 },
+      { ...options.Lance, cost: 5 },
+      { ...options.Shield, cost: 5 },
     ],
   },
 
@@ -807,12 +819,12 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 3,
     },
-    wargear: [wargear.Armour, wargear.Sword],
+    wargear: [options.Armour, options.Sword],
     wargearOptions: [
-      { ...wargear.Banner, cost: 25 },
-      { ...wargear.Bow, cost: 1 },
-      { ...wargear.Shield, cost: 1 },
-      { ...wargear.Spear, cost: 1 },
+      { ...options.Banner, cost: 25 },
+      { ...options.Bow, cost: 1 },
+      { ...options.Shield, cost: 1 },
+      { ...options.Spear, cost: 1 },
     ],
   },
 
@@ -833,8 +845,8 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 3,
     },
-    wargear: [wargear.HeavyArmour, wargear.AndurilFlameOfTheWest],
-    wargearOptions: [{ ...wargear.ArmouredHorse, cost: 15 }],
+    wargear: [options.HeavyArmour, options.AndurilFlameOfTheWest],
+    wargearOptions: [{ ...options.ArmouredHorse, cost: 15 }],
   },
 
   GandalfTheWhite: {
@@ -855,8 +867,8 @@ let _models: { [key: string]: iModel } = {
       Wi: 6,
       Fa: 3,
     },
-    wargear: [wargear.StaffOfPower, wargear.Glamdring, wargear.Narya],
-    wargearOptions: [{ ...wargear.Shadowfax, cost: 20 }],
+    wargear: [options.StaffOfPower, options.Glamdring, options.Narya],
+    wargearOptions: [{ ...options.Shadowfax, cost: 20 }],
   },
 
   DenethorStewardOfGondon: {
@@ -877,7 +889,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 0,
     },
-    wargear: [wargear.Armour, wargear.Sword],
+    wargear: [options.Armour, options.Sword],
     wargearOptions: [],
   },
 
@@ -899,8 +911,8 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 2,
     },
-    wargear: [wargear.Armour, wargear.Dagger],
-    wargearOptions: [{ ...wargear.ElvenCloak, cost: 5 }],
+    wargear: [options.Armour, options.Dagger],
+    wargearOptions: [{ ...options.ElvenCloak, cost: 5 }],
   },
 
   BoromirCaptainOfTheWhiteTower: {
@@ -921,12 +933,12 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 3,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword, wargear.HornOfGondor],
+    wargear: [options.HeavyArmour, options.Sword, options.HornOfGondor],
     wargearOptions: [
-      { ...wargear.TheBannerOfMinasTirith, cost: 40 },
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.Lance, cost: 5 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.TheBannerOfMinasTirith, cost: 40 },
+      { ...options.Horse, cost: 10 },
+      { ...options.Lance, cost: 5 },
+      { ...options.Shield, cost: 5 },
     ],
   },
 
@@ -948,14 +960,14 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 2,
     },
-    wargear: [wargear.Armour, wargear.Sword],
+    wargear: [options.Armour, options.Sword],
     wargearOptions: [
-      { ...wargear.ArmouredHorse, cost: 15 },
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.Bow, cost: 5 },
-      { ...wargear.HeavyArmour, cost: 5 },
-      { ...wargear.Lance, cost: 5 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.ArmouredHorse, cost: 15 },
+      { ...options.Horse, cost: 10 },
+      { ...options.Bow, cost: 5 },
+      { ...options.HeavyArmour, cost: 5 },
+      { ...options.Lance, cost: 5 },
+      { ...options.Shield, cost: 5 },
     ],
   },
 
@@ -977,8 +989,8 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword, wargear.Longbow],
-    wargearOptions: [{ ...wargear.Horse, cost: 5 }],
+    wargear: [options.HeavyArmour, options.Sword, options.Longbow],
+    wargearOptions: [{ ...options.Horse, cost: 5 }],
   },
 
   MadrilCaptainOfIthilien: {
@@ -999,7 +1011,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.Armour, wargear.Sword, wargear.Bow],
+    wargear: [options.Armour, options.Sword, options.Bow],
     wargearOptions: [],
   },
 
@@ -1021,7 +1033,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.Armour, wargear.Sword, wargear.Bow],
+    wargear: [options.Armour, options.Sword, options.Bow],
     wargearOptions: [],
   },
 
@@ -1043,7 +1055,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.Armour, wargear.Sword, wargear.Shield],
+    wargear: [options.Armour, options.Sword, options.Shield],
     wargearOptions: [],
   },
 
@@ -1065,7 +1077,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.HeavyArmour, wargear.Dagger, wargear.WhiteSwordOfGondor],
+    wargear: [options.HeavyArmour, options.Dagger, options.WhiteSwordOfGondor],
     wargearOptions: [],
   },
 
@@ -1087,13 +1099,13 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.Armour, wargear.Sword],
+    wargear: [options.Armour, options.Sword],
     wargearOptions: [
-      { ...wargear.ArmouredHorse, cost: 15 },
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.HeavyArmour, cost: 5 },
-      { ...wargear.Lance, cost: 5 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.ArmouredHorse, cost: 15 },
+      { ...options.Horse, cost: 10 },
+      { ...options.HeavyArmour, cost: 5 },
+      { ...options.Lance, cost: 5 },
+      { ...options.Shield, cost: 5 },
     ],
   },
 
@@ -1115,12 +1127,12 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword],
+    wargear: [options.HeavyArmour, options.Sword],
     wargearOptions: [
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.Bow, cost: 5 },
-      { ...wargear.Lance, cost: 5 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.Horse, cost: 10 },
+      { ...options.Bow, cost: 5 },
+      { ...options.Lance, cost: 5 },
+      { ...options.Shield, cost: 5 },
     ],
   },
 
@@ -1137,13 +1149,13 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 3,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword],
+    wargear: [options.HeavyArmour, options.Sword],
     wargearOptions: [
-      { ...wargear.Warhorn, cost: 30 },
-      { ...wargear.Banner, cost: 25 },
-      { ...wargear.Bow, cost: 1 },
-      { ...wargear.Shield, cost: 1 },
-      { ...wargear.Spear, cost: 1 },
+      { ...options.Warhorn, cost: 30 },
+      { ...options.Banner, cost: 25 },
+      { ...options.Bow, cost: 1 },
+      { ...options.Shield, cost: 1 },
+      { ...options.Spear, cost: 1 },
     ],
   },
   KnightOfMinasTirith: {
@@ -1159,10 +1171,10 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 3,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword, wargear.Lance, wargear.Horse],
+    wargear: [options.HeavyArmour, options.Sword, options.Lance, options.Horse],
     wargearOptions: [
-      { ...wargear.Banner, cost: 25 },
-      { ...wargear.Shield, cost: 1 },
+      { ...options.Banner, cost: 25 },
+      { ...options.Shield, cost: 1 },
     ],
   },
   RangerOfGondor: {
@@ -1178,8 +1190,8 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 3,
     },
-    wargear: [wargear.Armour, wargear.Sword, wargear.Bow],
-    wargearOptions: [{ ...wargear.Spear, cost: 1 }],
+    wargear: [options.Armour, options.Sword, options.Bow],
+    wargearOptions: [{ ...options.Spear, cost: 1 }],
   },
   CitadelGuard: {
     name: "CitadelGuard",
@@ -1194,10 +1206,10 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 3,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword, wargear.Spear],
+    wargear: [options.HeavyArmour, options.Sword, options.Spear],
     wargearOptions: [
-      { ...wargear.Horse, cost: 7 },
-      { ...wargearSwap.SpearForLongbow, cost: 1 },
+      { ...options.Horse, cost: 7 },
+      { ...optionSwaps.SpearForLongbow, cost: 1 },
     ],
   },
 
@@ -1214,10 +1226,10 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 3,
     },
-    wargear: [wargear.HeavyArmour, wargear.Dagger, wargear.Spear],
+    wargear: [options.HeavyArmour, options.Dagger, options.Spear],
     wargearOptions: [
-      { ...wargearSwap.SpearForBanner, cost: 25 },
-      { ...wargear.Shield, cost: 1 },
+      { ...optionSwaps.SpearForBanner, cost: 25 },
+      { ...options.Shield, cost: 1 },
     ],
   },
 
@@ -1234,11 +1246,11 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 4,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword],
+    wargear: [options.HeavyArmour, options.Sword],
     wargearOptions: [
-      { ...wargear.Bow, cost: 1 },
-      { ...wargear.Shield, cost: 1 },
-      { ...wargear.Spear, cost: 1 },
+      { ...options.Bow, cost: 1 },
+      { ...options.Shield, cost: 1 },
+      { ...options.Spear, cost: 1 },
     ],
   },
 
@@ -1259,10 +1271,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 3,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword, wargear.Shield],
+    wargear: [options.HeavyArmour, options.Sword, options.Shield],
     wargearOptions: [
-      { ...wargear.ArmouredHorse, cost: 15 },
-      { ...wargear.Lance, cost: 1 },
+      { ...options.ArmouredHorse, cost: 15 },
+      { ...options.Lance, cost: 1 },
     ],
   },
 
@@ -1284,12 +1296,12 @@ let _models: { [key: string]: iModel } = {
       Fa: 1,
     },
     wargear: [
-      wargear.HeavyArmour,
-      wargear.Sword,
-      wargear.WarSpear,
-      wargear.Warhorn,
+      options.HeavyArmour,
+      options.Sword,
+      options.WarSpear,
+      options.Warhorn,
     ],
-    wargearOptions: [{ ...wargear.Horse, cost: 10 }],
+    wargearOptions: [{ ...options.Horse, cost: 10 }],
   },
 
   AngborTheFearless: {
@@ -1309,7 +1321,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 1,
     },
-    wargear: [wargear.Armour, wargear.Broadsword],
+    wargear: [options.Armour, options.Broadsword],
     wargearOptions: [],
   },
 
@@ -1330,7 +1342,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.Armour, wargear.Sword, wargear.Bow, wargear.Spear],
+    wargear: [options.Armour, options.Sword, options.Bow, options.Spear],
     wargearOptions: [],
   },
 
@@ -1351,10 +1363,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword, wargear.Shield],
+    wargear: [options.HeavyArmour, options.Sword, options.Shield],
     wargearOptions: [
-      { ...wargear.ArmouredHorse, cost: 15 },
-      { ...wargear.Lance, cost: 5 },
+      { ...options.ArmouredHorse, cost: 15 },
+      { ...options.Lance, cost: 5 },
     ],
   },
 
@@ -1371,12 +1383,12 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 4,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword, wargear.Shield],
+    wargear: [options.HeavyArmour, options.Sword, options.Shield],
     wargearOptions: [
-      { ...wargear.Warhorn, cost: 30 },
-      { ...wargear.Banner, cost: 25 },
-      { ...wargear.ArmouredHorse, cost: 8 },
-      { ...wargear.Lance, cost: 1 },
+      { ...options.Warhorn, cost: 30 },
+      { ...options.Banner, cost: 25 },
+      { ...options.ArmouredHorse, cost: 8 },
+      { ...options.Lance, cost: 1 },
     ],
   },
 
@@ -1393,8 +1405,8 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 3,
     },
-    wargear: [wargear.HeavyArmour, wargear.Pike],
-    wargearOptions: [{ ...wargearSwap.PikeForBanner, cost: 25 }],
+    wargear: [options.HeavyArmour, options.Pike],
+    wargearOptions: [{ ...optionSwaps.PikeForBanner, cost: 25 }],
   },
 
   AxemanOfLossarnach: {
@@ -1410,8 +1422,8 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 3,
     },
-    wargear: [wargear.HeavyArmour, wargear.AxeOfLossarnach, wargear.Dagger],
-    wargearOptions: [{ ...wargearSwap.AxeOfLossarnachForBanner, cost: 25 }],
+    wargear: [options.HeavyArmour, options.AxeOfLossarnach, options.Dagger],
+    wargearOptions: [{ ...optionSwaps.AxeOfLossarnachForBanner, cost: 25 }],
   },
 
   ClansmenOfLamedon: {
@@ -1427,7 +1439,7 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 5,
     },
-    wargear: [wargear.Armour, wargear.Broadsword],
+    wargear: [options.Armour, options.Broadsword],
     wargearOptions: [],
   },
 
@@ -1444,11 +1456,11 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 2,
     },
-    wargear: [wargear.Armour, wargear.Sword, wargear.Bow],
+    wargear: [options.Armour, options.Sword, options.Bow],
     wargearOptions: [
-      { ...wargear.Warhorn, cost: 30 },
-      { ...wargear.Banner, cost: 25 },
-      { ...wargear.Spear, cost: 1 },
+      { ...options.Warhorn, cost: 30 },
+      { ...options.Banner, cost: 25 },
+      { ...options.Spear, cost: 1 },
     ],
   },
 
@@ -1469,7 +1481,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 6,
       Fa: 3,
     },
-    wargear: [wargear.Armour, wargearChoice.SwordOrAxe],
+    wargear: [options.Armour, optionChoice.SwordOrAxe],
     wargearOptions: [],
   },
 
@@ -1486,7 +1498,7 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 6,
     },
-    wargear: [wargear.Armour, wargearChoice.SwordOrAxe],
+    wargear: [options.Armour, optionChoice.SwordOrAxe],
     wargearOptions: [],
   },
 
@@ -1504,10 +1516,10 @@ let _models: { [key: string]: iModel } = {
       C: 6,
     },
     wargear: [
-      wargear.Armour,
-      wargear.Sword,
-      wargear.Shield,
-      wargear.SpectralSteed,
+      options.Armour,
+      options.Sword,
+      options.Shield,
+      options.SpectralSteed,
     ],
     wargearOptions: [],
   },
@@ -1529,7 +1541,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 2,
       Fa: 1,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword],
+    wargear: [options.HeavyArmour, options.Sword],
     wargearOptions: [],
   },
 
@@ -1550,7 +1562,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 2,
       Fa: 1,
     },
-    wargear: [wargear.Staff],
+    wargear: [options.Staff],
     wargearOptions: [],
   },
 
@@ -1571,7 +1583,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword, wargear.Shield],
+    wargear: [options.HeavyArmour, options.Sword, options.Shield],
     wargearOptions: [],
   },
 
@@ -1589,14 +1601,14 @@ let _models: { [key: string]: iModel } = {
       C: 2,
     },
     wargear: [
-      wargear.HeavyArmour,
-      wargear.Sword,
-      wargear.Spear,
-      wargear.Shield,
+      options.HeavyArmour,
+      options.Sword,
+      options.Spear,
+      options.Shield,
     ],
     wargearOptions: [
       {
-        ...wargearSwap.SpearAndShieldForBanner,
+        ...optionSwaps.SpearAndShieldForBanner,
         cost: 25,
       },
     ],
@@ -1615,10 +1627,10 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 3,
     },
-    wargear: [wargear.Armour, wargear.Sword, wargear.Bow],
+    wargear: [options.Armour, options.Sword, options.Bow],
     wargearOptions: [
       {
-        ...wargear.Spear,
+        ...options.Spear,
         cost: 1,
       },
     ],
@@ -1641,12 +1653,12 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 1,
     },
-    wargear: [wargear.Armour, wargear.Herugrim],
+    wargear: [options.Armour, options.Herugrim],
     wargearOptions: [
-      { ...wargear.ArmouredHorse, cost: 15 },
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.HeavyArmour, cost: 5 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.ArmouredHorse, cost: 15 },
+      { ...options.Horse, cost: 10 },
+      { ...options.HeavyArmour, cost: 5 },
+      { ...options.Shield, cost: 5 },
     ],
   },
 
@@ -1668,11 +1680,11 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 1,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword],
+    wargear: [options.HeavyArmour, options.Sword],
     wargearOptions: [
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.Shield, cost: 5 },
-      { ...wargear.ThrowingSpears, cost: 5 },
+      { ...options.Horse, cost: 10 },
+      { ...options.Shield, cost: 5 },
+      { ...options.ThrowingSpears, cost: 5 },
     ],
   },
 
@@ -1694,12 +1706,12 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 3,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword],
+    wargear: [options.HeavyArmour, options.Sword],
     wargearOptions: [
-      { ...wargear.ArmouredHorse, cost: 15 },
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.Shield, cost: 5 },
-      { ...wargear.ThrowingSpears, cost: 5 },
+      { ...options.ArmouredHorse, cost: 15 },
+      { ...options.Horse, cost: 10 },
+      { ...options.Shield, cost: 5 },
+      { ...options.ThrowingSpears, cost: 5 },
     ],
   },
 
@@ -1721,12 +1733,12 @@ let _models: { [key: string]: iModel } = {
       Wi: 2,
       Fa: 2,
     },
-    wargear: [wargear.Sword],
+    wargear: [options.Sword],
     wargearOptions: [
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.Armour, cost: 5 },
-      { ...wargear.Shield, cost: 5 },
-      { ...wargear.ThrowingSpears, cost: 5 },
+      { ...options.Horse, cost: 10 },
+      { ...options.Armour, cost: 5 },
+      { ...options.Shield, cost: 5 },
+      { ...options.ThrowingSpears, cost: 5 },
     ],
   },
 
@@ -1748,11 +1760,11 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 2,
     },
-    wargear: [wargear.Armour, wargear.Dagger],
+    wargear: [options.Armour, options.Dagger],
     wargearOptions: [
-      { ...wargear.ElvenCloak, cost: 5 },
-      { ...wargear.Pony, cost: 5 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.ElvenCloak, cost: 5 },
+      { ...options.Pony, cost: 5 },
+      { ...options.Shield, cost: 5 },
     ],
   },
 
@@ -1775,12 +1787,12 @@ let _models: { [key: string]: iModel } = {
       Fa: 1,
     },
     wargear: [
-      wargear.HeavyArmour,
-      wargear.Sword,
-      wargear.Shield,
-      wargear.HornOfTheHammerhand,
+      options.HeavyArmour,
+      options.Sword,
+      options.Shield,
+      options.HornOfTheHammerhand,
     ],
-    wargearOptions: [{ ...wargear.Horse, cost: 10 }],
+    wargearOptions: [{ ...options.Horse, cost: 10 }],
   },
 
   GamlingCaptainOfRohan: {
@@ -1800,10 +1812,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword],
+    wargear: [options.HeavyArmour, options.Sword],
     wargearOptions: [
-      { ...wargear.RoyalStandardOfRohan, cost: 50 },
-      { ...wargear.Horse, cost: 10 },
+      { ...options.RoyalStandardOfRohan, cost: 50 },
+      { ...options.Horse, cost: 10 },
     ],
   },
 
@@ -1824,10 +1836,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword],
+    wargear: [options.HeavyArmour, options.Sword],
     wargearOptions: [
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.Horse, cost: 10 },
+      { ...options.Shield, cost: 5 },
     ],
   },
 
@@ -1848,7 +1860,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.Armour, wargear.TwoHandedAxe],
+    wargear: [options.Armour, options.TwoHandedAxe],
     wargearOptions: [],
   },
 
@@ -1870,10 +1882,10 @@ let _models: { [key: string]: iModel } = {
       Fa: 2,
     },
     wargear: [
-      wargear.HeavyArmour,
-      wargear.Sword,
-      wargear.Shield,
-      wargear.Felarof,
+      options.HeavyArmour,
+      options.Sword,
+      options.Shield,
+      options.Felarof,
     ],
     wargearOptions: [],
   },
@@ -1895,7 +1907,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.Armour, wargear.Sword, wargear.Longbow],
+    wargear: [options.Armour, options.Sword, options.Longbow],
     wargearOptions: [],
   },
 
@@ -1916,13 +1928,13 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.Armour, wargearChoice.SwordOrAxe],
+    wargear: [options.Armour, optionChoice.SwordOrAxe],
     wargearOptions: [
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.Bow, cost: 5 },
-      { ...wargear.HeavyArmour, cost: 5 },
-      { ...wargear.Shield, cost: 5 },
-      { ...wargear.ThrowingSpears, cost: 5 },
+      { ...options.Horse, cost: 10 },
+      { ...options.Bow, cost: 5 },
+      { ...options.HeavyArmour, cost: 5 },
+      { ...options.Shield, cost: 5 },
+      { ...options.ThrowingSpears, cost: 5 },
     ],
   },
 
@@ -1939,13 +1951,13 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 3,
     },
-    wargear: [wargear.Armour, wargearChoice.SwordOrAxe],
+    wargear: [options.Armour, optionChoice.SwordOrAxe],
     wargearOptions: [
-      { ...wargear.Warhorn, cost: 30 },
-      { ...wargear.Banner, cost: 25 },
-      { ...wargear.ThrowingSpears, cost: 2 },
-      { ...wargear.Bow, cost: 1 },
-      { ...wargear.Shield, cost: 1 },
+      { ...options.Warhorn, cost: 30 },
+      { ...options.Banner, cost: 25 },
+      { ...options.ThrowingSpears, cost: 2 },
+      { ...options.Bow, cost: 1 },
+      { ...options.Shield, cost: 1 },
     ],
   },
 
@@ -1963,16 +1975,16 @@ let _models: { [key: string]: iModel } = {
       C: 3,
     },
     wargear: [
-      wargear.Armour,
-      wargearChoice.SwordOrAxe,
-      wargear.Shield,
-      wargear.Bow,
-      wargear.Horse,
+      options.Armour,
+      optionChoice.SwordOrAxe,
+      options.Shield,
+      options.Bow,
+      options.Horse,
     ],
     wargearOptions: [
-      { ...wargear.Warhorn, cost: 30 },
-      { ...wargear.Banner, cost: 25 },
-      { ...wargear.ThrowingSpears, cost: 2 },
+      { ...options.Warhorn, cost: 30 },
+      { ...options.Banner, cost: 25 },
+      { ...options.ThrowingSpears, cost: 2 },
     ],
   },
 
@@ -1989,11 +2001,11 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 3,
     },
-    wargear: [wargear.HeavyArmour, wargear.Sword, wargear.Shield],
+    wargear: [options.HeavyArmour, options.Sword, options.Shield],
     wargearOptions: [
-      { ...wargear.Banner, cost: 25 },
-      { ...wargear.Horse, cost: 5 },
-      { ...wargear.ThrowingSpears, cost: 2 },
+      { ...options.Banner, cost: 25 },
+      { ...options.Horse, cost: 5 },
+      { ...options.ThrowingSpears, cost: 2 },
     ],
   },
 
@@ -2010,8 +2022,8 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 3,
     },
-    wargear: [wargear.Armour, wargear.Sword, wargear.Bow],
-    wargearOptions: [{ ...wargear.Horse, cost: 5 }],
+    wargear: [options.Armour, options.Sword, options.Bow],
+    wargearOptions: [{ ...options.Horse, cost: 5 }],
   },
 
   SonOfEorl: {
@@ -2028,10 +2040,10 @@ let _models: { [key: string]: iModel } = {
       C: 4,
     },
     wargear: [
-      wargear.HeavyArmour,
-      wargear.Axe,
-      wargear.Shield,
-      wargear.ArmouredHorse,
+      options.HeavyArmour,
+      options.Axe,
+      options.Shield,
+      options.ArmouredHorse,
     ],
     wargearOptions: [],
   },
@@ -2053,7 +2065,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.Dagger, wargear.Spear, wargear.PoisonedBlowpipe],
+    wargear: [options.Dagger, options.Spear, options.PoisonedBlowpipe],
     wargearOptions: [],
   },
   WosesWarriors: {
@@ -2069,7 +2081,7 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 3,
     },
-    wargear: [wargear.Dagger, wargear.Spear, wargear.PoisonedBlowpipe],
+    wargear: [options.Dagger, options.Spear, options.PoisonedBlowpipe],
     wargearOptions: [],
   },
 
@@ -2090,10 +2102,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 1,
     },
-    wargear: [wargear.HeavyArmour, wargear.Aiglos],
+    wargear: [options.HeavyArmour, options.Aiglos],
     wargearOptions: [
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.Horse, cost: 10 },
+      { ...options.Shield, cost: 5 },
     ],
   },
 
@@ -2114,10 +2126,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 3,
     },
-    wargear: [wargear.HeavyArmour, wargear.Hadhafang],
+    wargear: [options.HeavyArmour, options.Hadhafang],
     wargearOptions: [
-      { ...wargear.HeavyArmour, cost: 10 },
-      { ...wargear.Horse, cost: 10 },
+      { ...options.HeavyArmour, cost: 10 },
+      { ...options.Horse, cost: 10 },
     ],
   },
 
@@ -2138,10 +2150,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 3,
     },
-    wargear: [wargear.ElvenMadeHandAndAHalfSword],
+    wargear: [options.ElvenMadeHandAndAHalfSword],
     wargearOptions: [
-      { ...wargear.ArmourOfGondolin, cost: 15 },
-      { ...wargear.Asfaloth, cost: 10 },
+      { ...options.ArmourOfGondolin, cost: 15 },
+      { ...options.Asfaloth, cost: 10 },
     ],
   },
 
@@ -2162,7 +2174,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 2,
       Fa: 2,
     },
-    wargear: [wargear.HeavyArmour, wargear.NoldorinDaggers],
+    wargear: [options.HeavyArmour, options.NoldorinDaggers],
     wargearOptions: [],
   },
 
@@ -2183,11 +2195,11 @@ let _models: { [key: string]: iModel } = {
       Wi: 4,
       Fa: 1,
     },
-    wargear: [wargear.ElvenMadeSword],
+    wargear: [options.ElvenMadeSword],
     wargearOptions: [
-      { ...wargear.Asfaloth, cost: 10 },
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.ElvenCloak, cost: 5 },
+      { ...options.Asfaloth, cost: 10 },
+      { ...options.Horse, cost: 10 },
+      { ...options.ElvenCloak, cost: 5 },
     ],
   },
 
@@ -2218,12 +2230,12 @@ let _models: { [key: string]: iModel } = {
       Wi: 4,
       Fa: 1,
     },
-    wargear: [wargear.Armour, wargear.ElvenMadeSword],
+    wargear: [options.Armour, options.ElvenMadeSword],
     wargearOptions: [
-      { ...wargear.Horse, name: "Horses (for both)", cost: 20 },
-      { ...wargear.ElfBow, name: "Elf bows (for both)", cost: 10 },
-      { ...wargear.ElvenCloak, name: "Elven Cloaks (for both)", cost: 5 },
-      { ...wargear.HeavyArmour, name: "Heavy armour (for both)", cost: 10 },
+      { ...options.Horse, name: "Horses (for both)", cost: 20 },
+      { ...options.ElfBow, name: "Elf bows (for both)", cost: 10 },
+      { ...options.ElvenCloak, name: "Elven Cloaks (for both)", cost: 5 },
+      { ...options.HeavyArmour, name: "Heavy armour (for both)", cost: 10 },
     ],
   },
 
@@ -2244,10 +2256,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 1,
     },
-    wargear: [wargear.ElvenMadeSword],
+    wargear: [options.ElvenMadeSword],
     wargearOptions: [
-      { ...wargear.HeavyArmour, cost: 10 },
-      { ...wargear.Horse, cost: 10 },
+      { ...options.HeavyArmour, cost: 10 },
+      { ...options.Horse, cost: 10 },
     ],
   },
 
@@ -2289,7 +2301,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 4,
       Fa: 1,
     },
-    wargear: [wargear.ElvenMadeSword, wargear.ElvenCloak],
+    wargear: [options.ElvenMadeSword, options.ElvenCloak],
     wargearOptions: [],
   },
 
@@ -2310,12 +2322,12 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.HeavyArmour, wargear.ElvenMadeHandAndAHalfSword],
+    wargear: [options.HeavyArmour, options.ElvenMadeHandAndAHalfSword],
     wargearOptions: [
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.ElfBow, cost: 5 },
-      { ...wargear.Lance, cost: 5 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.Horse, cost: 10 },
+      { ...options.ElfBow, cost: 5 },
+      { ...options.Lance, cost: 5 },
+      { ...options.Shield, cost: 5 },
     ],
   },
 
@@ -2336,12 +2348,12 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 1,
     },
-    wargear: [wargear.Armour, wargear.ElvenMadeSword, wargear.Staff],
+    wargear: [options.Armour, options.ElvenMadeSword, options.Staff],
     wargearOptions: [
-      { ...wargear.Horse, cost: 10 },
-      { ...wargear.ElfBow, cost: 5 },
-      { ...wargear.Lance, cost: 5 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.Horse, cost: 10 },
+      { ...options.ElfBow, cost: 5 },
+      { ...options.Lance, cost: 5 },
+      { ...options.Shield, cost: 5 },
     ],
   },
 
@@ -2358,13 +2370,13 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 5,
     },
-    wargear: [wargear.HeavyArmour, wargear.ElvenMadeHandAndAHalfSword],
+    wargear: [options.HeavyArmour, options.ElvenMadeHandAndAHalfSword],
     wargearOptions: [
-      { ...wargear.Warhorn, cost: 30 },
-      { ...wargear.Banner, cost: 25 },
-      { ...wargear.ElfBow, cost: 2 },
-      { ...wargear.Shield, cost: 1 },
-      { ...wargear.Spear, cost: 1 },
+      { ...options.Warhorn, cost: 30 },
+      { ...options.Banner, cost: 25 },
+      { ...options.ElfBow, cost: 2 },
+      { ...options.Shield, cost: 1 },
+      { ...options.Spear, cost: 1 },
     ],
   },
 
@@ -2382,16 +2394,16 @@ let _models: { [key: string]: iModel } = {
       C: 5,
     },
     wargear: [
-      wargear.HeavyArmour,
-      wargear.Lance,
-      wargear.ElvenMadeHandAndAHalfSword,
-      wargear.ElfBow,
-      wargear.Horse,
+      options.HeavyArmour,
+      options.Lance,
+      options.ElvenMadeHandAndAHalfSword,
+      options.ElfBow,
+      options.Horse,
     ],
     wargearOptions: [
-      { ...wargear.Warhorn, cost: 30 },
-      { ...wargear.Banner, cost: 25 },
-      { ...wargear.Shield, cost: 1 },
+      { ...options.Warhorn, cost: 30 },
+      { ...options.Banner, cost: 25 },
+      { ...options.Shield, cost: 1 },
     ],
   },
 
@@ -2412,8 +2424,8 @@ let _models: { [key: string]: iModel } = {
       Wi: 6,
       Fa: 3,
     },
-    wargear: [wargear.Nenya],
-    wargearOptions: [{ ...wargear.MirrorOfGaladriel, cost: 25 }],
+    wargear: [options.Nenya],
+    wargearOptions: [{ ...options.MirrorOfGaladriel, cost: 25 }],
   },
 
   Celeborn: {
@@ -2435,9 +2447,9 @@ let _models: { [key: string]: iModel } = {
     },
     wargear: [],
     wargearOptions: [
-      { ...wargear.HeavyArmour, cost: 10 },
-      { ...wargear.ElvenMadeHandAndAHalfSword, cost: 5 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.HeavyArmour, cost: 10 },
+      { ...options.ElvenMadeHandAndAHalfSword, cost: 5 },
+      { ...options.Shield, cost: 5 },
     ],
   },
 
@@ -2458,8 +2470,8 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.HeavyArmour, wargear.ElvenMadeSword, wargear.Shield],
-    wargearOptions: [{ ...wargear.ElvenCloak, cost: 5 }],
+    wargear: [options.HeavyArmour, options.ElvenMadeSword, options.Shield],
+    wargearOptions: [{ ...options.ElvenCloak, cost: 5 }],
   },
 
   Haldir: {
@@ -2479,11 +2491,11 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.ElvenMadeHandAndAHalfSword],
+    wargear: [options.ElvenMadeHandAndAHalfSword],
     wargearOptions: [
-      { ...wargear.HeavyArmour, cost: 10 },
-      { ...wargear.ElfBow, cost: 5 },
-      { ...wargear.ElvenCloak, cost: 5 },
+      { ...options.HeavyArmour, cost: 10 },
+      { ...options.ElfBow, cost: 5 },
+      { ...options.ElvenCloak, cost: 5 },
     ],
   },
 
@@ -2504,11 +2516,11 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.HeavyArmour, wargear.ElvenMadeHandAndAHalfSword],
+    wargear: [options.HeavyArmour, options.ElvenMadeHandAndAHalfSword],
     wargearOptions: [
-      { ...wargear.ArmouredHorse, cost: 15 },
-      { ...wargear.ElfBow, cost: 5 },
-      { ...wargear.Shield, cost: 5 },
+      { ...options.ArmouredHorse, cost: 15 },
+      { ...options.ElfBow, cost: 5 },
+      { ...options.Shield, cost: 5 },
     ],
   },
 
@@ -2529,11 +2541,11 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.ElvenMadeSword, wargear.ElvenCloak],
+    wargear: [options.ElvenMadeSword, options.ElvenCloak],
     wargearOptions: [
-      { ...wargear.ElfBow, cost: 5 },
-      { ...wargear.ThrowingDaggers, cost: 5 },
-      { ...wargear.WoodElfSpear, cost: 5 },
+      { ...options.ElfBow, cost: 5 },
+      { ...options.ThrowingDaggers, cost: 5 },
+      { ...options.WoodElfSpear, cost: 5 },
     ],
   },
 
@@ -2554,11 +2566,11 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 1,
     },
-    wargear: [wargear.Armour, wargear.ElvenMadeSword, wargear.Staff],
+    wargear: [options.Armour, options.ElvenMadeSword, options.Staff],
     wargearOptions: [
-      { ...wargear.ElfBow, cost: 5 },
-      { ...wargear.ThrowingDaggers, cost: 5 },
-      { ...wargear.WoodElfSpear, cost: 5 },
+      { ...options.ElfBow, cost: 5 },
+      { ...options.ThrowingDaggers, cost: 5 },
+      { ...options.WoodElfSpear, cost: 5 },
     ],
   },
 
@@ -2575,13 +2587,13 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 5,
     },
-    wargear: [wargear.HeavyArmour, wargear.ElvenMadeHandAndAHalfSword],
+    wargear: [options.HeavyArmour, options.ElvenMadeHandAndAHalfSword],
     wargearOptions: [
-      { ...wargear.Warhorn, cost: 30 },
-      { ...wargear.Banner, cost: 25 },
-      { ...wargear.ElfBow, cost: 2 },
-      { ...wargear.Shield, cost: 1 },
-      { ...wargear.Spear, cost: 1 },
+      { ...options.Warhorn, cost: 30 },
+      { ...options.Banner, cost: 25 },
+      { ...options.ElfBow, cost: 2 },
+      { ...options.Shield, cost: 1 },
+      { ...options.Spear, cost: 1 },
     ],
   },
 
@@ -2599,14 +2611,14 @@ let _models: { [key: string]: iModel } = {
       C: 5,
     },
     wargear: [
-      wargear.HeavyArmour,
-      wargear.ElvenMadeSword,
-      wargear.ArmouredHorse,
+      options.HeavyArmour,
+      options.ElvenMadeSword,
+      options.ArmouredHorse,
     ],
     wargearOptions: [
-      { ...wargear.Banner, cost: 25 },
-      { ...wargear.ElfBow, cost: 2 },
-      { ...wargear.Shield, cost: 1 },
+      { ...options.Banner, cost: 25 },
+      { ...options.ElfBow, cost: 2 },
+      { ...options.Shield, cost: 1 },
     ],
   },
 
@@ -2623,8 +2635,8 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 6,
     },
-    wargear: [wargear.HeavyArmour, wargear.Pike],
-    wargearOptions: [{ ...wargearSwap.PikeForBanner, cost: 25 }],
+    wargear: [options.HeavyArmour, options.Pike],
+    wargearOptions: [{ ...optionSwaps.PikeForBanner, cost: 25 }],
   },
 
   WoodElfWarrior: {
@@ -2640,12 +2652,13 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 5,
     },
-    wargear: [wargear.ElvenMadeHandAndAHalfSword, wargear.ElvenCloak],
+    wargear: [options.ElvenMadeHandAndAHalfSword, options.ElvenCloak],
     wargearOptions: [
-      { ...wargear.Banner, cost: 25 },
-      { ...wargear.ElfBow, cost: 2 },
-      { ...wargear.ThrowingDaggers, cost: 2 },
-      { ...wargear.WoodElfSpear, cost: 1 },
+      // { ...optionUpgrades.NoldorinExile, cost: 1 },
+      { ...options.Banner, cost: 25 },
+      { ...options.ElfBow, cost: 2 },
+      { ...options.ThrowingDaggers, cost: 2 },
+      { ...options.WoodElfSpear, cost: 1 },
     ],
   },
 
@@ -2662,7 +2675,7 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 5,
     },
-    wargear: [wargear.ElvenMadeSword, wargear.ElfBow, wargear.ElvenCloak],
+    wargear: [options.ElvenMadeSword, options.ElfBow, options.ElvenCloak],
     wargearOptions: [],
   },
 
@@ -2683,8 +2696,8 @@ let _models: { [key: string]: iModel } = {
       Wi: 6,
       Fa: 3,
     },
-    wargear: [wargear.RootsAndBranches],
-    wargearOptions: [{ ...wargear.MerryAndPippin, cost: 10 }],
+    wargear: [options.RootsAndBranches],
+    wargearOptions: [{ ...options.MerryAndPippin, cost: 10 }],
   },
 
   Ent: {
@@ -2700,7 +2713,7 @@ let _models: { [key: string]: iModel } = {
       W: 3,
       C: 6,
     },
-    wargear: [wargear.RootsAndBranches],
+    wargear: [options.RootsAndBranches],
     wargearOptions: [],
   },
 
@@ -2721,7 +2734,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 3,
     },
-    wargear: [wargear.ClawsAndBeak],
+    wargear: [options.ClawsAndBeak],
     wargearOptions: [],
   },
 
@@ -2738,7 +2751,7 @@ let _models: { [key: string]: iModel } = {
       W: 3,
       C: 6,
     },
-    wargear: [wargear.ClawsAndBeak],
+    wargear: [options.ClawsAndBeak],
     wargearOptions: [],
   },
 
@@ -2760,11 +2773,11 @@ let _models: { [key: string]: iModel } = {
       Fa: 1,
     },
     wargear: [
-      wargear.HeavyMithrilArmour,
-      wargear.DurinsAxe,
-      wargear.RingOfDurin,
-      wargear.CrownOfKings,
-      wargear.HornOfZirakzigil,
+      options.HeavyMithrilArmour,
+      options.DurinsAxe,
+      options.RingOfDurin,
+      options.CrownOfKings,
+      options.HornOfZirakzigil,
     ],
     wargearOptions: [],
   },
@@ -2786,7 +2799,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.DwarfArmour, wargear.Torozul],
+    wargear: [options.DwarfArmour, options.Torozul],
     wargearOptions: [],
   },
 
@@ -2807,7 +2820,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 1,
     },
-    wargear: [wargear.HeavyDwarfArmour, wargear.Staff],
+    wargear: [options.HeavyDwarfArmour, options.Staff],
     wargearOptions: [],
   },
 
@@ -2828,7 +2841,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 3,
       Fa: 1,
     },
-    wargear: [wargear.HeavyDwarfArmour, wargear.DurinsAxe],
+    wargear: [options.HeavyDwarfArmour, options.DurinsAxe],
     wargearOptions: [],
   },
 
@@ -2849,10 +2862,10 @@ let _models: { [key: string]: iModel } = {
       Wi: 2,
       Fa: 1,
     },
-    wargear: [wargear.HeavyDwarfArmour, wargear.Axe],
+    wargear: [options.HeavyDwarfArmour, options.Axe],
     wargearOptions: [
-      { ...wargear.ThrowingAxes, cost: 5 },
-      { ...wargear.TwoHandedAxe, cost: 5 },
+      { ...options.ThrowingAxes, cost: 5 },
+      { ...options.TwoHandedAxe, cost: 5 },
     ],
   },
 
@@ -2873,11 +2886,11 @@ let _models: { [key: string]: iModel } = {
       Wi: 1,
       Fa: 1,
     },
-    wargear: [wargear.DwarfArmour, wargear.Axe],
+    wargear: [options.DwarfArmour, options.Axe],
     wargearOptions: [
-      { ...wargear.Shield, cost: 5 },
-      { ...wargear.ThrowingAxes, cost: 5 },
-      { ...wargear.TwoHandedAxe, cost: 5 },
+      { ...options.Shield, cost: 5 },
+      { ...options.ThrowingAxes, cost: 5 },
+      { ...options.TwoHandedAxe, cost: 5 },
     ],
   },
 
@@ -2902,7 +2915,7 @@ let _models: { [key: string]: iModel } = {
           Wi: 1,
           Fa: 1,
         },
-        wargear: [wargear.HeavyArmour, wargear.TwoAxes],
+        wargear: [options.HeavyArmour, options.TwoAxes],
       },
       {
         key: "Herald",
@@ -2922,10 +2935,10 @@ let _models: { [key: string]: iModel } = {
           Fa: 2,
         },
         wargear: [
-          wargear.DwarfArmour,
-          wargear.Shield,
-          wargear.Axe,
-          wargear.Banner,
+          options.DwarfArmour,
+          options.Shield,
+          options.Axe,
+          options.Banner,
         ],
       },
     ],
@@ -2963,7 +2976,7 @@ let _models: { [key: string]: iModel } = {
       Wi: 0,
       Fa: 0,
     },
-    wargear: [wargear.DwarfArmour, wargear.Shield, wargear.Axe],
+    wargear: [options.DwarfArmour, options.Shield, options.Axe],
     wargearOptions: [],
   },
 
@@ -2980,13 +2993,13 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 4,
     },
-    wargear: [wargear.DwarfArmour, wargear.Axe],
+    wargear: [options.DwarfArmour, options.Axe],
     wargearOptions: [
-      { ...wargear.Warhorn, cost: 30 },
-      { ...wargear.Banner, cost: 25 },
-      { ...wargear.DwarfBow, cost: 1 },
-      { ...wargear.Shield, cost: 1 },
-      { ...wargearSwap.AxeForTwoHandedAxeAndDagger, cost: 1 },
+      { ...options.Warhorn, cost: 30 },
+      { ...options.Banner, cost: 25 },
+      { ...options.DwarfBow, cost: 1 },
+      { ...options.Shield, cost: 1 },
+      { ...optionSwaps.AxeForTwoHandedAxeAndDagger, cost: 1 },
     ],
   },
 
@@ -3003,7 +3016,7 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 4,
     },
-    wargear: [wargear.HeavyDwarfArmour, wargear.TwoHandedAxe, wargear.Axe],
+    wargear: [options.HeavyDwarfArmour, options.TwoHandedAxe, options.Axe],
     wargearOptions: [],
   },
 
@@ -3020,7 +3033,7 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 4,
     },
-    wargear: [wargear.DwarfArmour, wargear.Sword, wargear.ThrowingAxes],
+    wargear: [options.DwarfArmour, options.Sword, options.ThrowingAxes],
     wargearOptions: [],
   },
 
@@ -3037,11 +3050,11 @@ let _models: { [key: string]: iModel } = {
       W: 1,
       C: 4,
     },
-    wargear: [wargear.Armour, wargear.Axe],
+    wargear: [options.Armour, options.Axe],
     wargearOptions: [
-      { ...wargear.DwarfLongBow, cost: 1 },
-      { ...wargear.ThrowingAxes, cost: 1 },
-      { ...wargear.TwoHandedAxe, cost: 1 },
+      { ...options.DwarfLongBow, cost: 1 },
+      { ...options.ThrowingAxes, cost: 1 },
+      { ...options.TwoHandedAxe, cost: 1 },
     ],
   },
 
@@ -3062,7 +3075,7 @@ let _models: { [key: string]: iModel } = {
           W: 1,
           C: 4,
         },
-        wargear: [wargear.HeavyArmour, wargear.Axe, wargear.IronShield],
+        wargear: [options.HeavyArmour, options.Axe, options.IronShield],
       },
       {
         key: "FoeSpear",
@@ -3077,7 +3090,7 @@ let _models: { [key: string]: iModel } = {
           W: 1,
           C: 4,
         },
-        wargear: [wargear.DwarfArmour, wargear.FoeSpear],
+        wargear: [options.DwarfArmour, options.FoeSpear],
       },
     ],
     stats: {
@@ -3111,8 +3124,8 @@ let _models: { [key: string]: iModel } = {
       Fa: 2,
     },
     name: "The Dark Lord Sauron",
-    wargear: [wargear.Armour, wargearChoice.SwordOrPick],
-    wargearOptions: [{ ...wargear.Warg, cost: 7 }],
+    wargear: [options.Armour, optionChoice.SwordOrPick],
+    wargearOptions: [{ ...options.Warg, cost: 7 }],
   },
   OrcCaptain: {
     heroLevel: eHeroLevel.Fortitude,
@@ -3131,8 +3144,8 @@ let _models: { [key: string]: iModel } = {
       Fa: 2,
     },
     name: "Orc Captain",
-    wargear: [wargear.Armour, wargearChoice.SwordOrPick],
-    wargearOptions: [{ ...wargear.Warg, cost: 7 }],
+    wargear: [options.Armour, optionChoice.SwordOrPick],
+    wargearOptions: [{ ...options.Warg, cost: 7 }],
   },
   OrcWarrior: {
     cost: 1,
@@ -3147,13 +3160,13 @@ let _models: { [key: string]: iModel } = {
       C: 2,
     },
     name: "Orc Warrior",
-    wargear: [wargear.Armour, wargearChoice.SwordOrPick],
+    wargear: [options.Armour, optionChoice.SwordOrPick],
     wargearOptions: [
-      { ...wargear.Banner, cost: 25 },
-      { ...wargear.OrcBow, cost: 1 },
-      { ...wargear.Shield, cost: 1 },
-      { ...wargear.Spear, cost: 1 },
-      { ...wargear.TwoHandedWeapon, cost: 1 },
+      { ...options.Banner, cost: 25 },
+      { ...options.OrcBow, cost: 1 },
+      { ...options.Shield, cost: 1 },
+      { ...options.Spear, cost: 1 },
+      { ...options.TwoHandedWeapon, cost: 1 },
     ],
   },
   OrcTracker: {
@@ -3169,8 +3182,8 @@ let _models: { [key: string]: iModel } = {
       C: 2,
     },
     name: "Orc Tracker",
-    wargear: [wargear.Armour, wargearChoice.SwordOrPick],
-    wargearOptions: [{ ...wargear.Warg, cost: 7 }],
+    wargear: [options.Armour, optionChoice.SwordOrPick],
+    wargearOptions: [{ ...options.Warg, cost: 7 }],
   },
   BlackNumenorian: {
     cost: 1,
@@ -3185,17 +3198,46 @@ let _models: { [key: string]: iModel } = {
       C: 2,
     },
     name: "Black Numenorian",
-    wargear: [wargear.Armour, wargearChoice.SwordOrPick],
-    wargearOptions: [{ ...wargear.Warg, cost: 7 }],
+    wargear: [options.Armour, optionChoice.SwordOrPick],
+    wargearOptions: [{ ...options.Warg, cost: 7 }],
   },
 };
 
+let modelsWithKeys: { [key: string]: iModel } = {};
+
+Object.keys(_models).map((k) => {
+  modelsWithKeys[k] = {
+    key: k,
+    ..._models[k],
+  };
+});
+
 // add in the extra may fields
-_models.GildorInglorion = {
-  ..._models.GildorInglorion,
-  mayField: [_models.WoodElfWarrior],
+modelsWithKeys.GildorInglorion = {
+  ...modelsWithKeys.GildorInglorion,
+  mayField: [
+    {
+      ...modelsWithKeys.WoodElfWarrior,
+      name: "Noldorin Exile",
+      cost: 9,
+      stats: {
+        ...modelsWithKeys.WoodElfWarrior.stats,
+        Mv: 8,
+      },
+    },
+  ],
+};
+modelsWithKeys.DurinKingOfKhazadDum = {
+  ...modelsWithKeys.DurinKingOfKhazadDum,
+  mayField: [
+    {
+      ...modelsWithKeys.KhazadGuard,
+      wargearOptions: [
+        { ...options.Asfaloth, cost: 4 },
+        ...modelsWithKeys.KhazadGuard.wargearOptions,
+      ],
+    },
+  ],
 };
 
-export const models = {
-  ..._models,
-};
+export const models = modelsWithKeys;

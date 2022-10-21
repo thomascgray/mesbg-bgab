@@ -2,7 +2,7 @@ import { proxy } from "valtio";
 import { ArmyKey } from "./data/armies";
 import { iHeroModelInArmy, iModel, iModelInArmy } from "./data/models";
 import { nanoid } from "nanoid";
-import { iWargear } from "./data/wargear";
+import { iOption } from "./data/wargear";
 import { getDefaultChoiceWargearChoices } from "./utils";
 
 export interface iState {
@@ -40,7 +40,7 @@ export const addWarbandWarriorToHero = (
 
 export const toggleWargearToHero = (
   isOn: boolean,
-  wargear: iWargear,
+  wargear: iOption,
   hero: iHeroModelInArmy
 ) => {
   const heroIndex = state.yourArmyHeroes.findIndex((h) => h.id === hero.id);
@@ -59,7 +59,7 @@ export const toggleWargearToHero = (
 
 export const toggleWargearToWarbandWarrior = (
   isOn: boolean,
-  wargear: iWargear,
+  wargear: iOption,
   warbandWarrior: iModelInArmy,
   hero: iHeroModelInArmy
 ) => {
@@ -124,8 +124,8 @@ export const addHeroToArmy = (hero: iModel) => {
 };
 
 export const setHeroChoiceWargear = (
-  choice: iWargear,
-  wargearChoice: iWargear,
+  choice: iOption,
+  wargearChoice: iOption,
   hero: iHeroModelInArmy
 ) => {
   // remove all the choices from wargear choice on the hero
@@ -136,8 +136,8 @@ export const setHeroChoiceWargear = (
 };
 
 export const setWarriorChoiceWargear = (
-  choice: iWargear,
-  wargearChoice: iWargear,
+  choice: iOption,
+  wargearChoice: iOption,
   hero: iHeroModelInArmy,
   warrior: iModelInArmy
 ) => {
@@ -159,8 +159,14 @@ export const duplicateWarriorInWarband = (
   hero: iHeroModelInArmy
 ) => {
   const heroIndex = state.yourArmyHeroes.findIndex((h) => h.id === hero.id);
+  const modelIndex = state.yourArmyHeroes[heroIndex].warband.findIndex(
+    (w) => w.id === model.id
+  );
 
-  state.yourArmyHeroes[heroIndex].warband.push({ ...model, id: nanoid() });
+  state.yourArmyHeroes[heroIndex].warband.splice(modelIndex, 0, {
+    ...model,
+    id: nanoid(),
+  });
 };
 
 export const deleteWarriorFromWarband = (

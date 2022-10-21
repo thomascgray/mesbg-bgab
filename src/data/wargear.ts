@@ -1,13 +1,16 @@
-export interface iWargear {
+import { models } from "./models";
+
+export interface iOption {
   key: string;
   name: string;
+  changes?: any; // any changes overwrite the base model when this upgrade it taken
   cost?: number;
-  swapFrom?: iWargear[];
-  swapTo?: iWargear;
-  choices?: iWargear[];
+  swapFrom?: iOption[];
+  swapTo?: iOption;
+  choices?: iOption[];
 }
 
-export const wargear = {
+export const options = {
   Aiglos: { key: "Aiglos", name: "Aiglos" },
 
   AndurilFlameOfTheWest: {
@@ -130,61 +133,78 @@ export const wargear = {
   WoodElfSpear: { key: "WoodElfSpear", name: "WoodElfSpear" },
 };
 
-export const wargearSwap: { [key: string]: iWargear } = {
+export const optionSwaps: { [key: string]: iOption } = {
   SpearForLongbow: {
     key: "SpearForLongbow",
     name: "Longbow (Replaces Spear)",
-    swapFrom: [wargear.Spear],
-    swapTo: wargear.Longbow,
+    swapFrom: [options.Spear],
+    swapTo: options.Longbow,
   },
   SpearForBanner: {
     key: "SpearForBanner",
     name: "Banner (Replaces Spear)",
-    swapFrom: [wargear.Spear],
-    swapTo: wargear.Banner,
+    swapFrom: [options.Spear],
+    swapTo: options.Banner,
   },
   PikeForBanner: {
     key: "PikeForBanner",
     name: "Banner (Replaces Pike)",
-    swapFrom: [wargear.Pike],
-    swapTo: wargear.Banner,
+    swapFrom: [options.Pike],
+    swapTo: options.Banner,
   },
   AxeOfLossarnachForBanner: {
     key: "AxeOfLossarnachForBanner",
     name: "Banner (Replaces Axe of Lossarnach)",
-    swapFrom: [wargear.AxeOfLossarnach],
-    swapTo: wargear.Banner,
+    swapFrom: [options.AxeOfLossarnach],
+    swapTo: options.Banner,
   },
   SpearAndShieldForBanner: {
     key: "SpearAndShieldForBanner",
     name: "Banner (Replaces Spear & Shield)",
-    swapFrom: [wargear.Spear, wargear.Shield],
-    swapTo: wargear.Banner,
+    swapFrom: [options.Spear, options.Shield],
+    swapTo: options.Banner,
   },
   AxeForTwoHandedAxeAndDagger: {
     key: "SpearAndShieldForBanner",
     name: "Two Handed Axe & Dagger (Replaces Axe)",
-    swapFrom: [wargear.Axe],
-    swapTo: wargear.TwoHandedAxeAndDagger,
+    swapFrom: [options.Axe],
+    swapTo: options.TwoHandedAxeAndDagger,
   },
 };
 
-export const wargearChoice: { [key: string]: iWargear } = {
+export const optionChoice: { [key: string]: iOption } = {
   SwordOrAxe: {
     key: "SwordOrAxe",
     name: "Sword or Axe (Choose)",
-    choices: [wargear.Sword, wargear.Axe],
+    choices: [options.Sword, options.Axe],
   },
   DaggerOrAxeOrHammer: {
     key: "DaggerOrAxeOrHammer",
     name: "Dagger or Axe or Hammer",
-    choices: [wargear.Dagger, wargear.Axe, wargear.Hammer],
+    choices: [options.Dagger, options.Axe, options.Hammer],
   },
   SwordOrPick: {
     key: "SwordOrPick",
     name: "Sword or Pick",
-    choices: [wargear.Sword, wargear.Pick],
+    choices: [options.Sword, options.Pick],
   },
 };
 
+export const optionUpgrades = {
+  NoldorinExile: {
+    key: "NoldorinExile",
+    name: "NoldorinExile",
+    isMandatory: true,
+    requirements: [
+      {
+        beInWarbandUnder: "GildorInglorion",
+      },
+    ],
+    changes: {
+      stats: {
+        Mv: 8,
+      },
+    },
+  },
+};
 export const wargearEffects = {};
