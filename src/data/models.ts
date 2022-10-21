@@ -30,7 +30,7 @@ export interface iModelProfile {
     Wi?: number;
     Fa?: number;
   };
-  quantity?: number;
+  effectiveQuantity?: number;
   wargear?: iOption[];
 }
 
@@ -38,6 +38,7 @@ export interface iModel {
   heroLevel?: eHeroLevel;
   key: string;
   cost: number;
+  effectiveQuantity?: number;
   stats: {
     Mv: number;
     F1: number;
@@ -2920,7 +2921,7 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
       {
         key: "Herald",
         name: `Herald`,
-        quantity: 2,
+        effectiveQuantity: 2,
         stats: {
           Mv: 5,
           F1: 4,
@@ -2981,7 +2982,7 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
   },
 
   DwarfWarrior: {
-    name: "DwarfWarrior",
+    name: "Dwarf Warrior",
     cost: 8,
     stats: {
       Mv: 5,
@@ -3004,7 +3005,7 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
   },
 
   KhazadGuard: {
-    name: "KhazadGuard",
+    name: "Khazad Guard",
     cost: 11,
     stats: {
       Mv: 5,
@@ -3021,7 +3022,7 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
   },
 
   IronGuard: {
-    name: "IronGuard",
+    name: "Iron Guard",
     cost: 15,
     stats: {
       Mv: 5,
@@ -3038,7 +3039,7 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
   },
 
   DwarfRanger: {
-    name: "DwarfRanger",
+    name: "Dwarf Ranger",
     cost: 8,
     stats: {
       Mv: 5,
@@ -3059,7 +3060,7 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
   },
 
   VaultWardenTeam: {
-    name: "VaultWardenTeam",
+    name: "Vault Warden Team",
     cost: 25,
     profiles: [
       {
