@@ -15,7 +15,12 @@ import * as State from "./state";
 
 import "./index.css";
 import { AddHeroToArmy } from "./components/AddHeroToArmyButton";
-import { groupHeroes } from "./utils";
+import {
+  calculateBowCountForWarband,
+  calculateModelCountForWarband,
+  calculatePointsForWarband,
+  groupHeroes,
+} from "./utils";
 
 function App() {
   const stateView = useSnapshot(State.state);
@@ -36,6 +41,17 @@ function App() {
 
   const groupedHeroes = groupHeroes(allowedHeroes);
 
+  const totalModelsInArmy = stateView.yourArmyHeroes.reduce((pv, cv) => {
+    return pv + calculateModelCountForWarband(cv as iHeroModelInArmy, true);
+  }, 0);
+
+  const totalPointsInArmy = stateView.yourArmyHeroes.reduce((pv, cv) => {
+    return pv + calculatePointsForWarband(cv as iHeroModelInArmy);
+  }, 0);
+
+  const totalBowCount = stateView.yourArmyHeroes.reduce((pv, cv) => {
+    return pv + calculateBowCountForWarband(cv as iHeroModelInArmy);
+  }, 0);
   return (
     <div className="container mx-auto text-sm">
       <div>
@@ -125,6 +141,32 @@ function App() {
         </div>
 
         <div className="w-2/3 space-y-2 pl-4">
+          {stateView.yourArmyHeroes.length >= 1 && (
+            <React.Fragment>
+              <table className="table-fixed">
+                <tbody>
+                  <tr className="even:bg-stone-100">
+                    <td className="px-2 py-1">Total Army Model Count</td>
+                    <td className="px-2 py-1">{totalModelsInArmy}</td>
+                  </tr>
+                  <tr className="even:bg-stone-100">
+                    <td className="px-2 py-1">50% of Army Model Count</td>
+                    <td className="px-2 py-1">{totalModelsInArmy / 2}</td>
+                  </tr>
+                  <tr className="even:bg-stone-100">
+                    <td className="px-2 py-1">Total Army Point Cost</td>
+                    <td className="px-2 py-1">{totalPointsInArmy}pts</td>
+                  </tr>
+                  <tr className="even:bg-stone-100">
+                    <td className="px-2 py-1">Bow Limit</td>
+                    <td className="px-2 py-1">
+                      {totalBowCount} of {Math.ceil(totalModelsInArmy / 3)}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </React.Fragment>
+          )}
           {stateView.yourArmyHeroes.map((hero) => {
             return (
               <HeroBuilder

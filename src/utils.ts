@@ -142,10 +142,12 @@ export const calculateModelCountForWarband = (
   let modelCount = 0;
 
   if (includeHero) {
-    if (hero.effectiveQuantity) {
-      modelCount += hero.effectiveQuantity;
+    if (hero.profiles) {
+      hero.profiles.forEach((p) => {
+        modelCount += p.effectiveQuantity ? p.effectiveQuantity : 1;
+      });
     } else {
-      modelCount += 1;
+      modelCount += hero.effectiveQuantity ? hero.effectiveQuantity : 1;
     }
   }
 
@@ -166,6 +168,18 @@ export const calculateModelCountForWarband = (
   });
 
   return modelCount;
+};
+
+export const calculateBowCountForWarband = (hero: iHeroModelInArmy) => {
+  let bowCount = 0;
+
+  hero.warband.forEach((warrior) => {
+    if (getActiveWargear(warrior).some((wg) => wg.countsAsBow)) {
+      bowCount += 1 * warrior.quantity;
+    }
+  });
+
+  return bowCount;
 };
 
 // get the stats for a model, and take into account war gear and stuff

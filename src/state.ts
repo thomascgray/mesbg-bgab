@@ -33,7 +33,7 @@ export const addWarbandWarriorToHero = (
     id: nanoid(),
     quantity: 1,
     wargearFromChoices: getDefaultChoiceWargearChoices(
-      warriorModel.wargear.filter((w) => w.choices)
+      (warriorModel.wargear || []).filter((w) => w.choices)
     ),
   });
 };
@@ -117,7 +117,7 @@ export const addHeroToArmy = (hero: iModel) => {
       equippedWargear: [],
       quantity: 1,
       wargearFromChoices: getDefaultChoiceWargearChoices(
-        hero.wargear.filter((w) => w.choices)
+        (hero.wargear || []).filter((w) => w.choices)
       ),
     },
   ];

@@ -57,21 +57,21 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
             </thead>
             <tbody>
               <tr>
-                <td className="">{model.stats.Mv}''</td>
+                <td className="">{model.stats!.Mv}''</td>
                 <td className="text-center">
-                  {model.stats.F1}/{model.stats.F1}+
+                  {model.stats!.F1}/{model.stats!.F1}+
                 </td>
-                <td className="">{model.stats.S}</td>
-                <td className="">{model.stats.D}</td>
-                <td className="">{model.stats.A}</td>
-                <td className="">{model.stats.W}</td>
-                <td className="">{model.stats.C}</td>
+                <td className="">{model.stats!.S}</td>
+                <td className="">{model.stats!.D}</td>
+                <td className="">{model.stats!.A}</td>
+                <td className="">{model.stats!.W}</td>
+                <td className="">{model.stats!.C}</td>
               </tr>
             </tbody>
           </table>
-          {model.stats.Mi !== undefined &&
-            model.stats.Wi !== undefined &&
-            model.stats.Fa !== undefined && (
+          {model.stats!.Mi !== undefined &&
+            model.stats!.Wi !== undefined &&
+            model.stats!.Fa !== undefined && (
               <table>
                 <thead>
                   <tr>
@@ -83,13 +83,13 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
                 <tbody>
                   <tr>
                     <td className="">
-                      <HeroAttributeRenderer value={model.stats.Mi} />
+                      <HeroAttributeRenderer value={model.stats!.Mi} />
                     </td>
                     <td className="">
-                      <HeroAttributeRenderer value={model.stats.Wi} />
+                      <HeroAttributeRenderer value={model.stats!.Wi} />
                     </td>
                     <td className="">
-                      <HeroAttributeRenderer value={model.stats.Fa} />
+                      <HeroAttributeRenderer value={model.stats!.Fa} />
                     </td>
                   </tr>
                 </tbody>
@@ -102,11 +102,13 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
         model.profiles.map((profile) => {
           const profileStats = getProfileActiveStats(profile, model);
           return (
-            <React.Fragment>
+            <React.Fragment key={profile.key}>
               {model.heroLevel !== undefined && (
                 <React.Fragment>
-                  {profile.quantity && (
-                    <span className="font-bold">{profile.quantity} * </span>
+                  {profile.effectiveQuantity && (
+                    <span className="font-bold">
+                      {profile.effectiveQuantity} *{" "}
+                    </span>
                   )}
                   <span className="font-bold">{profile.name}</span>
                 </React.Fragment>

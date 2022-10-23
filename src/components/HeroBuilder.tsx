@@ -6,7 +6,7 @@ import {
   getMaxUnitsForHero,
   hasPickableOptions,
 } from "../utils";
-
+import classnames from "classnames";
 import { ProfileRenderer } from "./ProfileRenderer";
 import { WargearOptions } from "./WargearOptions";
 import { WarriorButtons } from "./WarriorButtons";
@@ -46,6 +46,8 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
     ];
   }
 
+  const unitsInWarband = calculateModelCountForWarband(hero, false);
+  const maxUnitsInWarband = getMaxUnitsForHero(hero);
   return (
     <div className="relative bg-stone-100 p-4">
       <span className="absolute top-2 right-2 bg-stone-200 text-sm hover:scale-105 hover:bg-stone-300 active:scale-90">
@@ -61,9 +63,12 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
       )}
 
       <fieldset className="border border-solid border-stone-300 px-3 pt-1 pb-2">
-        <legend className="text-sm italic">
-          Warband | {calculateModelCountForWarband(hero, false)} of{" "}
-          {getMaxUnitsForHero(hero)}
+        <legend
+          className={classnames("text-sm italic", {
+            "font-bold text-red-500": unitsInWarband > maxUnitsInWarband,
+          })}
+        >
+          Warband | {unitsInWarband} of {maxUnitsInWarband}
         </legend>
         {hero.warband.length <= 0 && (
           <span className="italic text-stone-400">No warband</span>
@@ -72,7 +77,10 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
           <div className="mb-3 space-y-3">
             {hero.warband.map((warrior) => {
               return (
-                <div className="bg-stone-100 p-1 text-sm">
+                <div
+                  key={hero.id + warrior.id}
+                  className="bg-stone-100 p-1 text-sm"
+                >
                   <div className="flex flex-row items-center">
                     <ProfileRenderer model={warrior} />
                     <WarriorButtons model={warrior} hero={hero} />

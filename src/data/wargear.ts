@@ -8,6 +8,7 @@ export interface iOption {
   swapFrom?: iOption[];
   swapTo?: iOption;
   choices?: iOption[];
+  countsAsBow?: boolean; // for the purpose of calculating army bow limits, etc.
 }
 
 export const options = {
@@ -26,8 +27,12 @@ export const options = {
   DwarfArmour: { key: "DwarfArmour", name: "DwarfArmour" },
   Torozul: { key: "Torozul", name: "Torozul" },
   Axe: { key: "Axe", name: "Axe" },
-  DwarfBow: { key: "DwarfBow", name: "DwarfBow" },
-  DwarfLongBow: { key: "DwarfLongBow", name: "DwarfLongBow" },
+  DwarfBow: { key: "DwarfBow", name: "DwarfBow", countsAsBow: true },
+  DwarfLongBow: {
+    key: "DwarfLongBow",
+    name: "DwarfLongBow",
+    countsAsBow: true,
+  },
   AxeOfLossarnach: { key: "AxeOfLossarnach", name: "AxeOfLossarnach" },
   Banner: { key: "Banner", name: "Banner" },
   BannerOfArwenEvenstar: {
@@ -39,13 +44,13 @@ export const options = {
   RingOfDurin: { key: "RingOfDurin", name: "RingOfDurin" },
   CrownOfKings: { key: "CrownOfKings", name: "CrownOfKings" },
   HornOfZirakzigil: { key: "HornOfZirakzigil", name: "HornOfZirakzigil" },
-  Bow: { key: "Bow", name: "Bow" },
+  Bow: { key: "Bow", name: "Bow", countsAsBow: true },
   Broadsword: { key: "Broadsword", name: "Broadsword" },
   Cart: { key: "Cart", name: "Cart" },
   ClawsAndBeak: { key: "ClawsAndBeak", name: "ClawsAndBeak" },
   Club: { key: "Club", name: "Club" },
   Dagger: { key: "Dagger", name: "Dagger" },
-  ElfBow: { key: "ElfBow", name: "Elf bow" },
+  ElfBow: { key: "ElfBow", name: "Elf bow", countsAsBow: true },
   ElvenCloak: { key: "ElvenCloak", name: "Elven Cloak" },
   ElvenMadeDaggers: { key: "ElvenMadeDaggers", name: "Elven made daggers" },
   ElvenMadeHandAndAHalfSword: {
@@ -73,7 +78,7 @@ export const options = {
   Horse: { key: "Horse", name: "Horse" },
   IronShodHooves: { key: "IronShodHooves", name: "IronShodHooves" },
   Lance: { key: "Lance", name: "Lance" },
-  Longbow: { key: "Longbow", name: "Longbow" },
+  Longbow: { key: "Longbow", name: "Longbow", countsAsBow: true },
   MasterForgedTwoHandedAxe: {
     key: "MasterForgedTwoHandedAxe",
     name: "MasterForgedTwoHandedAxe",
@@ -85,7 +90,7 @@ export const options = {
   Narya: { key: "Narya", name: "Narya" },
   Nenya: { key: "Nenya", name: "Nenya" },
   NoldorinDaggers: { key: "NoldorinDaggers", name: "NoldorinDaggers" },
-  OrcBow: { key: "OrcBow", name: "Orc Bow" },
+  OrcBow: { key: "OrcBow", name: "Orc Bow", countsAsBow: true },
   Pick: { key: "Pick", name: "Pick" },
   Pike: { key: "Pike", name: "Pike" },
   PoisonedBlowpipe: { key: "PoisonedBlowpipe", name: "PoisonedBlowpipe" },
@@ -97,7 +102,7 @@ export const options = {
   },
   Shadowfax: { key: "Shadowfax", name: "Shadowfax" },
   Shield: { key: "Shield", name: "Shield" },
-  Shortbow: { key: "Shortbow", name: "Shortbow" },
+  Shortbow: { key: "Shortbow", name: "Shortbow", countsAsBow: true },
   Spear: { key: "Spear", name: "Spear" },
   SpectralSteed: { key: "SpectralSteed", name: "SpectralSteed" },
   Staff: { key: "Staff", name: "Staff" },
