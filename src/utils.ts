@@ -135,26 +135,38 @@ export const calculatePointsForWarband = (hero: iHeroModelInArmy) => {
   return cost;
 };
 
-export const calculateModelCountForWarband = (hero: iHeroModelInArmy) => {
+export const calculateModelCountForWarband = (
+  hero: iHeroModelInArmy,
+  includeHero: boolean
+) => {
   let modelCount = 0;
 
-  if (hero.effectiveQuantity) {
-    modelCount += hero.effectiveQuantity;
-  } else {
-    modelCount += 1;
+  if (includeHero) {
+    if (hero.effectiveQuantity) {
+      modelCount += hero.effectiveQuantity;
+    } else {
+      modelCount += 1;
+    }
   }
 
   hero.warband.forEach((warrior) => {
     let effectiveSingularCount: number = 0;
     if (warrior.profiles) {
       //loop over each profile - 1 each, unless its got an effective quantity
+      warrior.profiles.forEach((p) => {
+        effectiveSingularCount = p.effectiveQuantity ? p.effectiveQuantity : 1;
+      });
     } else {
       //TODO finish thius
       effectiveSingularCount = warrior.effectiveQuantity
         ? warrior.effectiveQuantity
         : 1;
     }
+
+    modelCount += effectiveSingularCount * warrior.quantity;
   });
+
+  return modelCount;
 };
 
 // get the stats for a model, and take into account war gear and stuff

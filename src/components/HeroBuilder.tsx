@@ -1,6 +1,10 @@
 import React from "react";
 import { iHeroModelInArmy, iModel, iModelInArmy } from "../data/models";
-import { calculatePointsForWarband, hasPickableOptions } from "../utils";
+import {
+  calculateModelCountForWarband,
+  calculatePointsForWarband,
+  hasPickableOptions,
+} from "../utils";
 
 import { ProfileRenderer } from "./ProfileRenderer";
 import { WargearOptions } from "./WargearOptions";
@@ -56,7 +60,9 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
       )}
 
       <fieldset className="border border-solid border-stone-300 px-3 pt-1 pb-2">
-        <legend className="text-sm italic">Warband</legend>
+        <legend className="text-sm italic">
+          Warband | {calculateModelCountForWarband(hero, false)} units
+        </legend>
         {hero.warband.length <= 0 && (
           <span className="italic text-stone-400">No warband</span>
         )}
