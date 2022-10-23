@@ -55,7 +55,7 @@ export const getActiveWargear = (
   if (excludeDefault === false) {
     activeWargear = [
       // all the default stuff WITHOUT choices
-      ...wargear.filter((dw) => dw.choices === undefined),
+      ...(wargear || []).filter((dw) => dw.choices === undefined),
       // and THEN all the stuff from choices array
       ...wargearFromChoices,
       // all the equipped wargear thats NOT a swap, just add it on
@@ -154,10 +154,9 @@ export const calculateModelCountForWarband = (
     if (warrior.profiles) {
       //loop over each profile - 1 each, unless its got an effective quantity
       warrior.profiles.forEach((p) => {
-        effectiveSingularCount = p.effectiveQuantity ? p.effectiveQuantity : 1;
+        effectiveSingularCount += p.effectiveQuantity ? p.effectiveQuantity : 1;
       });
     } else {
-      //TODO finish thius
       effectiveSingularCount = warrior.effectiveQuantity
         ? warrior.effectiveQuantity
         : 1;
@@ -216,7 +215,22 @@ export const groupHeroes = (heroes: iModel[]) => {
 
 export const hasPickableOptions = (model: iModelInArmy) => {
   return (
-    model.wargearOptions.length >= 1 ||
+    (model.wargearOptions && model.wargearOptions.length >= 1) ||
     (model.wargearFromChoices && model.wargearFromChoices.length >= 1)
   );
+};
+
+export const getMaxUnitsForHero = (model: iHeroModelInArmy) => {
+  switch (model.heroLevel) {
+    case eHeroLevel.Legend:
+      return 18;
+    case eHeroLevel.Valour:
+      return 15;
+    case eHeroLevel.Fortitude:
+      return 12;
+    case eHeroLevel.Minor:
+      return 6;
+    default:
+      return 0;
+  }
 };

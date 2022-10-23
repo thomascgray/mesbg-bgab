@@ -1,10 +1,4 @@
-import {
-  iOption,
-  options,
-  optionSwaps,
-  optionChoice,
-  optionUpgrades,
-} from "./wargear";
+import { iOption, options, optionSwaps, optionChoice } from "./wargear";
 
 // if a model has "profiles" it means that the model
 // is actually represented by more than 1 physical model
@@ -39,7 +33,7 @@ export interface iModel {
   key: string;
   cost: number;
   effectiveQuantity?: number;
-  stats: {
+  stats?: {
     Mv: number;
     F1: number;
     F2: number;
@@ -54,8 +48,8 @@ export interface iModel {
   };
   profiles?: iModelProfile[];
   name: string;
-  wargear: iOption[]; // the models starting options
-  wargearOptions: iOption[]; // any options that the model can optionally choose to take
+  wargear?: iOption[]; // the models starting options
+  wargearOptions?: iOption[]; // any options that the model can optionally choose to take
   wargearFromChoices?: iOption[]; // options that the model has taken from choices e.g they NEED to have one of the choices
   wargearFromUpgrades?: iOption[]; // options that the model has taken that it is allowed via upgrades
   allowPurchaseMiWiFa?: boolean;
@@ -1769,8 +1763,8 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
     ],
   },
 
-  Erkenbrand: {
-    name: "Erkenbrand",
+  ErkenbrandCaptainOfRohan: {
+    name: "ErkenbrandCaptainOfRohan",
     heroLevel: eHeroLevel.Fortitude,
 
     cost: 75,
@@ -1989,8 +1983,8 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
     ],
   },
 
-  RoyalRohanGuard: {
-    name: "RoyalRohanGuard",
+  RohanRoyalGuard: {
+    name: "RohanRoyalGuard",
     cost: 10,
     stats: {
       Mv: 6,
@@ -3108,6 +3102,92 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
     wargearOptions: [],
   },
 
+  MurinAndDrar: {
+    name: "MurinAndDrar",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 140,
+    profiles: [
+      {
+        key: "Murin",
+        name: "Murin",
+        stats: {
+          Mv: 5,
+          F1: 5,
+          F2: 4,
+          S: 4,
+          D: 8,
+          A: 2,
+          W: 2,
+          C: 5,
+          Mi: 3,
+          Wi: 1,
+          Fa: 1,
+        },
+        wargear: [options.DwarfArmour, options.Shield, options.Kalazal],
+      },
+      {
+        key: "Drar",
+        name: "Drar",
+        stats: {
+          Mv: 5,
+          F1: 5,
+          F2: 4,
+          S: 4,
+          D: 7,
+          A: 2,
+          W: 2,
+          C: 5,
+          Mi: 3,
+          Wi: 1,
+          Fa: 1,
+        },
+        wargear: [options.DwarfArmour, options.DwarfBow],
+      },
+    ],
+  },
+
+  TomBombadil: {
+    name: "TomBombadil",
+    heroLevel: eHeroLevel.Independent,
+    cost: 160,
+    stats: {
+      Mv: 6,
+      F1: 0,
+      F2: 0,
+      S: 0,
+      D: 0,
+      A: 0,
+      W: 0,
+      C: 0,
+      Mi: 0,
+      Wi: 15,
+      Fa: 0,
+    },
+    wargear: [options.TomBombadilsGear],
+    wargearOptions: [],
+  },
+
+  Goldberry: {
+    name: "Goldberry",
+    heroLevel: eHeroLevel.Independent,
+    cost: 140,
+    stats: {
+      Mv: 6,
+      F1: 0,
+      F2: 0,
+      S: 0,
+      D: 0,
+      A: 0,
+      W: 0,
+      C: 0,
+      Mi: 0,
+      Wi: 10,
+      Fa: 0,
+    },
+    wargear: [options.GoldberrysGear],
+    wargearOptions: [],
+  },
+
   TheDarkLordSauron: {
     heroLevel: eHeroLevel.Valour,
     cost: 400,
@@ -3222,7 +3302,7 @@ modelsWithKeys.GildorInglorion = {
       name: "Noldorin Exile",
       cost: 9,
       stats: {
-        ...modelsWithKeys.WoodElfWarrior.stats,
+        ...modelsWithKeys.WoodElfWarrior.stats!,
         Mv: 8,
       },
     },
@@ -3235,7 +3315,7 @@ modelsWithKeys.DurinKingOfKhazadDum = {
       ...modelsWithKeys.KhazadGuard,
       wargearOptions: [
         { ...options.Asfaloth, cost: 4 },
-        ...modelsWithKeys.KhazadGuard.wargearOptions,
+        ...modelsWithKeys.KhazadGuard.wargearOptions!,
       ],
     },
   ],

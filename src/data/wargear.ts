@@ -110,10 +110,13 @@ export const options = {
     name: "TheBannerOfMinasTirith",
   },
   TheOneRing: { key: "TheOneRing", name: "The One Ring" },
+  TomBombadilsGear: { key: "TomBombadilsGear", name: "TomBombadilsGear" },
+  GoldberrysGear: { key: "GoldberrysGear", name: "GoldberrysGear" },
   ThrowingAxes: { key: "ThrowingAxes", name: "ThrowingAxes" },
   ThrowingDaggers: { key: "ThrowingDaggers", name: "ThrowingDaggers" },
   ThrowingSpears: { key: "ThrowingSpears", name: "ThrowingSpears" },
   TwoAxes: { key: "TwoAxes", name: "TwoAxes" },
+  Kalazal: { key: "Kalazal", name: "Kalazal" },
   TwoHandedAxe: { key: "TwoHandedAxe", name: "TwoHandedAxe" },
   TwoHandedScythePick: {
     key: "TwoHandedScythePick",

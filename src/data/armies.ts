@@ -1,4 +1,4 @@
-import { models } from "./models";
+import { eHeroLevel, models } from "./models";
 
 // good or evil needs to be a tag, not a subtype
 export const armies = {
@@ -14,8 +14,39 @@ export const armies = {
       models.BoromirOfGondor,
     ],
   },
-  TheShire: { name: "TheShire", mayField: [] },
-  TheRangers: { name: "TheRangers", mayField: [] },
+  TheShire: {
+    name: "TheShire",
+    mayField: [
+      models.FrodoOfTheNineFingers,
+      models.SamwiseTheBrave,
+      models.MeriadocCaptainOfTheShire,
+      models.PeregrinCaptainOfTheShire,
+      models.PaladinTook,
+      models.FarmerMaggot,
+      models.LobeliaSackvilleBaggins,
+      models.FredegarBolger,
+      models.GandalfTheGrey,
+      models.Dunedain,
+      models.BilboBaggins,
+      models.BandobrasTook,
+      models.HobbitMilitia,
+      models.HobbitArcher,
+      models.HobbitShirriff,
+    ],
+  },
+  TheRangers: {
+    name: "TheRangers",
+    mayField: [
+      models.Arathorn,
+      {
+        ...models.AragornStrider,
+        heroLevel: eHeroLevel.Valour,
+      },
+      models.Halbarad,
+      models.Dunedain,
+      models.RangerOfTheNorth,
+    ],
+  },
   Numenor: {
     name: "Numenor",
     mayField: [
@@ -32,19 +63,82 @@ export const armies = {
       models.GandalfTheWhite,
       models.DenethorStewardOfGondon,
       models.BoromirCaptainOfTheWhiteTower,
+      models.PeregrinTookGuardOfTheCitadel,
+      models.BeregondGuardOfTheCitadel,
+      models.MadrilCaptainOfIthilien,
+      models.DamrodRangerOfIthilien,
+      models.CirionLieutenantOfAmonBarad,
+      models.KnightOfTheWhiteTower,
+      models.CaptainOfMinasTirith,
+      models.KingOfMen,
+      models.WarriorOfMinasTirith,
+      models.KnightOfMinasTirith,
+      models.RangerOfGondor,
       models.CitadelGuard,
       models.GuardOfTheFountainCourt,
       models.OsgiliathVeteran,
     ],
   },
-  TheFiefdoms: { name: "TheFiefdoms", mayField: [] },
+  TheFiefdoms: {
+    name: "TheFiefdoms",
+    mayField: [
+      models.PrinceImrahilOfDolAmroth,
+      models.ForlongTheFat,
+      models.AngborTheFearless,
+      models.Duinhir,
+      models.CaptainOfDolAmroth,
+      models.KnightOfDolAmroth,
+      models.ManAtArmsOfDolAmroth,
+      models.AxemanOfLossarnach,
+      models.ClansmenOfLamedon,
+      models.BlackrootValeArcher,
+    ],
+  },
   TheDeadOfDunharrow: {
     name: "TheDeadOfDunharrow",
-    mayField: [models.TheKingOfTheDead, models.WarriorOfTheDead],
+    mayField: [
+      models.TheKingOfTheDead,
+      models.WarriorOfTheDead,
+      models.RidersOfTheDead,
+    ],
   },
-  Arnor: { name: "Arnor", mayField: [] },
-  Rohan: { name: "Rohan", mayField: [models.TheodenKingOfRohan] },
-  WildmenOfDruadan: { name: "WildmenOfDruadan", mayField: [] },
+  Arnor: {
+    name: "Arnor",
+    mayField: [
+      models.ArveduiLastKingOfArnor,
+      models.MalbethTheSeer,
+      models.CaptainOfArnor,
+      models.WarriorOfArnor,
+      models.RangerOfArnor,
+      models.HobbitArcher,
+    ],
+  },
+  Rohan: {
+    name: "Rohan",
+    mayField: [
+      models.TheodenKingOfRohan,
+      models.TheodredHeirOfRohan,
+      models.EomerMarshalOfTheRiddermark,
+      models.EowynShieldMaidenOfRohan,
+      models.MeriadocBrandybuckKnightOfTheMark,
+      models.ErkenbrandCaptainOfRohan,
+      models.GamlingCaptainOfRohan,
+      models.HamaCaptainOfRohan,
+      models.GrimboldOfGrimslade,
+      models.EorlTheYoung,
+      models.CaptainOfRohan,
+      models.KingsHuntsman,
+      models.WarriorOfRohan,
+      models.RiderOfRohan,
+      models.RohanRoyalGuard,
+      models.RohanOutrider,
+      models.SonOfEorl,
+    ],
+  },
+  WildmenOfDruadan: {
+    name: "WildmenOfDruadan",
+    mayField: [models.GhanBuriGhan, models.WosesWarriors],
+  },
   Rivendell: {
     name: "Rivendell",
     mayField: [
@@ -57,7 +151,10 @@ export const armies = {
       models.LindirOfRivendell,
       models.Cirdan,
       models.GildorInglorion,
-      models.BilboBaggins,
+      {
+        ...models.BilboBaggins,
+        heroLevel: eHeroLevel.Independent,
+      },
       models.HighElfCaptain,
       models.HighElfStormCaller,
       models.HighElfWarrior,
@@ -80,8 +177,11 @@ export const armies = {
       models.WoodElfSentinel,
     ],
   },
-  Fangorn: { name: "Fangorn", mayField: [] },
-  TheMistyMountains: { name: "TheMistyMountains", mayField: [] },
+  Fangorn: { name: "Fangorn", mayField: [models.Treebard, models.Ent] },
+  TheMistyMountains: {
+    name: "TheMistyMountains",
+    mayField: [models.Gwaihir, models.GreatEagle],
+  },
   TheKingdomOfKhazadDum: {
     name: "TheKingdomOfKhazadDum",
     mayField: [
@@ -100,7 +200,10 @@ export const armies = {
       models.VaultWardenTeam,
     ],
   },
-  WanderersInTheWild: { name: "WanderersInTheWild", mayField: [] },
+  WanderersInTheWild: {
+    name: "WanderersInTheWild",
+    mayField: [models.MurinAndDrar, models.TomBombadil, models.Goldberry],
+  },
   BaradDur: {
     name: "BaradDur",
     mayField: [models.TheDarkLordSauron, models.OrcCaptain, models.OrcWarrior],

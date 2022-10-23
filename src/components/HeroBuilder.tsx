@@ -3,6 +3,7 @@ import { iHeroModelInArmy, iModel, iModelInArmy } from "../data/models";
 import {
   calculateModelCountForWarband,
   calculatePointsForWarband,
+  getMaxUnitsForHero,
   hasPickableOptions,
 } from "../utils";
 
@@ -61,7 +62,8 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
 
       <fieldset className="border border-solid border-stone-300 px-3 pt-1 pb-2">
         <legend className="text-sm italic">
-          Warband | {calculateModelCountForWarband(hero, false)} units
+          Warband | {calculateModelCountForWarband(hero, false)} of{" "}
+          {getMaxUnitsForHero(hero)}
         </legend>
         {hero.warband.length <= 0 && (
           <span className="italic text-stone-400">No warband</span>
