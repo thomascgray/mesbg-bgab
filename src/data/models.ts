@@ -1,4 +1,10 @@
-import { iOption, options, optionSwaps, optionChoice } from "./wargear";
+import {
+  iOption,
+  options,
+  optionSwaps,
+  optionChoice,
+  optionUpgrades,
+} from "./wargear";
 
 // if a model has "profiles" it means that the model
 // is actually represented by more than 1 physical model
@@ -50,6 +56,7 @@ export interface iModel {
   name: string;
   wargear?: iOption[]; // the models starting options
   wargearOptions?: iOption[]; // any options that the model can optionally choose to take
+  wargearUpgrades?: iOption[]; // upgrades that the unit can take
   wargearFromChoices?: iOption[]; // options that the model has taken from choices e.g they NEED to have one of the choices
   wargearFromUpgrades?: iOption[]; // options that the model has taken that it is allowed via upgrades
   allowPurchaseMiWiFa?: boolean;
@@ -2649,7 +2656,6 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
     },
     wargear: [options.ElvenMadeHandAndAHalfSword, options.ElvenCloak],
     wargearOptions: [
-      // { ...optionUpgrades.NoldorinExile, cost: 1 },
       { ...options.Banner, cost: 25 },
       { ...options.ElfBow, cost: 2 },
       { ...options.ThrowingDaggers, cost: 2 },
@@ -3313,9 +3319,9 @@ modelsWithKeys.DurinKingOfKhazadDum = {
   mayField: [
     {
       ...modelsWithKeys.KhazadGuard,
-      wargearOptions: [
-        { ...options.Asfaloth, cost: 4 },
-        ...modelsWithKeys.KhazadGuard.wargearOptions!,
+      wargearUpgrades: [
+        { ...optionUpgrades.Hearthguard, cost: 2 },
+        ...(modelsWithKeys.KhazadGuard.wargearUpgrades || []),
       ],
     },
   ],

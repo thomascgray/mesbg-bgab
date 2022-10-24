@@ -30,6 +30,16 @@ export const isWargearChoiceSelected = (
   // return keysOfEquippedWargear.includes(wargearOption.name);
 };
 
+export const isWargearUpgradeSelected = (
+  option: iOption,
+  model: iModelInArmy
+) => {
+  if (model.wargearFromUpgrades) {
+    return model.wargearFromUpgrades.map((c) => c.key).includes(option.key);
+  }
+  return false;
+};
+
 export const getDefaultChoiceWargearChoices = (wargearChoices: iOption[]) => {
   const defaultWargear = wargearChoices.map((wc) => {
     return wc.choices ? wc.choices[0] : [];
@@ -230,7 +240,8 @@ export const groupHeroes = (heroes: iModel[]) => {
 export const hasPickableOptions = (model: iModelInArmy) => {
   return (
     (model.wargearOptions && model.wargearOptions.length >= 1) ||
-    (model.wargearFromChoices && model.wargearFromChoices.length >= 1)
+    (model.wargearFromChoices && model.wargearFromChoices.length >= 1) ||
+    (model.wargearUpgrades && model.wargearUpgrades.length >= 1)
   );
 };
 

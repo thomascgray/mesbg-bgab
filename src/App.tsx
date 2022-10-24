@@ -36,7 +36,8 @@ function App() {
   );
 
   const allowedWarriors = armyForceAllowedModels.filter(
-    (m: iModel) => m.heroLevel === undefined
+    (m: iModel) =>
+      m.heroLevel === undefined || m.heroLevel === eHeroLevel.Independent
   );
 
   const groupedHeroes = groupHeroes(allowedHeroes);

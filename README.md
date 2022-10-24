@@ -28,7 +28,13 @@
 - Auto calculates which distinct models you're going to need for your army, and builds a BBCode'ified output for each of those models, that you can then easily copy and paste onto your TTS army.
 - I personally play exclusively on TTS, so I have a vested interest in this being as convinient as possible.
 
-**TODO**
+**Check Working**
+
+- Durin having khazad guard that get the upgrade
+  - basically, upgrades that can affect stats and wargear and names
+- Gildor Inglorion getting exiles
+- adding independent heros as warband
+  **TODO**
 
 - models need some kind of "effective model count" cus some things can be purchased as they count as 2 models
 

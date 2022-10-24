@@ -8,6 +8,7 @@ export interface iOption {
   swapFrom?: iOption[];
   swapTo?: iOption;
   choices?: iOption[];
+  isUpgrade?: boolean; // so we know whether to show it as an item or not, etc.
   countsAsBow?: boolean; // for the purpose of calculating army bow limits, etc.
 }
 
@@ -199,15 +200,10 @@ export const optionChoice: { [key: string]: iOption } = {
 };
 
 export const optionUpgrades = {
-  NoldorinExile: {
-    key: "NoldorinExile",
-    name: "NoldorinExile",
-    isMandatory: true,
-    requirements: [
-      {
-        beInWarbandUnder: "GildorInglorion",
-      },
-    ],
+  Hearthguard: {
+    key: "Hearthguard",
+    name: "Hearthguard",
+    isUpgrade: true,
     changes: {
       stats: {
         Mv: 8,
@@ -215,4 +211,4 @@ export const optionUpgrades = {
     },
   },
 };
-export const wargearEffects = {};
+// export const wargearEffects = {};

@@ -1,5 +1,9 @@
 import { iHeroModelInArmy, iModelInArmy } from "../data/models";
-import { isWargearChoiceSelected, isWargearOptionEquipped } from "../utils";
+import {
+  isWargearChoiceSelected,
+  isWargearOptionEquipped,
+  isWargearUpgradeSelected,
+} from "../utils";
 import * as State from "../state";
 
 export interface iWargearOptionsProps {
@@ -11,9 +15,8 @@ export const WargearOptions = (props: iWargearOptionsProps) => {
   const { model, hero } = props;
   return (
     <fieldset className="border border-solid border-stone-300 px-2 py-2">
-      {/* <legend className="text-sm italic">Options</legend> */}
       {/* here we need to render out all the choices */}
-      {model.wargear
+      {(model.wargear || [])
         .filter((w) => w.choices && w.choices.length >= 1)
         .map((wc) => {
           return (
@@ -52,7 +55,39 @@ export const WargearOptions = (props: iWargearOptionsProps) => {
             </div>
           );
         })}
-      {model.wargearOptions.map((wgo) => {
+      {(model.wargearUpgrades || []).map((wgo) => {
+        return (
+          <label
+            key={wgo.key}
+            className="flex cursor-pointer flex-row items-center space-x-2"
+          >
+            <input
+              type="checkbox"
+              checked={isWargearUpgradeSelected(wgo, model)}
+              onChange={(e) => {
+                if (hero) {
+                  State.toggleUpgradeToWarbandWarrior(
+                    e.currentTarget.checked,
+                    wgo,
+                    model,
+                    hero
+                  );
+                } else {
+                  State.toggleUpgradeToHero(
+                    e.currentTarget.checked,
+                    wgo,
+                    model as iHeroModelInArmy
+                  );
+                }
+              }}
+            />
+            <span>
+              {wgo.name} - {wgo.cost}pts
+            </span>
+          </label>
+        );
+      })}
+      {(model.wargearOptions || []).map((wgo) => {
         return (
           <label
             key={wgo.key}
