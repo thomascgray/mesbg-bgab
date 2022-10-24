@@ -11,7 +11,7 @@
 - Designed from the ground up to work on a variety of computer screen sizes.
 - Edit and display army lists from your phone, easy access for when you're in person.
 - Don't need to install any software or run any programs or anything like that.
-- I don't want (or care about, to be honest) your data, so no Google Analytics on the page.
+- I don't want (or care about, to be honest) your data, so no Google Analytics or tracking anywhere.
 
 ### **Save rosters to your computer browser's local storage (with an option to export to file)**
 
@@ -25,30 +25,17 @@
 
 ### **Supports Tabletop Simulator from the get go**
 
-- Auto calculates which distinct models you're going to need for your army, and builds a BBCode'ified output for each of those models, that you can then easily copy and paste onto your TTS army.
+- Auto calculates which distinct models you're going to need for your army, and builds a BBCode'ified output for each of those models that you can then easily copy and paste onto your TTS army.
 - I personally play exclusively on TTS, so I have a vested interest in this being as convinient as possible.
 
-**Check Working**
+**TODO**
 
 - Durin having khazad guard that get the upgrade
   - basically, upgrades that can affect stats and wargear and names
 - Gildor Inglorion getting exiles
 - adding independent heros as warband
-  **TODO**
 
-- models need some kind of "effective model count" cus some things can be purchased as they count as 2 models
-
-  - e.g dwarf vault warden teams
-
-- supporting things with multiple profiles for 1 choice e.g the 2 elves together
-
-  - `ElladanAndElrohir`
-  - now check with the dwarfs with different profiles
-
-- upgrading units based on them being inside a specific hero's warband
-
-  - durin
-    that elf man
+- calculate bow limits per force in the army
 
 - upgrading units allowing changes to any of the stats of a unit
 

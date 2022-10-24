@@ -23,6 +23,15 @@ export const options = {
   IronShield: { key: "IronShield", name: "IronShield" },
   FoeSpear: { key: "FoeSpear", name: "FoeSpear" },
   ArmouredHorse: { key: "ArmouredHorse", name: "ArmouredHorse" },
+  ArmouredFellBeast: { key: "ArmouredFellBeast", name: "ArmouredFellBeast" },
+  WardrumMordorOrc: { key: "WardrumMordorOrc", name: "WardrumMordorOrc" },
+  WardrumMordor: { key: "WardrumMordor", name: "WardrumMordor" },
+  FellBeast: { key: "FellBeast", name: "FellBeast" },
+  CrownOfMorgul: { key: "CrownOfMorgul", name: "CrownOfMorgul" },
+  MorgulBlade: { key: "MorgulBlade", name: "MorgulBlade" },
+  TwoHandedFlail: { key: "TwoHandedFlail", name: "TwoHandedFlail" },
+  LargeVenemousFangs: { key: "LargeVenemousFangs", name: "LargeVenemousFangs" },
+  Whip: { key: "Whip", name: "Whip" },
   ArmourOfGondolin: { key: "ArmourOfGondolin", name: "ArmourOfGondolin" },
   Asfaloth: { key: "Asfaloth", name: "Asfaloth" },
   DwarfArmour: { key: "DwarfArmour", name: "DwarfArmour" },
@@ -50,6 +59,7 @@ export const options = {
   Cart: { key: "Cart", name: "Cart" },
   ClawsAndBeak: { key: "ClawsAndBeak", name: "ClawsAndBeak" },
   Club: { key: "Club", name: "Club" },
+  Mace: { key: "Mace", name: "Mace" },
   Dagger: { key: "Dagger", name: "Dagger" },
   ElfBow: { key: "ElfBow", name: "Elf bow", countsAsBow: true },
   ElvenCloak: { key: "ElvenCloak", name: "Elven Cloak" },
@@ -68,6 +78,7 @@ export const options = {
 
   HandAndAHalfClub: { key: "HandAndAHalfClub", name: "HandAndAHalfClub" },
   HandAndAHalfSword: { key: "HandAndAHalfSword", name: "HandAndAHalfSword" },
+  HandAndAHalfHammer: { key: "HandAndAHalfHammer", name: "HandAndAHalfHammer" },
   HeavyArmour: { key: "HeavyArmour", name: "HeavyArmour" },
   HeavyDwarfArmour: { key: "HeavyDwarfArmour", name: "HeavyDwarfArmour" },
   Herugrim: { key: "Herugrim", name: "Herugrim" },
@@ -179,6 +190,12 @@ export const optionSwaps: { [key: string]: iOption } = {
     swapFrom: [options.Axe],
     swapTo: options.TwoHandedAxeAndDagger,
   },
+  ShieldForTwoHandedWeapon: {
+    key: "ShieldForTwoHandedWeapon",
+    name: "Two Handed Weapon (Replaces Shield)",
+    swapFrom: [options.Shield],
+    swapTo: options.TwoHandedWeapon,
+  },
 };
 
 export const optionChoice: { [key: string]: iOption } = {
@@ -196,6 +213,15 @@ export const optionChoice: { [key: string]: iOption } = {
     key: "SwordOrPick",
     name: "Sword or Pick",
     choices: [options.Sword, options.Pick],
+  },
+  HandAndAHalfSwordOrHandAndAHalfClubOrHandAndAHalfHammer: {
+    key: "HandAndAHalfSwordOrHandAndAHalfClubOrHandAndAHalfHammer",
+    name: "HandAndAHalfSword Or HandAndAHalfClub Or HandAndAHalfHammer",
+    choices: [
+      options.HandAndAHalfSword,
+      options.HandAndAHalfClub,
+      options.HandAndAHalfHammer,
+    ],
   },
 };
 
