@@ -59,7 +59,7 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
               <tr>
                 <td className="">{model.stats!.Mv}''</td>
                 <td className="text-center">
-                  {model.stats!.F1}/{model.stats!.F1}+
+                  {model.stats!.F1}/{model.stats!.F2}+
                 </td>
                 <td className="">{model.stats!.S}</td>
                 <td className="">{model.stats!.D}</td>

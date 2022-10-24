@@ -35,10 +35,12 @@ function App() {
     (m: iModel) => m.heroLevel !== undefined
   );
 
-  const allowedWarriors = armyForceAllowedModels.filter(
-    (m: iModel) =>
-      m.heroLevel === undefined || m.heroLevel === eHeroLevel.Independent
-  );
+  const allowedWarriors = [
+    ...armyForceAllowedModels.filter((m) => m.heroLevel === undefined),
+    ...armyForceAllowedModels.filter(
+      (m) => m.heroLevel === eHeroLevel.Independent
+    ),
+  ];
 
   const groupedHeroes = groupHeroes(allowedHeroes);
 
@@ -124,7 +126,12 @@ function App() {
             groupedHeroes.map((group) => {
               return (
                 <div key={group.name}>
-                  <span>Heroes of {group.name}</span>
+                  {["Minor", "Independent"].includes(group.name) && (
+                    <span>{group.name} Heroes</span>
+                  )}
+                  {!(
+                    group.name === "Minor" || group.name === "Independent"
+                  ) && <span>Heroes of {group.name}</span>}
                   <div className="space-y-2">
                     {group.heroes &&
                       group.heroes.map((hero) => {

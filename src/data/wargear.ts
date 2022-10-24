@@ -1,5 +1,3 @@
-import { models } from "./models";
-
 export interface iOption {
   key: string;
   name: string;
@@ -26,6 +24,10 @@ export const options = {
   ArmouredFellBeast: { key: "ArmouredFellBeast", name: "ArmouredFellBeast" },
   WardrumMordorOrc: { key: "WardrumMordorOrc", name: "WardrumMordorOrc" },
   WardrumMordor: { key: "WardrumMordor", name: "WardrumMordor" },
+  WardrumMordorUrukHai: {
+    key: "WardrumMordorUrukHai",
+    name: "WardrumMordorUrukHai",
+  },
   FellBeast: { key: "FellBeast", name: "FellBeast" },
   CrownOfMorgul: { key: "CrownOfMorgul", name: "CrownOfMorgul" },
   MorgulBlade: { key: "MorgulBlade", name: "MorgulBlade" },
@@ -45,6 +47,7 @@ export const options = {
   },
   AxeOfLossarnach: { key: "AxeOfLossarnach", name: "AxeOfLossarnach" },
   Banner: { key: "Banner", name: "Banner" },
+  TrollChain: { key: "TrollChain", name: "TrollChain" },
   BannerOfArwenEvenstar: {
     key: "BannerOfArwenEvenstar",
     name: "BannerOfArwenEvenstar",
@@ -58,6 +61,7 @@ export const options = {
   Broadsword: { key: "Broadsword", name: "Broadsword" },
   Cart: { key: "Cart", name: "Cart" },
   ClawsAndBeak: { key: "ClawsAndBeak", name: "ClawsAndBeak" },
+  ClawsAndTeeth: { key: "ClawsAndTeeth", name: "ClawsAndTeeth" },
   Club: { key: "Club", name: "Club" },
   Mace: { key: "Mace", name: "Mace" },
   Dagger: { key: "Dagger", name: "Dagger" },
@@ -72,6 +76,7 @@ export const options = {
 
   Felarof: { key: "Felarof", name: "Felarof" },
   Glamdring: { key: "Glamdring", name: "Glamdring" },
+  TwoHandedMace: { key: "TwoHandedMace", name: "TwoHandedMace" },
   GripFangAndWolf: { key: "GripFangAndWolf", name: "Grip, Fang and Wolf" },
   Hammer: { key: "Hammer", name: "Hammer" },
   Hadhafang: { key: "Hadhafang", name: "Hadhafang" },
@@ -131,15 +136,22 @@ export const options = {
   GoldberrysGear: { key: "GoldberrysGear", name: "GoldberrysGear" },
   ThrowingAxes: { key: "ThrowingAxes", name: "ThrowingAxes" },
   ThrowingDaggers: { key: "ThrowingDaggers", name: "ThrowingDaggers" },
+  ShieldOfCirithUngol: {
+    key: "ShieldOfCirithUngol",
+    name: "ShieldOfCirithUngol",
+  },
   ThrowingSpears: { key: "ThrowingSpears", name: "ThrowingSpears" },
   TwoAxes: { key: "TwoAxes", name: "TwoAxes" },
   Kalazal: { key: "Kalazal", name: "Kalazal" },
   TwoHandedAxe: { key: "TwoHandedAxe", name: "TwoHandedAxe" },
+  HugeClawsAndTeeth: { key: "HugeClawsAndTeeth", name: "HugeClawsAndTeeth" },
+  ShadeWargear: { key: "ShadeWargear", name: "ShadeWargear" },
   TwoHandedScythePick: {
     key: "TwoHandedScythePick",
     name: "Two Handed Scythe (pick)",
   },
   TwoHandedWeapon: { key: "TwoHandedWeapon", name: "Two Handed Weapon" },
+  TwoHandedSword: { key: "TwoHandedSword", name: "TwoHandedSword" },
   TwoHandedAxeAndDagger: {
     key: "TwoHandedAxeAndDagger",
     name: "TwoHandedAxeAndDagger",
@@ -196,6 +208,12 @@ export const optionSwaps: { [key: string]: iOption } = {
     swapFrom: [options.Shield],
     swapTo: options.TwoHandedWeapon,
   },
+  SpearForHandAndAHalfHammer: {
+    key: "SpearForHandAndAHalfHammer",
+    name: "Hand And A Half Hammer (Replaces Spear)",
+    swapFrom: [options.Spear],
+    swapTo: options.HandAndAHalfHammer,
+  },
 };
 
 export const optionChoice: { [key: string]: iOption } = {
@@ -213,6 +231,11 @@ export const optionChoice: { [key: string]: iOption } = {
     key: "SwordOrPick",
     name: "Sword or Pick",
     choices: [options.Sword, options.Pick],
+  },
+  SwordOrMaceOrAxe: {
+    key: "SwordOrMaceOrAxe",
+    name: "Sword or Mace or Axe (Choose)",
+    choices: [options.Sword, options.Mace, options.Axe],
   },
   HandAndAHalfSwordOrHandAndAHalfClubOrHandAndAHalfHammer: {
     key: "HandAndAHalfSwordOrHandAndAHalfClubOrHandAndAHalfHammer",
