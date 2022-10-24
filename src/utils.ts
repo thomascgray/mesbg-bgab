@@ -125,16 +125,19 @@ export const getActiveWargear = (
 };
 
 export const calculatePointsForWarband = (hero: iHeroModelInArmy) => {
-  let cost = hero.cost;
+  let cost = Array.isArray(hero.cost) ? hero.cost[0] : hero.cost;
 
   hero.equippedWargear.forEach((w) => {
-    cost += w.cost || 0;
+    cost += (Array.isArray(w.cost) ? w.cost[0] : w.cost) || 0;
   });
 
   hero.warband.forEach((warrior) => {
-    let warriorCost = warrior.cost;
+    let warriorCost = Array.isArray(warrior.cost)
+      ? warrior.cost[0]
+      : warrior.cost;
+
     warrior.equippedWargear.forEach((w) => {
-      warriorCost += w.cost || 0;
+      warriorCost += (Array.isArray(w.cost) ? w.cost[0] : w.cost) || 0;
     });
 
     warriorCost *= warrior.quantity;

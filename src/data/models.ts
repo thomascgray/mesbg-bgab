@@ -37,7 +37,7 @@ export interface iModelProfile {
 export interface iModel {
   heroLevel?: eHeroLevel;
   key: string;
-  cost: number | number[];
+  cost: number;
   effectiveQuantity?: number;
   stats?: {
     Mv: number;
@@ -48,9 +48,9 @@ export interface iModel {
     A: number;
     W: number;
     C: number;
-    Mi?: number | number[];
-    Wi?: number | number[];
-    Fa?: number | number[];
+    Mi?: number;
+    Wi?: number;
+    Fa?: number;
   };
   profiles?: iModelProfile[];
   name: string;
