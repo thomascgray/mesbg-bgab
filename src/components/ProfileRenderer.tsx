@@ -1,9 +1,14 @@
 import { iHeroModelInArmy, iModelInArmy } from "../data/models";
-import { getActiveWargear, getProfileActiveStats } from "../utils";
+import {
+  getActiveWargear,
+  getModelActiveData,
+  getProfileActiveData,
+} from "../utils";
 import { HeroAttributeRenderer } from "./HeroAttributeRenderer";
 import * as State from "../state";
 import React from "react";
 import * as Pluralize from "pluralize";
+import _ from "lodash";
 
 export interface iProfileRendererProps {
   model: iHeroModelInArmy | iModelInArmy;
@@ -15,13 +20,15 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
     excludeDefault: true,
   }).map((w) => w.name);
 
+  const activeModelData = getModelActiveData(model);
+
   return (
     <div>
       <div>
         {/* heroes */}
         {model.heroLevel !== undefined && (
           <React.Fragment>
-            <span className="font-bold">{model.name}</span>
+            <span className="font-bold">{activeModelData.name}</span>
             {activeWargearNames.length >= 1 && (
               <span className="ml-1 font-bold">
                 w/ {activeWargearNames.join(", ")}
@@ -33,7 +40,7 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
         {model.heroLevel === undefined && (
           <React.Fragment>
             <span>{model.quantity} * </span>
-            <span>{model.name}</span>
+            <span>{activeModelData.name}</span>
             {activeWargearNames.length >= 1 && (
               <span className="ml-1">w/ {activeWargearNames.join(", ")}</span>
             )}
@@ -41,6 +48,7 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
         )}
       </div>
 
+      {/* if a model DOESNT have profiles, just render out effectively 1 profile "block" */}
       {model.profiles === undefined && (
         <div className="flex flex-row items-center space-x-8">
           <table className="table-fixed border-collapse border-spacing-0">
@@ -57,21 +65,21 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
             </thead>
             <tbody>
               <tr>
-                <td className="">{model.stats!.Mv}''</td>
+                <td className="">{activeModelData.stats!.Mv}''</td>
                 <td className="text-center">
-                  {model.stats!.F1}/{model.stats!.F2}+
+                  {activeModelData.stats!.F1}/{activeModelData.stats!.F2}+
                 </td>
-                <td className="">{model.stats!.S}</td>
-                <td className="">{model.stats!.D}</td>
-                <td className="">{model.stats!.A}</td>
-                <td className="">{model.stats!.W}</td>
-                <td className="">{model.stats!.C}</td>
+                <td className="">{activeModelData.stats!.S}</td>
+                <td className="">{activeModelData.stats!.D}</td>
+                <td className="">{activeModelData.stats!.A}</td>
+                <td className="">{activeModelData.stats!.W}</td>
+                <td className="">{activeModelData.stats!.C}</td>
               </tr>
             </tbody>
           </table>
-          {model.stats!.Mi !== undefined &&
-            model.stats!.Wi !== undefined &&
-            model.stats!.Fa !== undefined && (
+          {activeModelData.stats!.Mi !== undefined &&
+            activeModelData.stats!.Wi !== undefined &&
+            activeModelData.stats!.Fa !== undefined && (
               <table>
                 <thead>
                   <tr>
@@ -83,13 +91,19 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
                 <tbody>
                   <tr>
                     <td className="">
-                      <HeroAttributeRenderer value={model.stats!.Mi} />
+                      <HeroAttributeRenderer
+                        value={activeModelData.stats!.Mi}
+                      />
                     </td>
                     <td className="">
-                      <HeroAttributeRenderer value={model.stats!.Wi} />
+                      <HeroAttributeRenderer
+                        value={activeModelData.stats!.Wi}
+                      />
                     </td>
                     <td className="">
-                      <HeroAttributeRenderer value={model.stats!.Fa} />
+                      <HeroAttributeRenderer
+                        value={activeModelData.stats!.Fa}
+                      />
                     </td>
                   </tr>
                 </tbody>
@@ -98,9 +112,11 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
         </div>
       )}
 
+      {/* if it DOES have render out a block for each, taking into account the "active" version
+of any given profile */}
       {model.profiles &&
         model.profiles.map((profile) => {
-          const profileStats = getProfileActiveStats(profile, model);
+          const profileData = getProfileActiveData(profile, model);
           return (
             <React.Fragment key={profile.key}>
               {model.heroLevel !== undefined && (
@@ -128,21 +144,21 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="">{profileStats.Mv}''</td>
+                      <td className="">{profileData.stats?.Mv}''</td>
                       <td className="text-center">
-                        {profileStats.F1}/{profileStats.F2}+
+                        {profileData.stats?.F1}/{profileData.stats?.F2}+
                       </td>
-                      <td className="">{profileStats.S}</td>
-                      <td className="">{profileStats.D}</td>
-                      <td className="">{profileStats.A}</td>
-                      <td className="">{profileStats.W}</td>
-                      <td className="">{profileStats.C}</td>
+                      <td className="">{profileData.stats?.S}</td>
+                      <td className="">{profileData.stats?.D}</td>
+                      <td className="">{profileData.stats?.A}</td>
+                      <td className="">{profileData.stats?.W}</td>
+                      <td className="">{profileData.stats?.C}</td>
                     </tr>
                   </tbody>
                 </table>
-                {profileStats.Mi !== undefined &&
-                  profileStats.Wi !== undefined &&
-                  profileStats.Fa !== undefined && (
+                {profileData.stats?.Mi !== undefined &&
+                  profileData.stats?.Wi !== undefined &&
+                  profileData.stats?.Fa !== undefined && (
                     <table>
                       <thead>
                         <tr>
@@ -154,13 +170,19 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
                       <tbody>
                         <tr>
                           <td className="">
-                            <HeroAttributeRenderer value={profileStats.Mi} />
+                            <HeroAttributeRenderer
+                              value={profileData.stats?.Mi}
+                            />
                           </td>
                           <td className="">
-                            <HeroAttributeRenderer value={profileStats.Wi} />
+                            <HeroAttributeRenderer
+                              value={profileData.stats?.Wi}
+                            />
                           </td>
                           <td className="">
-                            <HeroAttributeRenderer value={profileStats.Fa} />
+                            <HeroAttributeRenderer
+                              value={profileData.stats?.Fa}
+                            />
                           </td>
                         </tr>
                       </tbody>

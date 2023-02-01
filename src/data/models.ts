@@ -68,7 +68,13 @@ export interface iModel {
   // functions like army may fields, allows heroes to field armies from other lists
   // if a hero has a mayField or a unit that it is already allowed to field, the heros
   // mayField OVERWRITES the "army" model
+  // a models mayField like this appears as their warband
   mayField?: iModel[];
+
+  // units can also specify units that get added to the roster
+  // at an ARMY level. This is useful for when having a hero in an army allows
+  // other random heroes e.g Balin may field Gimli (from the Fellowship)
+  armyMayField?: iModel[];
 }
 
 export interface ISiegeEngine {
@@ -159,7 +165,7 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
   },
   MeriadocBrandybuck: {
     name: "Meriadoc Brandybuck",
-    heroLevel: eHeroLevel.Fortitude,
+    heroLevel: eHeroLevel.Minor,
     cost: 10,
     stats: {
       Mv: 4,
@@ -184,7 +190,7 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
   },
   PeregrinTook: {
     name: "PeregrinTook",
-    heroLevel: eHeroLevel.Fortitude,
+    heroLevel: eHeroLevel.Minor,
     cost: 10,
     stats: {
       Mv: 4,
@@ -3098,16 +3104,8 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
         wargear: [options.DwarfArmour, options.FoeSpear],
       },
     ],
-    stats: {
-      Mv: 5,
-      F1: 4,
-      F2: 3,
-      S: 3,
-      D: 5,
-      A: 1,
-      W: 1,
-      C: 4,
-    },
+    // @ts-ignore defined in profiles
+    stats: {},
     wargear: [],
     wargearOptions: [],
   },
@@ -4280,9 +4278,7 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
       C: 3,
     },
     wargear: [options.HeavyArmour, options.Sword, options.Shield],
-    wargearOptions: [
-      { ...options.Banner, cost: 25 },
-    ],
+    wargearOptions: [{ ...options.Banner, cost: 25 }],
   },
   MordorUrukHai: {
     name: "MordorUrukHai",
@@ -4331,15 +4327,25 @@ modelsWithKeys.GildorInglorion = {
     },
   ],
 };
+
+// this is because when Durin, and ONLY durin, takes khazad guards,
+// they have an optional upgrade
 modelsWithKeys.DurinKingOfKhazadDum = {
   ...modelsWithKeys.DurinKingOfKhazadDum,
   mayField: [
     {
       ...modelsWithKeys.KhazadGuard,
-      wargearUpgrades: [
-        { ...optionUpgrades.Hearthguard, cost: 2 },
-        ...(modelsWithKeys.KhazadGuard.wargearUpgrades || []),
-      ],
+      wargearUpgrades: [{ ...optionUpgrades.Hearthguard, cost: 2 }],
+    },
+  ],
+};
+
+modelsWithKeys.BalinTheDwarfKingOfMoria = {
+  ...modelsWithKeys.BalinTheDwarfKingOfMoria,
+  armyMayField: [
+    {
+      ...modelsWithKeys.GimliSonOfGloin,
+      heroLevel: eHeroLevel.Fortitude,
     },
   ],
 };

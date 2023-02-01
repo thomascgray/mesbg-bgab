@@ -1,5 +1,7 @@
 import React from "react";
 import { armies, ArmyKey } from "./data/armies";
+import classnames from "classnames";
+
 import {
   eHeroLevel,
   iHeroModelInArmy,
@@ -31,12 +33,18 @@ function App() {
     })
   );
 
-  const allowedHeroes = armyForceAllowedModels.filter(
-    (m: iModel) => m.heroLevel !== undefined
-  );
+  const heroesInArmy = [...stateView.yourArmyHeroes] as iHeroModelInArmy[];
+  const allowedHeroes = [
+    // the heroes are everything from the army that HAS a hero level
+    ...armyForceAllowedModels.filter((m: iModel) => m.heroLevel !== undefined),
+    // AND anything from selected heroes that comes with an armyMayField
+    ...heroesInArmy.map((h) => h.armyMayField || []).flat(),
+  ];
 
   const allowedWarriors = [
+    // heroes can field other units from the army that AREN'T heroes...
     ...armyForceAllowedModels.filter((m) => m.heroLevel === undefined),
+    // ...and they can field other heroes from the army that ARE independent
     ...armyForceAllowedModels.filter(
       (m) => m.heroLevel === eHeroLevel.Independent
     ),
@@ -167,7 +175,12 @@ function App() {
                   </tr>
                   <tr className="even:bg-stone-100">
                     <td className="px-2 py-1">Bow Limit</td>
-                    <td className="px-2 py-1">
+                    <td
+                      className={classnames("px-2 py-1", {
+                        "font-bold text-red-500":
+                          totalBowCount > Math.ceil(totalModelsInArmy / 3),
+                      })}
+                    >
                       {totalBowCount} of {Math.ceil(totalModelsInArmy / 3)}
                     </td>
                   </tr>

@@ -140,6 +140,11 @@ export const calculatePointsForWarband = (hero: iHeroModelInArmy) => {
       warriorCost += (Array.isArray(w.cost) ? w.cost[0] : w.cost) || 0;
     });
 
+    // this needs to account for wargear upgrades too
+    (warrior.wargearFromUpgrades || []).forEach((w) => {
+      warriorCost += (Array.isArray(w.cost) ? w.cost[0] : w.cost) || 0;
+    });
+
     warriorCost *= warrior.quantity;
 
     cost += warriorCost;
@@ -196,23 +201,52 @@ export const calculateBowCountForWarband = (hero: iHeroModelInArmy) => {
 };
 
 // get the stats for a model, and take into account war gear and stuff
-export const getModelActiveStats = (model: iHeroModelInArmy | iModelInArmy) => {
-  return {
-    ...model.stats,
-  };
+export const getModelActiveData = (
+  model: iHeroModelInArmy | iModelInArmy
+): iHeroModelInArmy | iModelInArmy => {
+  let baseModel = { ...model };
+
+  if (model.wargearFromUpgrades) {
+    // take into account upgrades
+    model.wargearFromUpgrades.forEach((wfu) => {
+      if (wfu.changes?.name) {
+        baseModel.name = wfu.changes.name;
+      }
+      if (wfu.changes?.stats) {
+        baseModel.stats = {
+          ...baseModel.stats,
+          ...wfu.changes.stats,
+        };
+      }
+    });
+  }
+
+  return baseModel;
 };
 
-export const getProfileActiveStats = (
+export const getProfileActiveData = (
   profile: iModelProfile,
   model: iHeroModelInArmy | iModelInArmy
-) => {
-  if (profile.stats !== undefined) {
-    return {
+): iHeroModelInArmy | iModelInArmy => {
+  let baseModel = getModelActiveData(model);
+
+  if (profile.stats) {
+    baseModel.stats = {
+      ...baseModel.stats,
       ...profile.stats,
     };
-  } else {
-    return getModelActiveStats(model);
   }
+  if (profile.effectiveQuantity) {
+    baseModel.effectiveQuantity = profile.effectiveQuantity;
+  }
+  if (profile.name) {
+    baseModel.name = profile.name;
+  }
+  if (profile.wargear) {
+    baseModel.wargear = profile.wargear;
+  }
+
+  return baseModel;
 };
 
 export const groupHeroes = (heroes: iModel[]) => {

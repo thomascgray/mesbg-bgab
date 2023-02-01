@@ -1,7 +1,9 @@
+import { iModel } from "./models";
+
 export interface iOption {
   key: string;
-  name: string;
-  changes?: any; // any changes overwrite the base model when this upgrade it taken
+  name: string; // the name of the upgrade
+  changes?: iModel; // any changes overwrite the base model when this upgrade it taken
   cost?: number;
   swapFrom?: iOption[];
   swapTo?: iOption;
@@ -10,7 +12,7 @@ export interface iOption {
   countsAsBow?: boolean; // for the purpose of calculating army bow limits, etc.
 }
 
-export const options = {
+export const options: { [key: string]: iOption } = {
   Aiglos: { key: "Aiglos", name: "Aiglos" },
 
   AndurilFlameOfTheWest: {
@@ -248,12 +250,13 @@ export const optionChoice: { [key: string]: iOption } = {
   },
 };
 
-export const optionUpgrades = {
+export const optionUpgrades: { [key: string]: any } = {
   Hearthguard: {
     key: "Hearthguard",
     name: "Hearthguard",
     isUpgrade: true,
     changes: {
+      name: "Hearthguard",
       stats: {
         Mv: 8,
       },

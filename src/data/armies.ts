@@ -12,6 +12,10 @@ export const armies = {
       models.GandalfTheGrey,
       models.AragornStrider,
       models.BoromirOfGondor,
+      models.LegolasGreenleaf,
+      models.GimliSonOfGloin,
+      models.BillThePony,
+      models.Smeagol,
     ],
   },
   TheShire: {

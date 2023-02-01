@@ -26,36 +26,52 @@
 ### **Supports Tabletop Simulator from the get go**
 
 - Auto calculates which distinct models you're going to need for your army, and builds a BBCode'ified output for each of those models that you can then easily copy and paste onto your TTS army.
-- I personally play exclusively on TTS, so I have a vested interest in this being as convinient as possible.
+- I personally play exclusively on TTS, so I have a vested interest in this not being shit.
 
 **TODO**
 
-- Durin having khazad guard that get the upgrade
-  - basically, upgrades that can affect stats and wargear and names
-- Gildor Inglorion getting exiles
-- adding independent heros as warband
+[x] Durin having khazad guard that get the upgrade
 
-- calculate bow limits per force in the army
+- basically, upgrades that can affect stats and wargear and names
 
-- upgrading units allowing changes to any of the stats of a unit
+[x] Gildor Inglorion getting exiles
 
-- units allowing new HEROES to join the army (balin the dwarf) at new heroic tiers
+[x] adding independent heros as warband
 
-  - battlescribe doesnt support this
+[x] calculate bow limits per force in the army
 
-- support buying increases in a heros might, will, and fate for different point costs
+[x] upgrading units allowing changes to any of the stats of a unit
 
-  - started the data for this
+- this is sorta working; us having a "key" against models breaks lodash defaults deep (what the fuck lol) so atm we're only "overriding" what we need; look into changing our usages of the word "key" i guess? maybe fucking "MESBGserial"?lmao
 
-- i THINK mumakil can just be a hero and the warband is any units taht can ride on it, etc.
+[x] units allowing new HEROES to join the army (balin the dwarf) at new heroic tiers
 
-- wargear needs a separate "summary name", as it can be useful to have 1 name in the listing, and 1 in the summary
+- Balin (for khazad dun) allows members of the fellowship to join at a different heroic tier than what they normally are, for example (and some from the erebor list, too)
 
-  - e.g swaps, the listing needs to say "X (replaces Y)" but the summary should probably just say "X"
+- battlescribe doesnt support this
 
-- things to put in data for easy access with TTS
-  - spells
-  - special rules
+[ ] when we render out equipped wargear, etc. we should order them by the order they appear in the listing. e.g if the options say "bow" THEN "horse", if you click horse then bow, it renders as "Horse, Bow" - it should be "Bow, Horse" (the order they appear in the list)
+
+[ ] support buying increases in a heros might, will, and fate for different point costs
+
+- started the data for this
+
+[ ] i THINK mumakil can just be a hero and the warband is any units taht can ride on it, etc.
+
+[ ] wargear needs a separate "summary name", as it can be useful to have 1 name in the listing, and 1 in the summary
+
+- e.g swaps, the final .txt output should maybe say "X (replaces Y)" or something, but the in-app summary should probably just say "X"?
+
+[ ] things to put in data for easy access with TTS
+
+- spells
+- special rules
+
+[ ] the word "wargear" sort of just gets thrown around, but it kiiiinda should be something like "choices" or something. it actually accounts for
+
+- optional item additions
+- optional item SWAPS
+- optional upgrades (which can affect anything)
 
 **Things I Know Are Missing (For Now!):**
 
