@@ -13,7 +13,6 @@ import {
 // if the profile has a "stats", it overwrites the main model's "stats"
 // otherwise the main models stats are used for all profiles
 // same for wargear and wargear options
-
 export interface iModelProfile {
   key: string;
   name?: string;
