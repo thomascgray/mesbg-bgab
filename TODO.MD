@@ -27,7 +27,7 @@
 
 [ ] support buying increases in a heros might, will, and fate for different point costs
 
-- started the data for this
+- made allowPurchaseMi, allowPurchaseWi, allowPurchaseFa against models, use this
 
 [ ] i THINK mumakil can just be a hero and the warband is any units taht can ride on it, etc.
 

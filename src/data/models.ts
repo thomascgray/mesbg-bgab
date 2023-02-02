@@ -62,7 +62,9 @@ export interface iModel {
   wargearUpgrades?: iOption[]; // upgrades that the unit can take
   wargearFromChoices?: iOption[]; // options that the model has taken from choices e.g they NEED to have one of the choices
   wargearFromUpgrades?: iOption[]; // options that the model has taken that it is allowed via upgrades
-  allowPurchaseMiWiFa?: boolean; // can this hero purchase increases to its Mi, Wi and Fa?
+  allowPurchaseMi?: boolean; // can this hero purchase increases to its Mi, Wi and Fa?
+  allowPurchaseWi?: boolean; // can this hero purchase increases to its Mi, Wi and Fa?
+  allowPurchaseFa?: boolean; // can this hero purchase increases to its Mi, Wi and Fa?
 
   // functions like army may fields, allows heroes to field armies from other lists
   // if a hero has a mayField or a unit that it is already allowed to field, the heros
@@ -3258,6 +3260,9 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
     name: "Ringwraith",
     cost: 55,
     maxCost: 110,
+    allowPurchaseMi: true,
+    allowPurchaseWi: true,
+    allowPurchaseFa: true,
     stats: {
       Mv: 6,
       F1: 5,

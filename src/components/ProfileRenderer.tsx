@@ -17,7 +17,7 @@ export interface iProfileRendererProps {
 export const ProfileRenderer = (props: iProfileRendererProps) => {
   const { model } = props;
   const activeWargearNames = getActiveWargear(model, {
-    excludeDefault: true,
+    excludeDefault: false,
   }).map((w) => w.name);
 
   const activeModelData = getModelActiveData(model);
@@ -26,7 +26,7 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
     <div>
       <div>
         {/* heroes */}
-        {model.heroLevel !== undefined && (
+        {activeModelData.heroLevel !== undefined && (
           <React.Fragment>
             <span className="font-bold">{activeModelData.name}</span>
             {activeWargearNames.length >= 1 && (
@@ -37,9 +37,9 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
           </React.Fragment>
         )}
         {/* warriors */}
-        {model.heroLevel === undefined && (
+        {activeModelData.heroLevel === undefined && (
           <React.Fragment>
-            <span>{model.quantity} * </span>
+            <span>{activeModelData.quantity} * </span>
             <span>{activeModelData.name}</span>
             {activeWargearNames.length >= 1 && (
               <span className="ml-1">w/ {activeWargearNames.join(", ")}</span>
