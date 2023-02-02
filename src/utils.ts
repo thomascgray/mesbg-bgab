@@ -75,10 +75,9 @@ export const getActiveWargear = (
     ];
   } else {
     activeWargear = [
-      // all the default stuff WITHOUT choices
-      // and THEN all the stuff from choices array
+      // we're excluding defaults, so just add on the stuff from choices array
       ...wargearFromChoices,
-      // all the equipped wargear thats NOT a swap, just add it on
+      // plus all the equipped wargear thats NOT a swap, just add it on
       ...equippedWargear.filter(
         (ew) => ew.swapFrom === undefined && ew.swapTo === undefined
       ),
@@ -86,38 +85,26 @@ export const getActiveWargear = (
   }
 
   // do any swaps
+  // eg find the indexes in the active wargear that we're swapping from, remove
+  // them, and then add in the swapped to wargear
   equippedWargear
     .filter((ew) => !(ew.swapFrom === undefined && ew.swapTo === undefined))
     .forEach((swapWargear) => {
+      // find if we've got anything to remove from the existing active stuff
+      // this is because the thing we're swapping FROM might be default, and therefore
+      // not in here (if we've exluded default gear, for example)
       const indexesToSwapOut = swapWargear.swapFrom?.map((s) => {
         return activeWargear.findIndex((a) => a.key === s.key);
       });
 
-      if (indexesToSwapOut) {
-        activeWargear[indexesToSwapOut[0]] = {
-          ...swapWargear.swapTo!,
-        };
-
-        if (indexesToSwapOut[1]) {
-          delete activeWargear[indexesToSwapOut[1]];
-        }
-        if (indexesToSwapOut[2]) {
-          delete activeWargear[indexesToSwapOut[2]];
-        }
-        if (indexesToSwapOut[3]) {
-          delete activeWargear[indexesToSwapOut[3]];
-        }
-      }
-    });
-
-  // if we're excluding, we need to add back in the swaps
-  if (excludeDefault) {
-    equippedWargear
-      .filter((ew) => !(ew.swapFrom === undefined && ew.swapTo === undefined))
-      .forEach((swapWargear) => {
-        activeWargear.push(swapWargear);
+      indexesToSwapOut?.forEach((i) => {
+        activeWargear.splice(i, 1);
       });
-  }
+
+      swapWargear.swapTo?.forEach((s) => {
+        activeWargear.push(s);
+      });
+    });
 
   //TODO order them by the order they appear on the model
 

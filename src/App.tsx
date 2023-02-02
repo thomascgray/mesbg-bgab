@@ -188,7 +188,7 @@ function App() {
               </table>
             </React.Fragment>
           )}
-          {stateView.yourArmyHeroes.map((hero) => {
+          {_.sortBy(stateView.yourArmyHeroes, ["heroLevel"]).map((hero) => {
             return (
               <HeroBuilder
                 key={hero.id}

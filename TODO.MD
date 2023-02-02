@@ -17,10 +17,13 @@
 [x] units allowing new HEROES to join the army (balin the dwarf) at new heroic tiers
 
 - Balin (for khazad dun) allows members of the fellowship to join at a different heroic tier than what they normally are, for example (and some from the erebor list, too)
-
-- battlescribe doesnt support this
+  - p.s battlescribe doesnt support this!
 
 [ ] when we render out equipped wargear, etc. we should order them by the order they appear in the listing. e.g if the options say "bow" THEN "horse", if you click horse then bow, it renders as "Horse, Bow" - it should be "Bow, Horse" (the order they appear in the list)
+
+[x] heroes too, put heroes of valour at the top, and THEN order by index, etc.
+
+[x] `swapTo` needs to be an array, the same as `swapFrom`
 
 [ ] support buying increases in a heros might, will, and fate for different point costs
 
@@ -60,6 +63,6 @@ All the actual models and all their stuff.
 
 These get (as you can imagine) quite complex to handle the many different scenarioes.
 
-- models have wargear, and then wargearFrom. this is because past-tom is an idiot who doesn't know how to name things.
+- models have `wargear`, and then `wargearFrom`. this is because past-tom is an idiot who doesn't know how to name things.
   - wargear\* is stuff thats AVAILABLE
   - wargearFrom\* is stuff thats SELECTED and should be factored when calculating points, etc.

@@ -37,7 +37,7 @@ export interface iModel {
   heroLevel?: eHeroLevel;
   key: string;
   cost: number;
-  effectiveQuantity?: number;
+  effectiveQuantity?: number; // sometimes a Model actually consists of multiple real-world "models" e.g dwarf vault teams
   stats?: {
     Mv: number;
     F1: number;
@@ -62,7 +62,7 @@ export interface iModel {
   wargearUpgrades?: iOption[]; // upgrades that the unit can take
   wargearFromChoices?: iOption[]; // options that the model has taken from choices e.g they NEED to have one of the choices
   wargearFromUpgrades?: iOption[]; // options that the model has taken that it is allowed via upgrades
-  allowPurchaseMiWiFa?: boolean;
+  allowPurchaseMiWiFa?: boolean; // can this hero purchase increases to its Mi, Wi and Fa?
 
   // functions like army may fields, allows heroes to field armies from other lists
   // if a hero has a mayField or a unit that it is already allowed to field, the heros
@@ -85,22 +85,25 @@ export interface ISiegeEngine {
   };
 }
 
+// a model that is in an army gets a few extra fields
 export interface iModelInArmy extends iModel {
   id: string; // a unique ID
   equippedWargear: iOption[]; // wargear the user has equipped
-  quantity: number; // how many of the model with this wargear in this "squad"
+  quantity: number; // how many of the model with this wargear in this "squad". squads don't really exist, because models have quantitys.
 }
 
+// a hero model that HAS been added to an army.
+// when they get added to an army, they received a warband array.
 export interface iHeroModelInArmy extends iModelInArmy {
   warband: iModelInArmy[];
 }
 
 export enum eHeroLevel {
-  Fortitude,
-  Valour,
-  Minor,
-  Legend,
-  Independent,
+  Legend = 0,
+  Valour = 1,
+  Fortitude = 2,
+  Minor = 3,
+  Independent = 4,
 }
 
 let _models: { [key: string]: Omit<iModel, "key"> } = {
@@ -2851,7 +2854,7 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
       Wi: 3,
       Fa: 1,
     },
-    wargear: [options.HeavyDwarfArmour, options.DurinsAxe],
+    wargear: [options.HeavyDwarfArmour, options.DurinsAxe, options.Axe],
     wargearOptions: [],
   },
 
@@ -2901,6 +2904,7 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
       { ...options.Shield, cost: 5 },
       { ...options.ThrowingAxes, cost: 5 },
       { ...options.TwoHandedAxe, cost: 5 },
+      { ...optionSwaps.AxeForTwoHandedAxeAndDagger, cost: 10 },
     ],
   },
 

@@ -6,7 +6,7 @@ export interface iOption {
   changes?: iModel; // any changes overwrite the base model when this upgrade it taken
   cost?: number;
   swapFrom?: iOption[];
-  swapTo?: iOption;
+  swapTo?: iOption[];
   choices?: iOption[];
   isUpgrade?: boolean; // so we know whether to show it as an item or not, etc.
   countsAsBow?: boolean; // for the purpose of calculating army bow limits, etc.
@@ -172,49 +172,49 @@ export const optionSwaps: { [key: string]: iOption } = {
     key: "SpearForLongbow",
     name: "Longbow (Replaces Spear)",
     swapFrom: [options.Spear],
-    swapTo: options.Longbow,
+    swapTo: [options.Longbow],
   },
   SpearForBanner: {
     key: "SpearForBanner",
     name: "Banner (Replaces Spear)",
     swapFrom: [options.Spear],
-    swapTo: options.Banner,
+    swapTo: [options.Banner],
   },
   PikeForBanner: {
     key: "PikeForBanner",
     name: "Banner (Replaces Pike)",
     swapFrom: [options.Pike],
-    swapTo: options.Banner,
+    swapTo: [options.Banner],
   },
   AxeOfLossarnachForBanner: {
     key: "AxeOfLossarnachForBanner",
     name: "Banner (Replaces Axe of Lossarnach)",
     swapFrom: [options.AxeOfLossarnach],
-    swapTo: options.Banner,
+    swapTo: [options.Banner],
   },
   SpearAndShieldForBanner: {
     key: "SpearAndShieldForBanner",
     name: "Banner (Replaces Spear & Shield)",
     swapFrom: [options.Spear, options.Shield],
-    swapTo: options.Banner,
+    swapTo: [options.Banner],
   },
   AxeForTwoHandedAxeAndDagger: {
-    key: "SpearAndShieldForBanner",
+    key: "AxeForTwoHandedAxeAndDagger",
     name: "Two Handed Axe & Dagger (Replaces Axe)",
     swapFrom: [options.Axe],
-    swapTo: options.TwoHandedAxeAndDagger,
+    swapTo: [options.TwoHandedAxe, options.Dagger],
   },
   ShieldForTwoHandedWeapon: {
     key: "ShieldForTwoHandedWeapon",
     name: "Two Handed Weapon (Replaces Shield)",
     swapFrom: [options.Shield],
-    swapTo: options.TwoHandedWeapon,
+    swapTo: [options.TwoHandedWeapon],
   },
   SpearForHandAndAHalfHammer: {
     key: "SpearForHandAndAHalfHammer",
     name: "Hand And A Half Hammer (Replaces Spear)",
     swapFrom: [options.Spear],
-    swapTo: options.HandAndAHalfHammer,
+    swapTo: [options.HandAndAHalfHammer],
   },
 };
 
