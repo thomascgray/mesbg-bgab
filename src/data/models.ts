@@ -4986,6 +4986,31 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
       { ...options.TwoHandedWeapon, cost: 5 },
     ],
   },
+
+  UrukHaiShaman: {
+    name: "UrukHaiShaman",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 55,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 5,
+      D: 5,
+      A: 2,
+      W: 2,
+      C: 4,
+      Mi: 2,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [options.Armour, options.Sword],
+    wargearOptions: [
+      { ...options.UrukHaiBow, cost: 5 },
+      { ...options.Shield, cost: 5 },
+      { ...options.TwoHandedWeapon, cost: 5 },
+    ],
+  },
 };
 
 let modelsWithKeys: { [key: string]: iModel } = {};
