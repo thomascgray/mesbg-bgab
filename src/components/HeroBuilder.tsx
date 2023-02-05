@@ -82,7 +82,7 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
                     key={hero.id + warrior.id}
                     className="bg-stone-100 p-1 text-sm"
                   >
-                    <div className="flex flex-row items-center">
+                    <div className="flex flex-row items-center bg-gray-300">
                       <ProfileRenderer model={warrior} />
                       <WarriorButtons model={warrior} hero={hero} />
                     </div>
