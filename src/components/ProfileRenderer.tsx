@@ -106,6 +106,27 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
                       />
                     </td>
                   </tr>
+                  {(model.allowPurchaseMi ||
+                    model.allowPurchaseWi ||
+                    model.allowPurchaseFa) && (
+                    <tr>
+                      {model.allowPurchaseMi && (
+                        <td>
+                          <button>+</button>
+                        </td>
+                      )}
+                      {model.allowPurchaseWi && (
+                        <td>
+                          <button>+</button>
+                        </td>
+                      )}
+                      {model.allowPurchaseFa && (
+                        <td>
+                          <button>+</button>
+                        </td>
+                      )}
+                    </tr>
+                  )}
                 </tbody>
               </table>
             )}
