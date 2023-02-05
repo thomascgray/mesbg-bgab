@@ -149,10 +149,10 @@ export const calculateModelCountForWarband = (
   if (includeHero) {
     if (hero.profiles) {
       hero.profiles.forEach((p) => {
-        modelCount += p.effectiveQuantity ? p.effectiveQuantity : 1;
+        modelCount += p.effectiveQuantity != null ? p.effectiveQuantity : 1;
       });
     } else {
-      modelCount += hero.effectiveQuantity ? hero.effectiveQuantity : 1;
+      modelCount += hero.effectiveQuantity != null ? hero.effectiveQuantity : 1;
     }
   }
 
@@ -161,12 +161,12 @@ export const calculateModelCountForWarband = (
     if (warrior.profiles) {
       //loop over each profile - 1 each, unless its got an effective quantity
       warrior.profiles.forEach((p) => {
-        effectiveSingularCount += p.effectiveQuantity ? p.effectiveQuantity : 1;
+        effectiveSingularCount +=
+          p.effectiveQuantity != null ? p.effectiveQuantity : 1;
       });
     } else {
-      effectiveSingularCount = warrior.effectiveQuantity
-        ? warrior.effectiveQuantity
-        : 1;
+      effectiveSingularCount =
+        warrior.effectiveQuantity != null ? warrior.effectiveQuantity : 1;
     }
 
     modelCount += effectiveSingularCount * warrior.quantity;
@@ -223,7 +223,7 @@ export const getProfileActiveData = (
       ...profile.stats,
     };
   }
-  if (profile.effectiveQuantity) {
+  if (profile.effectiveQuantity != null) {
     baseModel.effectiveQuantity = profile.effectiveQuantity;
   }
   if (profile.name) {

@@ -105,6 +105,7 @@ export const options: { [key: string]: iOption } = {
   MerryAndPippin: { key: "MerryAndPippin", name: "MerryAndPippin" },
   MirrorOfGaladriel: { key: "MirrorOfGaladriel", name: "MirrorOfGaladriel" },
   MithrilCoat: { key: "MithrilCoat", name: "Mithril Coat" },
+  MithrilCrown: { key: "MithrilCrown", name: "Mithril Crown" },
   Narsil: { key: "Narsil", name: "Narsil" },
   Narya: { key: "Narya", name: "Narya" },
   Nenya: { key: "Nenya", name: "Nenya" },
@@ -154,6 +155,7 @@ export const options: { [key: string]: iOption } = {
   },
   TwoHandedWeapon: { key: "TwoHandedWeapon", name: "Two Handed Weapon" },
   TwoHandedSword: { key: "TwoHandedSword", name: "TwoHandedSword" },
+  TwoHandedStaff: { key: "TwoHandedStaff", name: "TwoHandedStaff" },
   TwoHandedAxeAndDagger: {
     key: "TwoHandedAxeAndDagger",
     name: "TwoHandedAxeAndDagger",
@@ -165,6 +167,13 @@ export const options: { [key: string]: iOption } = {
   WarSpear: { key: "WarSpear", name: "WarSpear" },
   WhiteSwordOfGondor: { key: "WhiteSwordOfGondor", name: "WhiteSwordOfGondor" },
   WoodElfSpear: { key: "WoodElfSpear", name: "WoodElfSpear" },
+  GiantFlamingSword: { key: "GiantFlamingSword", name: "GiantFlamingSword" },
+  FieryLash: { key: "FieryLash", name: "FieryLash" },
+  Tentacles: { key: "Tentacles", name: "Tentacles" },
+  MoriaBlackshieldDrum: {
+    key: "MoriaBlackshieldDrum",
+    name: "MoriaBlackshieldDrum",
+  },
 };
 
 export const optionSwaps: { [key: string]: iOption } = {
@@ -261,6 +270,27 @@ export const optionUpgrades: { [key: string]: any } = {
         Mv: 8,
       },
     },
+  },
+
+  BreatheFire: {
+    key: "BreatheFire",
+    name: "BreatheFire",
+    isUpgrade: true,
+  },
+  Fly: {
+    key: "Fly",
+    name: "Fly",
+    isUpgrade: true,
+  },
+  ToughHide: {
+    key: "ToughHide",
+    name: "ToughHide",
+    isUpgrade: true,
+  },
+  Wyrmtongue: {
+    key: "Wyrmtongue",
+    name: "Wyrmtongue",
+    isUpgrade: true,
   },
 };
 // export const wargearEffects = {};

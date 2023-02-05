@@ -5,10 +5,9 @@ import {
   getProfileActiveData,
 } from "../utils";
 import { HeroAttributeRenderer } from "./HeroAttributeRenderer";
-import * as State from "../state";
 import React from "react";
-import * as Pluralize from "pluralize";
 import _ from "lodash";
+import classnames from "classnames";
 
 export interface iProfileRendererProps {
   model: iHeroModelInArmy | iModelInArmy;
@@ -17,7 +16,7 @@ export interface iProfileRendererProps {
 export const ProfileRenderer = (props: iProfileRendererProps) => {
   const { model } = props;
   const activeWargearNames = getActiveWargear(model, {
-    excludeDefault: false,
+    excludeDefault: true,
   }).map((w) => w.name);
 
   const activeModelData = getModelActiveData(model);
@@ -25,26 +24,24 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
   return (
     <div>
       <div>
-        {/* heroes */}
-        {activeModelData.heroLevel !== undefined && (
-          <React.Fragment>
-            <span className="font-bold">{activeModelData.name}</span>
-            {activeWargearNames.length >= 1 && (
-              <span className="ml-1 font-bold">
-                w/ {activeWargearNames.join(", ")}
-              </span>
-            )}
-          </React.Fragment>
-        )}
-        {/* warriors */}
+        <span
+          className={classnames({
+            "font-bold": activeModelData.heroLevel !== undefined,
+          })}
+        >
+          {activeModelData.name}
+        </span>
         {activeModelData.heroLevel === undefined && (
-          <React.Fragment>
-            <span>{activeModelData.quantity} * </span>
-            <span>{activeModelData.name}</span>
-            {activeWargearNames.length >= 1 && (
-              <span className="ml-1">w/ {activeWargearNames.join(", ")}</span>
-            )}
-          </React.Fragment>
+          <span> * {activeModelData.quantity}</span>
+        )}
+        {activeWargearNames.length >= 1 && (
+          <span
+            className={classnames("ml-1", {
+              "font-bold": activeModelData.heroLevel !== undefined,
+            })}
+          >
+            w/ {activeWargearNames.join(", ")}
+          </span>
         )}
       </div>
 
@@ -112,23 +109,18 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
         </div>
       )}
 
-      {/* if it DOES have render out a block for each, taking into account the "active" version
-of any given profile */}
+      {/* if it DOES have profiles, render out a block for each, taking into 
+      account the "active" version of any given profile */}
       {model.profiles &&
         model.profiles.map((profile) => {
           const profileData = getProfileActiveData(profile, model);
           return (
             <React.Fragment key={profile.key}>
-              {model.heroLevel !== undefined && (
-                <React.Fragment>
-                  {profile.effectiveQuantity && (
-                    <span className="font-bold">
-                      {profile.effectiveQuantity} *{" "}
-                    </span>
-                  )}
-                  <span className="font-bold">{profile.name}</span>
-                </React.Fragment>
-              )}
+              <span>{profileData.name}</span>
+              {profile.effectiveQuantity != null &&
+                profile.effectiveQuantity >= 1 && (
+                  <span> * {profile.effectiveQuantity}</span>
+                )}
               <div className="flex flex-row items-center space-x-8">
                 <table className="table-fixed border-collapse border-spacing-0">
                   <thead>

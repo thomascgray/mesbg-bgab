@@ -234,7 +234,15 @@ export const armies = {
     mayField: [],
   },
   Mordor: { name: "Mordor", mayField: [] },
-  Moria: { name: "Moria", mayField: [] },
+  Moria: {
+    name: "Moria",
+    mayField: [
+      models.MoriaGoblinCaptain,
+      models.MoriaGoblinWarrior,
+      models.MoriaGoblinDrumTeam,
+      models.MoriaBlackshieldDrumTeam,
+    ],
+  },
   Isengard: { name: "Isengard", mayField: [] },
   TheEasterlings: { name: "TheEasterlings", mayField: [] },
   VariagsOfKhand: { name: "VariagsOfKhand", mayField: [] },
