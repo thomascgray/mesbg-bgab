@@ -158,7 +158,7 @@ export const calculateModelCountForWarband = (
 
   hero.warband.forEach((warrior) => {
     let effectiveSingularCount: number = 0;
-    if (warrior.profiles) {
+    if (warrior.profiles && warrior.effectiveQuantity == undefined) {
       //loop over each profile - 1 each, unless its got an effective quantity
       warrior.profiles.forEach((p) => {
         effectiveSingularCount +=
@@ -179,7 +179,9 @@ export const calculateBowCountForWarband = (hero: iHeroModelInArmy) => {
   let bowCount = 0;
 
   hero.warband.forEach((warrior) => {
-    if (getActiveWargear(warrior).some((wg) => wg.countsAsBow)) {
+    if (warrior.effectiveBowQuantity != null) {
+      bowCount += warrior.effectiveBowQuantity * warrior.quantity;
+    } else if (getActiveWargear(warrior).some((wg) => wg.countsAsBow)) {
       bowCount += 1 * warrior.quantity;
     }
   });

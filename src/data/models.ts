@@ -30,6 +30,7 @@ export interface iModelProfile {
     Fa?: number;
   };
   effectiveQuantity?: number;
+  effectiveBowQuantity?: number; // warg marauders have 2 bows but it only counts as 1
   wargear?: iOption[];
 }
 
@@ -38,6 +39,7 @@ export interface iModel {
   key: string;
   cost: number;
   effectiveQuantity?: number; // sometimes a Model actually consists of multiple real-world "models" e.g dwarf vault teams
+  effectiveBowQuantity?: number; // warg marauders have 2 bows but it only counts as 1
   stats?: {
     Mv: number;
     F1: number;
@@ -4699,6 +4701,290 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
       C: 2,
     },
     wargear: [options.ClawsAndTeeth],
+  },
+
+  WargMarauder: {
+    name: "WargMarauder",
+    cost: 30,
+    stats: {
+      Mv: 5,
+      F1: 2,
+      F2: 5,
+      S: 3,
+      D: 4,
+      A: 1,
+      W: 1,
+      C: 2,
+    },
+    effectiveQuantity: 1,
+    effectiveBowQuantity: 1,
+    profiles: [
+      {
+        key: "WargMarauderGoblinWithShield",
+        name: "Goblin with Shield",
+        wargear: [options.Shield],
+        effectiveQuantity: 1,
+      },
+      {
+        key: "WargMarauderGoblinWithBow",
+        name: "Goblin with Bow",
+        wargear: [options.OrcBow],
+        effectiveQuantity: 2,
+      },
+      {
+        key: "WargMarauderWarg",
+        name: "Warg",
+        wargear: [options.ClawsAndTeeth],
+        effectiveQuantity: 1,
+        stats: {
+          Mv: 10,
+          F1: 3,
+          F2: 5,
+          S: 4,
+          D: 4,
+          A: 1,
+          W: 1,
+          C: 2,
+        },
+      },
+    ],
+  },
+
+  DwellerInTheDark: {
+    name: "DwellerInTheDark",
+    cost: 75,
+    stats: {
+      Mv: 8,
+      F1: 7,
+      F2: 3,
+      S: 5,
+      D: 5,
+      A: 3,
+      W: 3,
+      C: 7,
+    },
+    wargear: [options.ClawsAndTeeth],
+  },
+
+  Saruman: {
+    name: "Saruman",
+    heroLevel: eHeroLevel.Legend,
+    cost: 180,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 4,
+      D: 5,
+      A: 1,
+      W: 3,
+      C: 7,
+      Mi: 3,
+      Wi: 6,
+      Fa: 3,
+    },
+    wargear: [options.StaffOfPower],
+    wargearOptions: [{ ...options.Horse, cost: 10 }],
+  },
+
+  GrimaWormtongue: {
+    name: "GrimaWormtongue",
+    heroLevel: eHeroLevel.Independent,
+    cost: 25,
+    stats: {
+      Mv: 6,
+      F1: 2,
+      F2: 5,
+      S: 3,
+      D: 3,
+      A: 1,
+      W: 1,
+      C: 2,
+      Mi: 0,
+      Wi: 0,
+      Fa: 0,
+    },
+    wargear: [options.Dagger],
+    wargearOptions: [{ ...options.Horse, cost: 10 }],
+  },
+
+  Lurtz: {
+    name: "Lurtz",
+    heroLevel: eHeroLevel.Valour,
+    cost: 90,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 3,
+      S: 5,
+      D: 6,
+      A: 3,
+      W: 3,
+      C: 5,
+      Mi: 3,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [options.Armour, options.Sword, options.UrukHaiBow],
+    wargearOptions: [{ ...options.Shield, cost: 0 }],
+  },
+
+  Ugluk: {
+    name: "Uglúk",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 65,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 5,
+      D: 5,
+      A: 2,
+      W: 2,
+      C: 4,
+      Mi: 3,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [options.Armour, options.Sword],
+    wargearOptions: [{ ...options.Shield, cost: 0 }],
+  },
+
+  Sharku: {
+    name: "Sharku",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 65,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 5,
+      D: 5,
+      A: 2,
+      W: 2,
+      C: 4,
+      Mi: 3,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [options.Armour, options.RidingDagger],
+    wargearOptions: [
+      { ...options.Warg, cost: 10 },
+      { ...options.Shield, cost: 5 },
+    ],
+  },
+
+  Vrasku: {
+    name: "Vrasku",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 65,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 3,
+      S: 5,
+      D: 5,
+      A: 2,
+      W: 2,
+      C: 4,
+      Mi: 3,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [options.Armour, options.Sword, options.Crossbow],
+    wargearOptions: [],
+  },
+
+  Mauhur: {
+    name: "Mauhur",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 60,
+    stats: {
+      Mv: 8,
+      F1: 5,
+      F2: 3,
+      S: 5,
+      D: 5,
+      A: 3,
+      W: 2,
+      C: 4,
+      Mi: 2,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [options.Armour, options.Sword, options.Sword],
+    wargearOptions: [],
+  },
+
+  ThrydanWolfsbane: {
+    name: "ThrydanWolfsbane",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 85,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 5,
+      D: 5,
+      A: 2,
+      W: 2,
+      C: 4,
+      Mi: 3,
+      Wi: 2,
+      Fa: 2,
+    },
+    wargear: [options.Armour, options.Sword, options.TwoHandedAxe],
+    wargearOptions: [{ ...options.Horse, cost: 10 }],
+  },
+
+  UrukHaiCaptain: {
+    name: "UrukHaiCaptain",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 60,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 5,
+      D: 6,
+      A: 2,
+      W: 2,
+      C: 4,
+      Mi: 2,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [options.HeavyArmour, options.Sword],
+    wargearOptions: [
+      { ...options.Crossbow, cost: 5 },
+      { ...options.Shield, cost: 5 },
+      { ...options.TwoHandedWeapon, cost: 5 },
+    ],
+  },
+
+  UrukHaiScoutCaptain: {
+    name: "UrukHaiScoutCaptain",
+    heroLevel: eHeroLevel.Fortitude,
+    cost: 55,
+    stats: {
+      Mv: 6,
+      F1: 5,
+      F2: 4,
+      S: 5,
+      D: 5,
+      A: 2,
+      W: 2,
+      C: 4,
+      Mi: 2,
+      Wi: 1,
+      Fa: 1,
+    },
+    wargear: [options.Armour, options.Sword],
+    wargearOptions: [
+      { ...options.UrukHaiBow, cost: 5 },
+      { ...options.Shield, cost: 5 },
+      { ...options.TwoHandedWeapon, cost: 5 },
+    ],
   },
 };
 

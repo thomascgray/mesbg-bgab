@@ -241,6 +241,7 @@ export const armies = {
       models.MoriaGoblinWarrior,
       models.MoriaGoblinDrumTeam,
       models.MoriaBlackshieldDrumTeam,
+      models.WargMarauder,
     ],
   },
   Isengard: { name: "Isengard", mayField: [] },

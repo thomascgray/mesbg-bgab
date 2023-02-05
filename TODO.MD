@@ -54,6 +54,9 @@
 [ ] moria goblin drum needs a profile but DOESNT count as a follower lmao, fucking rule exceptions
 
 [ ] profile renderer only showing effective quantity and name if they're NOT a warrior, for some reason?
+
+[ ] Mauhur of isenguard upgrading scouts into marauders
+
 **Things I Know Are Missing (For Now!):**
 
 - siege engines

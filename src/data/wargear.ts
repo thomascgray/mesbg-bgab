@@ -111,6 +111,7 @@ export const options: { [key: string]: iOption } = {
   Nenya: { key: "Nenya", name: "Nenya" },
   NoldorinDaggers: { key: "NoldorinDaggers", name: "NoldorinDaggers" },
   OrcBow: { key: "OrcBow", name: "Orc Bow", countsAsBow: true },
+  UrukHaiBow: { key: "UrukHaiBow", name: "Uruk-hai bow", countsAsBow: true },
   Pick: { key: "Pick", name: "Pick" },
   Pike: { key: "Pike", name: "Pike" },
   PoisonedBlowpipe: { key: "PoisonedBlowpipe", name: "PoisonedBlowpipe" },
@@ -174,6 +175,8 @@ export const options: { [key: string]: iOption } = {
     key: "MoriaBlackshieldDrum",
     name: "MoriaBlackshieldDrum",
   },
+  RidingDagger: { key: "RidingDagger", name: "RidingDagger" },
+  Crossbow: { key: "Crossbow", name: "Crossbow", countsAsBow: true },
 };
 
 export const optionSwaps: { [key: string]: iOption } = {
