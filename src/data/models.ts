@@ -4668,6 +4668,38 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
       C: 3,
     },
   },
+
+  MoriaGoblinProwler: {
+    name: "MoriaGoblinProwler",
+    cost: 7,
+    stats: {
+      Mv: 5,
+      F1: 3,
+      F2: 4,
+      S: 3,
+      D: 4,
+      A: 1,
+      W: 1,
+      C: 2,
+    },
+    wargear: [options.Armour, options.TwoHandedAxe, options.ThrowingDaggers],
+  },
+
+  BatSwarm: {
+    name: "BatSwarm",
+    cost: 35,
+    stats: {
+      Mv: 5,
+      F1: 1,
+      F2: 5,
+      S: 3,
+      D: 3,
+      A: 2,
+      W: 4,
+      C: 2,
+    },
+    wargear: [options.ClawsAndTeeth],
+  },
 };
 
 let modelsWithKeys: { [key: string]: iModel } = {};
