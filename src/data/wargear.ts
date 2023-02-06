@@ -30,6 +30,18 @@ export const options: { [key: string]: iOption } = {
     key: "WardrumMordorUrukHai",
     name: "WardrumMordorUrukHai",
   },
+  WardrumIsengardUrukHai: {
+    key: "WardrumIsengardUrukHai",
+    name: "WardrumIsengardUrukHai",
+  },
+  WardrumIsengard: {
+    key: "WardrumIsengard",
+    name: "WardrumIsengard",
+  },
+  WardrumEasterling: {
+    key: "WardrumEasterling",
+    name: "WardrumEasterling",
+  },
   FellBeast: { key: "FellBeast", name: "FellBeast" },
   CrownOfMorgul: { key: "CrownOfMorgul", name: "CrownOfMorgul" },
   MorgulBlade: { key: "MorgulBlade", name: "MorgulBlade" },
@@ -177,6 +189,16 @@ export const options: { [key: string]: iOption } = {
   },
   RidingDagger: { key: "RidingDagger", name: "RidingDagger" },
   Crossbow: { key: "Crossbow", name: "Crossbow", countsAsBow: true },
+  BerserkerBlade: { key: "BerserkerBlade", name: "BerserkerBlade" },
+  DurtuzTheSilverFalchion: {
+    key: "DurtuzTheSilverFalchion",
+    name: "DurtuzTheSilverFalchion",
+  },
+  EasterlingGlaive: { key: "EasterlingGlaive", name: "EasterlingGlaive" },
+  EasterlingBattleStave: {
+    key: "EasterlingBattleStave",
+    name: "EasterlingBattleStave",
+  },
 };
 
 export const optionSwaps: { [key: string]: iOption } = {
@@ -191,6 +213,18 @@ export const optionSwaps: { [key: string]: iOption } = {
     name: "Banner (Replaces Spear)",
     swapFrom: [options.Spear],
     swapTo: [options.Banner],
+  },
+  SwordForSpear: {
+    key: "SwordForSpear",
+    name: "Spear (Replaces Sword)",
+    swapFrom: [options.Sword],
+    swapTo: [options.Spear],
+  },
+  ShieldForWardrumIsengard: {
+    key: "ShieldForWardrumIsengard",
+    name: "Wardrum (Replaces Shield)",
+    swapFrom: [options.Shield],
+    swapTo: [options.WardrumIsengard],
   },
   PikeForBanner: {
     key: "PikeForBanner",
@@ -216,6 +250,24 @@ export const optionSwaps: { [key: string]: iOption } = {
     swapFrom: [options.Axe],
     swapTo: [options.TwoHandedAxe, options.Dagger],
   },
+  TwoHandedAxeForAxeAndShield: {
+    key: "TwoHandedAxeForAxeAndShield",
+    name: "Axe & Shield (Replaces Two Handed Axe)",
+    swapFrom: [options.TwoHandedAxe],
+    swapTo: [options.Axe, options.Shield],
+  },
+  AxeForDaggerAndBow: {
+    key: "AxeForDaggerAndBow",
+    name: "Dagger & Bow (Replaces Axe)",
+    swapFrom: [options.Axe],
+    swapTo: [options.Bow, options.Dagger],
+  },
+  EasterlingGlaiveForArmouredHorseAndSword: {
+    key: "EasterlingGlaiveForArmouredHorseAndSword",
+    name: "Armoured Horse & Sword (Replaces Easterling Glaive)",
+    swapFrom: [options.EasterlingGlaive],
+    swapTo: [options.ArmouredHorse, options.Sword],
+  },
   ShieldForTwoHandedWeapon: {
     key: "ShieldForTwoHandedWeapon",
     name: "Two Handed Weapon (Replaces Shield)",
@@ -235,6 +287,11 @@ export const optionChoice: { [key: string]: iOption } = {
     key: "SwordOrAxe",
     name: "Sword or Axe (Choose)",
     choices: [options.Sword, options.Axe],
+  },
+  SwordOrDagger: {
+    key: "SwordOrDagger",
+    name: "Sword or Dagger (Choose)",
+    choices: [options.Sword, options.Dagger],
   },
   DaggerOrAxeOrHammer: {
     key: "DaggerOrAxeOrHammer",
@@ -271,6 +328,32 @@ export const optionUpgrades: { [key: string]: any } = {
       name: "Hearthguard",
       stats: {
         Mv: 8,
+      },
+    },
+  },
+
+  EasterlingWarriorBlackDragon: {
+    key: "EasterlingWarriorBlackDragon",
+    name: "UpgradeToBlackDragon",
+    isUpgrade: true,
+    changes: {
+      name: "Black Dragon (Easterling Warrior)",
+      stats: {
+        F1: 4,
+        C: 4,
+      },
+    },
+  },
+
+  EasterlingKatapraktBlackDragon: {
+    key: "EasterlingKatapraktBlackDragon",
+    name: "UpgradeToBlackDragon",
+    isUpgrade: true,
+    changes: {
+      name: "Black Dragon (Easterling Kataprakt)",
+      stats: {
+        F1: 4,
+        C: 4,
       },
     },
   },

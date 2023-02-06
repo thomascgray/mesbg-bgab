@@ -56,6 +56,7 @@
 [ ] profile renderer only showing effective quantity and name if they're NOT a warrior, for some reason?
 
 [ ] Mauhur of isenguard upgrading scouts into marauders
+[ ] urukhai demolition team and uruk hai assault ballista
 
 **Things I Know Are Missing (For Now!):**
 
