@@ -248,7 +248,7 @@ export const armies = {
   TheEasterlings: { name: "TheEasterlings", mayField: [] },
   VariagsOfKhand: { name: "VariagsOfKhand", mayField: [] },
   TheSerpentHorde: { name: "TheSerpentHorde", mayField: [] },
-  FarHarad: { name: "FarHarad", mayField: [] },
+  FarHarad: { name: "FarHarad", mayField: [models.WarMumakOfHarad] },
   CorsairsOfUmbar: { name: "CorsairsOfUmbar", mayField: [] },
   SharkeysRogues: { name: "SharkeysRogues", mayField: [] },
 };

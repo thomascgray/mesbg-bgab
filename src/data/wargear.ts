@@ -79,6 +79,7 @@ export const options: { [key: string]: iOption } = {
   Club: { key: "Club", name: "Club" },
   Mace: { key: "Mace", name: "Mace" },
   Dagger: { key: "Dagger", name: "Dagger" },
+  Daggers: { key: "Daggers", name: "Daggers" },
   ElfBow: { key: "ElfBow", name: "Elf bow", countsAsBow: true },
   ElvenCloak: { key: "ElvenCloak", name: "Elven Cloak" },
   ElvenMadeDaggers: { key: "ElvenMadeDaggers", name: "Elven made daggers" },
@@ -86,7 +87,7 @@ export const options: { [key: string]: iOption } = {
     key: "ElvenMadeHandAndAHalfSword",
     name: "ElvenMadeHandAndAHalfSword",
   },
-  ElvenMadeSword: { key: "ElvenMadeSword", name: "Elven made daggers" },
+  ElvenMadeSword: { key: "ElvenMadeSword", name: "Elven made sword" },
 
   Felarof: { key: "Felarof", name: "Felarof" },
   Glamdring: { key: "Glamdring", name: "Glamdring" },
@@ -98,6 +99,7 @@ export const options: { [key: string]: iOption } = {
   HandAndAHalfClub: { key: "HandAndAHalfClub", name: "HandAndAHalfClub" },
   HandAndAHalfSword: { key: "HandAndAHalfSword", name: "HandAndAHalfSword" },
   HandAndAHalfHammer: { key: "HandAndAHalfHammer", name: "HandAndAHalfHammer" },
+  HandAndAHalfAxe: { key: "HandAndAHalfAxe", name: "HandAndAHalfAxe" },
   HeavyArmour: { key: "HeavyArmour", name: "HeavyArmour" },
   HeavyDwarfArmour: { key: "HeavyDwarfArmour", name: "HeavyDwarfArmour" },
   Herugrim: { key: "Herugrim", name: "Herugrim" },
@@ -126,6 +128,7 @@ export const options: { [key: string]: iOption } = {
   UrukHaiBow: { key: "UrukHaiBow", name: "Uruk-hai bow", countsAsBow: true },
   Pick: { key: "Pick", name: "Pick" },
   Pike: { key: "Pike", name: "Pike" },
+  Blowpipe: { key: "Blowpipe", name: "Blowpipe" },
   PoisonedBlowpipe: { key: "PoisonedBlowpipe", name: "PoisonedBlowpipe" },
   Pony: { key: "Pony", name: "Pony" },
   RootsAndBranches: { key: "RootsAndBranches", name: "RootsAndBranches" },
@@ -167,6 +170,7 @@ export const options: { [key: string]: iOption } = {
     name: "Two Handed Scythe (pick)",
   },
   TwoHandedWeapon: { key: "TwoHandedWeapon", name: "Two Handed Weapon" },
+  TwoHandedClub: { key: "TwoHandedClub", name: "Two Handed Club" },
   TwoHandedSword: { key: "TwoHandedSword", name: "TwoHandedSword" },
   TwoHandedStaff: { key: "TwoHandedStaff", name: "TwoHandedStaff" },
   TwoHandedAxeAndDagger: {
@@ -199,6 +203,21 @@ export const options: { [key: string]: iOption } = {
     key: "EasterlingBattleStave",
     name: "EasterlingBattleStave",
   },
+  KhandishChariot: {
+    key: "KhandishChariot",
+    name: "KhandishChariot",
+  },
+  TheSerpentBanner: { key: "TheSerpentBanner", name: "TheSerpentBanner" },
+  BowWithPoisonedArrows: {
+    key: "BowWithPoisonedArrows",
+    name: "BowWithPoisonedArrows",
+  },
+  TheGoldenThrone: { key: "TheGoldenThrone", name: "TheGoldenThrone" },
+  TwinBlades: { key: "TwinBlades", name: "TwinBlades" },
+  WarCamel: { key: "WarCamel", name: "WarCamel" },
+  SmokeBombs: { key: "SmokeBombs", name: "SmokeBombs" },
+  Pavise: { key: "Pavise", name: "Pavise" },
+  Knife: { key: "Knife", name: "Knife" },
 };
 
 export const optionSwaps: { [key: string]: iOption } = {
@@ -280,6 +299,12 @@ export const optionSwaps: { [key: string]: iOption } = {
     swapFrom: [options.Spear],
     swapTo: [options.HandAndAHalfHammer],
   },
+  HandAndAHalfAxeForBow: {
+    key: "HandAndAHalfAxeForBow",
+    name: "Bow (Replaces Hand and a half Axe)",
+    swapFrom: [options.HandAndAHalfAxe],
+    swapTo: [options.Bow],
+  },
 };
 
 export const optionChoice: { [key: string]: iOption } = {
@@ -288,10 +313,20 @@ export const optionChoice: { [key: string]: iOption } = {
     name: "Sword or Axe (Choose)",
     choices: [options.Sword, options.Axe],
   },
+  TwinBladesOrBowWithPoisonedArrows: {
+    key: "TwinBladesOrBowWithPoisonedArrows",
+    name: "Twin Blades or Bow with poisoned arrows (Choose)",
+    choices: [options.TwinBlades, options.BowWithPoisonedArrows],
+  },
   SwordOrDagger: {
     key: "SwordOrDagger",
     name: "Sword or Dagger (Choose)",
     choices: [options.Sword, options.Dagger],
+  },
+  KnifeOrClub: {
+    key: "KnifeOrClub",
+    name: "Knife or Club (Choose)",
+    choices: [options.Knife, options.Club],
   },
   DaggerOrAxeOrHammer: {
     key: "DaggerOrAxeOrHammer",
@@ -378,5 +413,44 @@ export const optionUpgrades: { [key: string]: any } = {
     name: "Wyrmtongue",
     isUpgrade: true,
   },
+  WarMumakOfHaradGnarledHide: {
+    key: "WarMumakOfHaradGnarledHide",
+    name: "GnarledHide",
+    isUpgrade: true,
+    changes: {
+      stats: {
+        D: 8,
+      },
+    },
+  },
+  WarMumakOfHaradMahudBeastmasterChieftan: {
+    key: "WarMumakOfHaradMahudBeastmasterChieftan",
+    name: "MahudBeastmasterChieftan",
+    isUpgrade: true,
+  },
+  WarMumakOfHaradRapellingLines: {
+    key: "WarMumakOfHaradRapellingLines",
+    name: "RapellingLines",
+    isUpgrade: true,
+  },
+  WarMumakOfHaradFoulTemperament: {
+    key: "WarMumakOfHaradFoulTemperament",
+    name: "FoulTemperament",
+    isUpgrade: true,
+  },
+  WarMumakOfHaradRocks: {
+    key: "WarMumakOfHaradRocks",
+    name: "Rocks",
+    isUpgrade: true,
+  },
+  WarMumakOfHaradSigilsOfDefiance: {
+    key: "WarMumakOfHaradSigilsOfDefiance",
+    name: "SigilsOfDefiance",
+    isUpgrade: true,
+  },
+  WarMumakOfHaradTuskWeapons: {
+    key: "WarMumakOfHaradTuskWeapons",
+    name: "TuskWeapons",
+    isUpgrade: true,
+  },
 };
-// export const wargearEffects = {};

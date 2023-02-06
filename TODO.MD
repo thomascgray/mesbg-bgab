@@ -57,6 +57,9 @@
 
 [ ] Mauhur of isenguard upgrading scouts into marauders
 [ ] urukhai demolition team and uruk hai assault ballista
+[ ] include khandish chariot in descriptions somehow
+[ ] mumak beast master upgrade needs to replace profile of commander
+[ ] mumak of far harad needs to copy mumak of harad with beast master thing preselected always
 
 **Things I Know Are Missing (For Now!):**
 
