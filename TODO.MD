@@ -25,7 +25,7 @@
 
 [x] `swapTo` needs to be an array, the same as `swapFrom`
 
-[ ] support buying increases in a heros might, will, and fate for different point costs
+[x] support buying increases in a heros might, will, and fate for different point costs
 
 - made allowPurchaseMi, allowPurchaseWi, allowPurchaseFa against models, use this
 

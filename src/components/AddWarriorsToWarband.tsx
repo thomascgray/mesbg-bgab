@@ -14,7 +14,7 @@ export const AddWarriorsToWarband = (props: iAddWarriorsToWarbandProps) => {
         return (
           <button
             key={`${hero.id}-${m.name}`}
-            className="inline-block bg-stone-200 px-4 py-2 text-xs hover:scale-105 hover:bg-stone-300 active:scale-95"
+            className=" bg-stone-200 px-4 py-2 text-xs hover:scale-105 hover:bg-stone-300 active:scale-95"
             onClick={() => {
               State.addWarbandWarriorToHero(m, hero.id);
             }}

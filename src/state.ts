@@ -12,7 +12,7 @@ export interface iState {
 }
 
 export const initialState: iState = {
-  selectedAddForceArmyKey: "TheKingdomOfKhazadDum",
+  selectedAddForceArmyKey: "Mordor",
   armyForces: [],
   yourArmyHeroes: [],
 };
@@ -237,4 +237,108 @@ export const deleteWarriorFromWarband = (
   );
 
   state.yourArmyHeroes[heroIndex].warband.splice(warriorIndex, 1);
+};
+
+export const increaseHeroicStat = (
+  hero: iHeroModelInArmy,
+  heroicStat: "mi" | "wi" | "fa"
+) => {
+  const heroIndex = state.yourArmyHeroes.findIndex((h) => h.id === hero.id);
+  // initialise them all
+  state.yourArmyHeroes[heroIndex].extraMi = state.yourArmyHeroes[heroIndex]
+    .extraMi
+    ? state.yourArmyHeroes[heroIndex].extraMi
+    : 0;
+  state.yourArmyHeroes[heroIndex].extraWi = state.yourArmyHeroes[heroIndex]
+    .extraWi
+    ? state.yourArmyHeroes[heroIndex].extraWi
+    : 0;
+  state.yourArmyHeroes[heroIndex].extraFa = state.yourArmyHeroes[heroIndex]
+    .extraFa
+    ? state.yourArmyHeroes[heroIndex].extraFa
+    : 0;
+
+  switch (heroicStat) {
+    case "mi":
+      state.yourArmyHeroes[heroIndex].extraMi! += 1;
+      break;
+    case "wi":
+      state.yourArmyHeroes[heroIndex].extraWi! += 1;
+      break;
+    case "fa":
+      state.yourArmyHeroes[heroIndex].extraFa! += 1;
+      break;
+  }
+
+  if (
+    state.yourArmyHeroes[heroIndex].extraMi! +
+      state.yourArmyHeroes[heroIndex].stats!.Mi! >
+    state.yourArmyHeroes[heroIndex].maxMi!
+  ) {
+    state.yourArmyHeroes[heroIndex].extraMi =
+      state.yourArmyHeroes[heroIndex].maxMi! -
+      state.yourArmyHeroes[heroIndex].stats!.Mi!;
+  }
+
+  if (
+    state.yourArmyHeroes[heroIndex].extraWi! +
+      state.yourArmyHeroes[heroIndex].stats!.Wi! >
+    state.yourArmyHeroes[heroIndex].maxWi!
+  ) {
+    state.yourArmyHeroes[heroIndex].extraWi =
+      state.yourArmyHeroes[heroIndex].maxWi! -
+      state.yourArmyHeroes[heroIndex].stats!.Wi!;
+  }
+
+  if (
+    state.yourArmyHeroes[heroIndex].extraFa! +
+      state.yourArmyHeroes[heroIndex].stats!.Fa! >
+    state.yourArmyHeroes[heroIndex].maxFa!
+  ) {
+    state.yourArmyHeroes[heroIndex].extraFa =
+      state.yourArmyHeroes[heroIndex].maxFa! -
+      state.yourArmyHeroes[heroIndex].stats!.Fa!;
+  }
+};
+
+export const decreaseHeroicStat = (
+  hero: iHeroModelInArmy,
+  heroicStat: "mi" | "wi" | "fa"
+) => {
+  const heroIndex = state.yourArmyHeroes.findIndex((h) => h.id === hero.id);
+  // initialise them all
+  state.yourArmyHeroes[heroIndex].extraMi = state.yourArmyHeroes[heroIndex]
+    .extraMi
+    ? state.yourArmyHeroes[heroIndex].extraMi
+    : 0;
+  state.yourArmyHeroes[heroIndex].extraWi = state.yourArmyHeroes[heroIndex]
+    .extraWi
+    ? state.yourArmyHeroes[heroIndex].extraWi
+    : 0;
+  state.yourArmyHeroes[heroIndex].extraFa = state.yourArmyHeroes[heroIndex]
+    .extraFa
+    ? state.yourArmyHeroes[heroIndex].extraFa
+    : 0;
+
+  switch (heroicStat) {
+    case "mi":
+      state.yourArmyHeroes[heroIndex].extraMi! -= 1;
+      break;
+    case "wi":
+      state.yourArmyHeroes[heroIndex].extraWi! -= 1;
+      break;
+    case "fa":
+      state.yourArmyHeroes[heroIndex].extraFa! -= 1;
+      break;
+  }
+
+  if (state.yourArmyHeroes[heroIndex].extraMi! < 0) {
+    state.yourArmyHeroes[heroIndex].extraMi = 0;
+  }
+  if (state.yourArmyHeroes[heroIndex].extraWi! < 0) {
+    state.yourArmyHeroes[heroIndex].extraWi = 0;
+  }
+  if (state.yourArmyHeroes[heroIndex].extraFa! < 0) {
+    state.yourArmyHeroes[heroIndex].extraFa = 0;
+  }
 };

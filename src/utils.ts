@@ -118,6 +118,11 @@ export const calculatePointsForWarband = (hero: iHeroModelInArmy) => {
     cost += (Array.isArray(w.cost) ? w.cost[0] : w.cost) || 0;
   });
 
+  // needs to account for increases in mi, wi and fa
+  cost += (hero.extraMi || 0) * 5;
+  cost += (hero.extraWi || 0) * 5;
+  cost += (hero.extraFa || 0) * 5;
+
   hero.warband.forEach((warrior) => {
     let warriorCost = Array.isArray(warrior.cost)
       ? warrior.cost[0]
@@ -209,6 +214,19 @@ export const getModelActiveData = (
       }
     });
   }
+
+  // console.log("baseModel", JSON.stringify(baseModel, null, 2));
+
+  // // extra heroic stats
+  // if (model.extraMi != null) {
+  //   baseModel.stats!.Mi = (baseModel.stats!.Mi || 0) + model.extraMi;
+  // }
+  // if (model.extraWi != null) {
+  //   baseModel.stats!.Wi = (baseModel.stats!.Wi || 0) + model.extraWi;
+  // }
+  // if (model.extraFa != null) {
+  //   baseModel.stats!.Fa = (baseModel.stats!.Fa || 0) + model.extraFa;
+  // }
 
   return baseModel;
 };

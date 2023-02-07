@@ -71,6 +71,9 @@ export interface iModel {
   maxMi?: number;
   maxWi?: number;
   maxFa?: number;
+  extraMi?: number; // the extra that you have bought
+  extraWi?: number; // the extra that you have bought
+  extraFa?: number; // the extra that you have bought
   profiles?: iModelProfile[];
   name: string;
   wargear?: iOption[]; // the models starting options
@@ -3281,6 +3284,9 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
     maxMi: 2,
     maxWi: 14,
     maxFa: 2,
+    extraMi: 0,
+    extraWi: 0,
+    extraFa: 0,
     wargear: [options.HeavyArmour, options.Sword],
     wargearOptions: [
       { ...options.ArmouredFellBeast, cost: 70 },

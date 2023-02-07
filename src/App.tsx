@@ -2,13 +2,7 @@ import React from "react";
 import { armies, ArmyKey } from "./data/armies";
 import classnames from "classnames";
 
-import {
-  eHeroLevel,
-  iHeroModelInArmy,
-  iModel,
-  iModelInArmy,
-  models,
-} from "./data/models";
+import { eHeroLevel, iHeroModelInArmy, iModel } from "./data/models";
 import * as _ from "lodash";
 import { HeroBuilder } from "./components/HeroBuilder";
 
@@ -23,6 +17,8 @@ import {
   calculatePointsForWarband,
   groupHeroes,
 } from "./utils";
+
+import { Close } from "./icons";
 
 function App() {
   const stateView = useSnapshot(State.state);
@@ -65,68 +61,90 @@ function App() {
   }, 0);
   return (
     <div className="container mx-auto text-sm">
-      <div>
-        <div className="flex flex-row space-x-4">
-          <label>
-            <span className="block text-sm">Roster Name</span>
-            <input
+      <div className="mt-4 flex flex-row space-x-4">
+        <label>
+          <span className="block text-sm">Roster Name</span>
+          <input
+            className="border border-solid border-stone-300 px-4 py-2"
+            placeholder="My Army"
+            type="input"
+          />
+        </label>
+        <label>
+          <span className="block text-sm">Max Points</span>
+          <input
+            className="border border-solid border-stone-300 px-4 py-2"
+            placeholder="0"
+            type="number"
+          />
+        </label>
+
+        <label>
+          <span className="block text-sm">Add Faction to Roster</span>
+          <div className="flex flex-row items-center space-x-4">
+            <select
+              value={stateView.selectedAddForceArmyKey}
               className="border border-solid border-stone-300 px-4 py-2"
-              placeholder="My Army"
-              type="input"
-            />
-          </label>
-          <label>
-            <span className="block text-sm">Max Points</span>
-            <input
-              className="border border-solid border-stone-300 px-4 py-2"
-              placeholder="0"
-              type="number"
-            />
-          </label>
-        </div>
+              onChange={(e) => {
+                State.state.selectedAddForceArmyKey = e.currentTarget
+                  .value as ArmyKey;
+              }}
+            >
+              {Object.keys(armies).map((ak) => {
+                return (
+                  <option key={ak} value={ak}>
+                    {armies[ak as ArmyKey].name}
+                  </option>
+                );
+              })}
+            </select>
+            <button
+              disabled={stateView.armyForces.includes(
+                stateView.selectedAddForceArmyKey
+              )}
+              className="bg-stone-200 px-4 py-2 text-center disabled:cursor-not-allowed disabled:text-stone-500"
+              onClick={() => {
+                State.state.armyForces = [
+                  ...stateView.armyForces,
+                  stateView.selectedAddForceArmyKey,
+                ];
+              }}
+            >
+              Add "{armies[stateView.selectedAddForceArmyKey].name}" To Roster
+            </button>
+          </div>
+        </label>
       </div>
 
-      <p className="text-sm">Forces in Roster</p>
+      <hr className="my-4" />
+
+      <p className="text-sm">Factions in Roster</p>
 
       {stateView.armyForces.length <= 0 && (
-        <p className="italic text-stone-400">No forces on this roster</p>
+        <p className="italic text-stone-400">No factions on this roster</p>
       )}
 
-      {stateView.armyForces.length >= 1 &&
-        stateView.armyForces.map((af) => <p key={af}>{af}</p>)}
-
-      <div className="flex flex-row items-center space-x-4">
-        <select
-          value={stateView.selectedAddForceArmyKey}
-          className="border border-solid border-stone-300 px-4 py-2"
-          onChange={(e) => {
-            State.state.selectedAddForceArmyKey = e.currentTarget
-              .value as ArmyKey;
-          }}
-        >
-          {Object.keys(armies).map((ak) => {
-            return (
-              <option key={ak} value={ak}>
-                {armies[ak as ArmyKey].name}
-              </option>
-            );
-          })}
-        </select>
-        <button
-          disabled={stateView.armyForces.includes(
-            stateView.selectedAddForceArmyKey
-          )}
-          className="bg-stone-200 px-4 py-2 text-center disabled:cursor-not-allowed disabled:text-stone-500"
-          onClick={() => {
-            State.state.armyForces = [
-              ...stateView.armyForces,
-              stateView.selectedAddForceArmyKey,
-            ];
-          }}
-        >
-          Add "{armies[stateView.selectedAddForceArmyKey].name}" To Roster
-        </button>
+      {/* the factions that are in the roster atm */}
+      <div className="flex flex-row space-x-4">
+        {stateView.armyForces.length >= 1 &&
+          stateView.armyForces.map((af) => (
+            <button
+              className="hover:shad block bg-stone-200 px-4 py-2 text-sm hover:scale-105 hover:bg-stone-300 active:scale-95"
+              key={af}
+              onClick={() => {
+                State.state.armyForces = stateView.armyForces.filter(
+                  (a) => a !== af
+                );
+              }}
+            >
+              <span className="flex flex-row items-center space-x-4">
+                <span>{af}</span> <Close />
+              </span>
+            </button>
+          ))}
       </div>
+
+      <hr className="my-4" />
 
       <div className="flex flex-row">
         <div className="w-1/3 space-y-4">
@@ -148,7 +166,7 @@ function App() {
                   </div>
                   {group.heroes.length <= 0 && (
                     <p className="italic text-stone-500">
-                      No heroes of this tier
+                      No heroes of this tier in this roster
                     </p>
                   )}
                 </div>

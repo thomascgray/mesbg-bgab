@@ -8,10 +8,11 @@ import { HeroAttributeRenderer } from "./HeroAttributeRenderer";
 import React from "react";
 import _ from "lodash";
 import classnames from "classnames";
-
+import { PlusCircle, ChevronUp, ChevronDown } from "../icons";
 export interface iProfileRendererProps {
   model: iHeroModelInArmy | iModelInArmy;
 }
+import * as State from "../state";
 
 export const ProfileRenderer = (props: iProfileRendererProps) => {
   const { model } = props;
@@ -81,49 +82,126 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
                 <thead>
                   <tr>
                     <th className="">M</th>
+                    {activeModelData.allowPurchaseMi && <th></th>}
                     <th className="">W</th>
+                    {activeModelData.allowPurchaseWi && <th></th>}
                     <th className="">F</th>
+                    {activeModelData.allowPurchaseFa && <th></th>}
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="">
+                    <td className="px-3">
+                      <div className="flex flex-row">
+                        <HeroAttributeRenderer
+                          value={
+                            activeModelData.stats!.Mi +
+                            (activeModelData.extraMi || 0)
+                          }
+                        />
+                      </div>
+                    </td>
+                    {activeModelData.allowPurchaseMi && (
+                      <td className="">
+                        <div className="flex flex-col">
+                          <button
+                            onClick={() =>
+                              State.increaseHeroicStat(
+                                model as iHeroModelInArmy,
+                                "mi"
+                              )
+                            }
+                            className="bg-red-200"
+                          >
+                            <ChevronUp />
+                          </button>
+                          <button
+                            onClick={() =>
+                              State.decreaseHeroicStat(
+                                model as iHeroModelInArmy,
+                                "mi"
+                              )
+                            }
+                            className="bg-red-200"
+                          >
+                            <ChevronDown />
+                          </button>
+                        </div>
+                      </td>
+                    )}
+                    <td className="px-3">
                       <HeroAttributeRenderer
-                        value={activeModelData.stats!.Mi}
+                        value={
+                          activeModelData.stats!.Wi +
+                          (activeModelData.extraWi || 0)
+                        }
                       />
                     </td>
-                    <td className="">
+                    {activeModelData.allowPurchaseMi && (
+                      <td className="">
+                        <div className="flex flex-col">
+                          <button
+                            onClick={() =>
+                              State.increaseHeroicStat(
+                                model as iHeroModelInArmy,
+                                "wi"
+                              )
+                            }
+                            className="bg-red-200"
+                          >
+                            <ChevronUp />
+                          </button>
+                          <button
+                            onClick={() =>
+                              State.decreaseHeroicStat(
+                                model as iHeroModelInArmy,
+                                "wi"
+                              )
+                            }
+                            className="bg-red-200"
+                          >
+                            <ChevronDown />
+                          </button>
+                        </div>
+                      </td>
+                    )}
+                    <td className="px-3">
                       <HeroAttributeRenderer
-                        value={activeModelData.stats!.Wi}
+                        value={
+                          activeModelData.stats!.Fa +
+                          (activeModelData.extraFa || 0)
+                        }
                       />
                     </td>
-                    <td className="">
-                      <HeroAttributeRenderer
-                        value={activeModelData.stats!.Fa}
-                      />
-                    </td>
+                    {activeModelData.allowPurchaseMi && (
+                      <td className="">
+                        <div className="flex flex-col">
+                          <button
+                            onClick={() =>
+                              State.increaseHeroicStat(
+                                model as iHeroModelInArmy,
+                                "fa"
+                              )
+                            }
+                            className="bg-red-200"
+                          >
+                            <ChevronUp />
+                          </button>
+                          <button
+                            onClick={() =>
+                              State.decreaseHeroicStat(
+                                model as iHeroModelInArmy,
+                                "fa"
+                              )
+                            }
+                            className="bg-red-200"
+                          >
+                            <ChevronDown />
+                          </button>
+                        </div>
+                      </td>
+                    )}
                   </tr>
-                  {(model.allowPurchaseMi ||
-                    model.allowPurchaseWi ||
-                    model.allowPurchaseFa) && (
-                    <tr>
-                      {model.allowPurchaseMi && (
-                        <td>
-                          <button>+</button>
-                        </td>
-                      )}
-                      {model.allowPurchaseWi && (
-                        <td>
-                          <button>+</button>
-                        </td>
-                      )}
-                      {model.allowPurchaseFa && (
-                        <td>
-                          <button>+</button>
-                        </td>
-                      )}
-                    </tr>
-                  )}
                 </tbody>
               </table>
             )}

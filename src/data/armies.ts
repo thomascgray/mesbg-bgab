@@ -269,7 +269,6 @@ export const armies = {
       },
       models.TheKnightOfUmbar,
       models.TheBetrayer,
-      models.TheBetrayer,
       {
         ...models.TheDwimmerlaik,
         heroLevel: eHeroLevel.Valour,
