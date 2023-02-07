@@ -33,14 +33,14 @@ export interface iModelProfile {
   // - this profile counts as this many models for determining total model count
   //   in armny, etc.
   // - effectiveQuantity "overwrites" any other calculation.
-  //   e.g if effectiveQuantity is set against the top level of a model that also has profiles, 
+  //   e.g if effectiveQuantity is set against the top level of a model that also has profiles,
   //   DONT count up the profiles - just use the effectiveQuantity
   effectiveQuantity?: number;
 
   // - some models have several bows per model but only count as 1 bow
   //   e.g warg marauders have 2 bows but it only counts as 1
   // - effectiveBowQuantity "overwrites" any other calculation, same as above
-  effectiveBowQuantity?: number; 
+  effectiveBowQuantity?: number;
   wargear?: iOption[];
 }
 
@@ -50,10 +50,10 @@ export interface iModel {
   cost: number;
 
   // same as above
-  effectiveQuantity?: number; 
+  effectiveQuantity?: number;
 
   // same as above
-  effectiveBowQuantity?: number; 
+  effectiveBowQuantity?: number;
   stats?: {
     Mv: number;
     F1: number;
@@ -4242,7 +4242,7 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
     heroLevel: eHeroLevel.Fortitude,
     name: "GreatBeastOfGorgoroth",
     cost: 150,
-    effectiveQuantity: 1,
+    effectiveQuantity: 11,
     disableWarbandAdding: true,
     profiles: [
       {

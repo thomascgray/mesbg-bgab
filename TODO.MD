@@ -69,7 +69,9 @@
 **Things I Know Are Missing (For Now!):**
 
 - siege engines
-- great beast of gorgoroth
+  - An army, or allied contingent, may only include one Siege
+    Engine for each Hero with a Heroic Tier of Hero of
+    Fortitude or above.
 
 # NOTES
 
