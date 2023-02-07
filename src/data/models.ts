@@ -29,8 +29,18 @@ export interface iModelProfile {
     Wi?: number;
     Fa?: number;
   };
+
+  // - this profile counts as this many models for determining total model count
+  //   in armny, etc.
+  // - effectiveQuantity "overwrites" any other calculation.
+  //   e.g if effectiveQuantity is set against the top level of a model that also has profiles, 
+  //   DONT count up the profiles - just use the effectiveQuantity
   effectiveQuantity?: number;
-  effectiveBowQuantity?: number; // warg marauders have 2 bows but it only counts as 1
+
+  // - some models have several bows per model but only count as 1 bow
+  //   e.g warg marauders have 2 bows but it only counts as 1
+  // - effectiveBowQuantity "overwrites" any other calculation, same as above
+  effectiveBowQuantity?: number; 
   wargear?: iOption[];
 }
 
@@ -38,8 +48,12 @@ export interface iModel {
   heroLevel?: eHeroLevel;
   key: string;
   cost: number;
-  effectiveQuantity?: number; // sometimes a Model actually consists of multiple real-world "models" e.g dwarf vault teams
-  effectiveBowQuantity?: number; // warg marauders have 2 bows but it only counts as 1
+
+  // same as above
+  effectiveQuantity?: number; 
+
+  // same as above
+  effectiveBowQuantity?: number; 
   stats?: {
     Mv: number;
     F1: number;
@@ -78,6 +92,9 @@ export interface iModel {
   // at an ARMY level. This is useful for when having a hero in an army allows
   // other random heroes e.g Balin may field Gimli (from the Fellowship)
   armyMayField?: iModel[];
+
+  // some heroes aren't allowed to add more warband followers
+  disableWarbandAdding?: boolean;
 }
 
 export interface ISiegeEngine {
@@ -3098,10 +3115,6 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
         wargear: [options.DwarfArmour, options.FoeSpear],
       },
     ],
-    // @ts-ignore defined in profiles
-    stats: {},
-    wargear: [],
-    wargearOptions: [],
   },
 
   MurinAndDrar: {
@@ -4225,6 +4238,85 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
     ],
   },
 
+  GreatBeastOfGorgoroth: {
+    heroLevel: eHeroLevel.Fortitude,
+    name: "GreatBeastOfGorgoroth",
+    cost: 150,
+    effectiveQuantity: 1,
+    disableWarbandAdding: true,
+    profiles: [
+      {
+        key: "GreatBeastOfGorgorothOrcCommander",
+        name: "OrcCommander",
+        effectiveQuantity: 1,
+        stats: {
+          Mv: 6,
+          F1: 4,
+          F2: 5,
+          S: 4,
+          D: 5,
+          A: 2,
+          W: 2,
+          C: 4,
+          Mi: 2,
+          Wi: 1,
+          Fa: 1,
+        },
+        wargear: [options.Armour, options.Spear],
+      },
+      {
+        key: "GreatBeastOfGorgorothOrcWarrior",
+        name: "OrcWarrior",
+        effectiveQuantity: 9,
+        stats: {
+          Mv: 6,
+          F1: 3,
+          F2: 5,
+          S: 3,
+          D: 4,
+          A: 1,
+          W: 1,
+          C: 2,
+        },
+        wargear: [options.Armour, optionChoice.OrcBow],
+      },
+      {
+        key: "GreatBeastOfGorgorothGreatBeast",
+        name: "GreatBeast",
+        effectiveQuantity: 1,
+
+        stats: {
+          Mv: 8,
+          F1: 4,
+          F2: 4,
+          S: 6,
+          D: 7,
+          A: 3,
+          W: 5,
+          C: 2,
+        },
+        wargear: [options.Armour, options.Spear],
+      },
+      {
+        key: "GreatBeastOfGorgorothHowdah",
+        name: "Howdah",
+        effectiveQuantity: 0,
+
+        stats: {
+          Mv: 0,
+          F1: 0,
+          F2: 0,
+          S: 0,
+          D: 8,
+          A: 0,
+          W: 4,
+          C: 0,
+        },
+        wargear: [options.Armour, options.Spear],
+      },
+    ],
+  },
+
   MorgulStalker: {
     name: "MorgulStalker",
     cost: 10,
@@ -4691,7 +4783,7 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
     name: "BatSwarm",
     cost: 35,
     stats: {
-      Mv: 5,
+      Mv: 3,
       F1: 1,
       F2: 5,
       S: 3,
@@ -6054,6 +6146,57 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
       { ...options.Whip, cost: 1 },
     ],
   },
+
+  FellBeast: {
+    name: "FellBeast",
+    cost: 0,
+    stats: {
+      Mv: 3,
+      F1: 5,
+      F2: 5,
+      S: 6,
+      D: 6,
+      A: 2,
+      W: 3,
+      C: 3,
+    },
+    wargear: [optionChoice.ClawsAndTeeth],
+    wargearOptions: [],
+  },
+
+  FellWarg: {
+    name: "FellWarg",
+    cost: 8,
+    stats: {
+      Mv: 10,
+      F1: 3,
+      F2: 5,
+      S: 4,
+      D: 4,
+      A: 1,
+      W: 1,
+      C: 2,
+    },
+    wargear: [optionChoice.ClawsAndTeeth],
+    wargearOptions: [],
+  },
+
+  GiantSpider: {
+    name: "GiantSpider",
+    cost: 20,
+    stats: {
+      Mv: 10,
+      F1: 4,
+      F2: 6,
+      S: 5,
+      D: 3,
+      A: 2,
+      W: 2,
+      C: 3,
+    },
+    wargear: [optionChoice.VenemousFangs],
+    wargearOptions: [],
+  },
 };
 
 let modelsWithKeys: { [key: string]: iModel } = {};
@@ -6089,6 +6232,26 @@ modelsWithKeys.DurinKingOfKhazadDum = {
     {
       ...modelsWithKeys.KhazadGuard,
       wargearUpgrades: [{ ...optionUpgrades.Hearthguard, cost: 2 }],
+    },
+  ],
+};
+
+modelsWithKeys.DruzhagTheBeastcaller = {
+  ...modelsWithKeys.DruzhagTheBeastcaller,
+  mayField: [
+    modelsWithKeys.WildWarg,
+    modelsWithKeys.FellWarg,
+    modelsWithKeys.GiantSpider,
+    modelsWithKeys.BatSwarm,
+  ],
+};
+
+modelsWithKeys.Ashrak = {
+  ...modelsWithKeys.Ashrak,
+  mayField: [
+    {
+      ...modelsWithKeys.GiantSpider,
+      wargearUpgrades: [{ ...optionUpgrades.VenomBackSpider, cost: 2 }],
     },
   ],
 };

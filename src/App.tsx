@@ -18,7 +18,7 @@ import * as State from "./state";
 import "./index.css";
 import { AddHeroToArmy } from "./components/AddHeroToArmyButton";
 import {
-  calculateBowCountForWarband,
+  calculateBowCountForHeroAndWarband,
   calculateModelCountForWarband,
   calculatePointsForWarband,
   groupHeroes,
@@ -61,7 +61,7 @@ function App() {
   }, 0);
 
   const totalBowCount = stateView.yourArmyHeroes.reduce((pv, cv) => {
-    return pv + calculateBowCountForWarband(cv as iHeroModelInArmy);
+    return pv + calculateBowCountForHeroAndWarband(cv as iHeroModelInArmy);
   }, 0);
   return (
     <div className="container mx-auto text-sm">

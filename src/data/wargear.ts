@@ -47,6 +47,7 @@ export const options: { [key: string]: iOption } = {
   MorgulBlade: { key: "MorgulBlade", name: "MorgulBlade" },
   TwoHandedFlail: { key: "TwoHandedFlail", name: "TwoHandedFlail" },
   LargeVenemousFangs: { key: "LargeVenemousFangs", name: "LargeVenemousFangs" },
+  VenemousFangs: { key: "VenemousFangs", name: "VenemousFangs" },
   Whip: { key: "Whip", name: "Whip" },
   ArmourOfGondolin: { key: "ArmourOfGondolin", name: "ArmourOfGondolin" },
   Asfaloth: { key: "Asfaloth", name: "Asfaloth" },
@@ -364,6 +365,16 @@ export const optionUpgrades: { [key: string]: any } = {
       stats: {
         Mv: 8,
       },
+    },
+  },
+
+  VenomBackSpider: {
+    key: "VenomBackSpider",
+    name: "VenomBackSpider",
+    isUpgrade: true,
+    changes: {
+      name: "VenomBackSpider",
+      // todo gets a new special rule
     },
   },
 

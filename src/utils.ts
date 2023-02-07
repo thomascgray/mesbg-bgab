@@ -147,7 +147,7 @@ export const calculateModelCountForWarband = (
   let modelCount = 0;
 
   if (includeHero) {
-    if (hero.profiles) {
+    if (hero.effectiveQuantity == null && hero.profiles) {
       hero.profiles.forEach((p) => {
         modelCount += p.effectiveQuantity != null ? p.effectiveQuantity : 1;
       });
@@ -175,7 +175,7 @@ export const calculateModelCountForWarband = (
   return modelCount;
 };
 
-export const calculateBowCountForWarband = (hero: iHeroModelInArmy) => {
+export const calculateBowCountForHeroAndWarband = (hero: iHeroModelInArmy) => {
   let bowCount = 0;
 
   hero.warband.forEach((warrior) => {
@@ -272,6 +272,9 @@ export const hasPickableOptions = (model: iModelInArmy) => {
 };
 
 export const getMaxUnitsForHero = (model: iHeroModelInArmy) => {
+  if (model.disableWarbandAdding) {
+    return 0;
+  }
   switch (model.heroLevel) {
     case eHeroLevel.Legend:
       return 18;

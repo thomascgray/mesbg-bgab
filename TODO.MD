@@ -46,9 +46,9 @@
 - optional item SWAPS
 - optional upgrades (which can affect anything)
 
-[ ] DruzhagTheBeastcaller mayfield
+[x] DruzhagTheBeastcaller mayfield Fell Warg and Giant Spider (both in hobbit book)
 
-[ ] askrak mayfield
+[x] askrak mayfield
 
 [ ] add spells
 
