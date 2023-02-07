@@ -29,7 +29,7 @@
 
 - made allowPurchaseMi, allowPurchaseWi, allowPurchaseFa against models, use this
 
-[ ] i THINK mumakil can just be a hero and the warband is any units taht can ride on it, etc.
+[x] i THINK mumakil can just be a hero and the warband is any units taht can ride on it, etc.
 
 [ ] wargear needs a separate "summary name", as it can be useful to have 1 name in the listing, and 1 in the summary
 
@@ -40,25 +40,30 @@
 - spells
 - special rules
 
-[ ] the word "wargear" sort of just gets thrown around, but it kiiiinda should be something like "choices" or something. it actually accounts for
+[ ] ~~the word "wargear" sort of just gets thrown around, but it kiiiinda should be something like "choices" or something. it actually accounts for~~
 
 - optional item additions
 - optional item SWAPS
 - optional upgrades (which can affect anything)
 
 [ ] DruzhagTheBeastcaller mayfield
+
 [ ] askrak mayfield
 
 [ ] add spells
 
-[ ] moria goblin drum needs a profile but DOESNT count as a follower lmao, fucking rule exceptions
+[x] moria goblin drum needs a profile but DOESNT count as a follower lmao, fucking rule exceptions
 
-[ ] profile renderer only showing effective quantity and name if they're NOT a warrior, for some reason?
+[x] profile renderer only showing effective quantity and name if they're NOT a warrior, for some reason?
 
 [ ] Mauhur of isenguard upgrading scouts into marauders
+
 [ ] urukhai demolition team and uruk hai assault ballista
+
 [ ] include khandish chariot in descriptions somehow
+
 [ ] mumak beast master upgrade needs to replace profile of commander
+
 [ ] mumak of far harad needs to copy mumak of harad with beast master thing preselected always
 
 **Things I Know Are Missing (For Now!):**
