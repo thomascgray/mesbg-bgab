@@ -70,10 +70,10 @@ function App() {
             type="input"
           />
         </label>
-        <label>
-          <span className="block text-sm">Max Points</span>
+        <label className="w-32">
+          <span className="block text-sm">Points</span>
           <input
-            className="border border-solid border-stone-300 px-4 py-2"
+            className="w-full border border-solid border-stone-300 px-4 py-2"
             placeholder="0"
             type="number"
           />

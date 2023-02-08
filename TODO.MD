@@ -56,7 +56,7 @@
 
 [x] profile renderer only showing effective quantity and name if they're NOT a warrior, for some reason?
 
-[ ] Mauhur of isenguard upgrading scouts into marauders
+[x] Mauhur of isenguard upgrading scouts into marauders
 
 [ ] urukhai demolition team and uruk hai assault ballista
 
@@ -66,6 +66,7 @@
 
 [ ] mumak of far harad needs to copy mumak of harad with beast master thing preselected always
 
+[ ] saving and loading armies and army data management
 **Things I Know Are Missing (For Now!):**
 
 - siege engines
