@@ -11,7 +11,8 @@ import { ProfileRenderer } from "./ProfileRenderer";
 import { WargearOptions } from "./WargearOptions";
 import { WarriorButtons } from "./WarriorButtons";
 import { AddWarriorsToWarband } from "./AddWarriorsToWarband";
-
+import * as State from "../state";
+import { CloseCircle, Close } from "../icons";
 export interface iHeroBuilderProps {
   hero: iHeroModelInArmy;
   warriorsInRoster: iModel[];
@@ -50,8 +51,19 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
   const maxUnitsInWarband = getMaxUnitsForHero(hero);
   return (
     <div className="relative bg-stone-100 p-4">
-      <span className="absolute top-2 right-2 bg-stone-200 text-sm hover:scale-105 hover:bg-stone-300 active:scale-90">
+      <span className="absolute top-2 right-12 text-sm font-bold">
         {calculatePointsForWarband(hero)}pts
+      </span>
+
+      <span className="absolute top-2 right-2">
+        <button
+          onClick={() => {
+            State.deleteHeroFromArmy(hero);
+          }}
+          className="block h-6 w-6 rounded-full bg-red-200 p-1 text-sm hover:scale-110 hover:bg-red-300 active:scale-95"
+        >
+          <Close className="h-4 w-4" />
+        </button>
       </span>
 
       <ProfileRenderer model={hero} />

@@ -6272,4 +6272,14 @@ modelsWithKeys.BalinTheDwarfKingOfMoria = {
   ],
 };
 
+modelsWithKeys.Mauhur = {
+  ...modelsWithKeys.Mauhur,
+  mayField: [
+    {
+      ...modelsWithKeys.UrukHaiScout,
+      wargearUpgrades: [{ ...optionUpgrades.UrukHaiScoutMarauder, cost: 1 }],
+    },
+  ],
+};
+
 export const models = modelsWithKeys;

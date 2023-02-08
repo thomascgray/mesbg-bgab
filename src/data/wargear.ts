@@ -464,4 +464,16 @@ export const optionUpgrades: { [key: string]: any } = {
     name: "TuskWeapons",
     isUpgrade: true,
   },
+
+  UrukHaiScoutMarauder: {
+    key: "UrukHaiScoutMarauder",
+    name: "Upgrade to Marauder",
+    isUpgrade: true,
+    changes: {
+      name: "Marauder",
+      stats: {
+        Mv: 8,
+      },
+    },
+  },
 };

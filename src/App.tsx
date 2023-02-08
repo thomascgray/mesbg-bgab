@@ -18,7 +18,7 @@ import {
   groupHeroes,
 } from "./utils";
 
-import { Close } from "./icons";
+import { CloseCircle } from "./icons";
 
 function App() {
   const stateView = useSnapshot(State.state);
@@ -138,7 +138,7 @@ function App() {
               }}
             >
               <span className="flex flex-row items-center space-x-4">
-                <span>{af}</span> <Close />
+                <span>{af}</span> <CloseCircle />
               </span>
             </button>
           ))}
@@ -161,7 +161,7 @@ function App() {
                   <div className="space-y-2">
                     {group.heroes &&
                       group.heroes.map((hero) => {
-                        return <AddHeroToArmy key={hero.name} hero={hero} />;
+                        return <AddHeroToArmy key={hero.key} hero={hero} />;
                       })}
                   </div>
                   {group.heroes.length <= 0 && (

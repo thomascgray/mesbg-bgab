@@ -181,6 +181,10 @@ export const addHeroToArmy = (hero: iModel) => {
   ];
 };
 
+export const deleteHeroFromArmy = (hero: iModelInArmy) => {
+  state.yourArmyHeroes = state.yourArmyHeroes.filter((h) => h.id !== hero.id);
+};
+
 export const setHeroChoiceWargear = (
   choice: iOption,
   wargearChoice: iOption,
