@@ -1923,6 +1923,7 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
       options.HeavyArmour,
       options.Sword,
       options.Shield,
+      options.ThrowingSpears,
       options.Felarof,
     ],
     wargearOptions: [],
