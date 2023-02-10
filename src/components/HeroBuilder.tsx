@@ -68,54 +68,58 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
 
       <ProfileRenderer model={hero} />
       {hasPickableOptions(hero) && (
-        <details>
-          <summary className="cursor-pointer">Options</summary>
+        <details className="bg-zinc-200">
+          <summary className="cursor-pointer">
+            Wargear, Options & Upgrades
+          </summary>
           <WargearOptions model={hero} />
         </details>
       )}
 
       {maxUnitsInWarband > 0 && (
-        <fieldset className="border border-solid border-stone-300 px-3 pt-1 pb-2">
-          <legend
-            className={classnames("text-sm italic", {
+        <details className="bg-zinc-200">
+          <summary
+            className={classnames("cursor-pointer", {
               "font-bold text-red-500": unitsInWarband > maxUnitsInWarband,
             })}
           >
             Warband | {unitsInWarband} of {maxUnitsInWarband}
-          </legend>
-          {hero.warband.length <= 0 && (
-            <span className="italic text-stone-400">No warband</span>
-          )}
-          {hero.warband.length >= 1 && (
-            <div className="mb-3 space-y-3">
-              {hero.warband.map((warrior) => {
-                return (
-                  <div
-                    key={hero.id + warrior.id}
-                    className="bg-lime-300 p-1 text-sm"
-                  >
-                    <div className="flex flex-row items-center ">
-                      <ProfileRenderer model={warrior} />
-                      <WarriorButtons model={warrior} hero={hero} />
+          </summary>
+          <>
+            {hero.warband.length <= 0 && (
+              <span className="italic text-stone-400">No warband</span>
+            )}
+            {hero.warband.length >= 1 && (
+              <div className="mb-3 space-y-3">
+                {hero.warband.map((warrior) => {
+                  return (
+                    <div
+                      key={hero.id + warrior.id}
+                      className="bg-zinc-300 p-1 text-sm"
+                    >
+                      <div className="flex flex-row items-center ">
+                        <ProfileRenderer model={warrior} />
+                        <WarriorButtons model={warrior} hero={hero} />
+                      </div>
+                      {hasPickableOptions(warrior) && (
+                        <details>
+                          <summary className="cursor-pointer">Options</summary>
+                          <WargearOptions model={warrior} hero={hero} />
+                        </details>
+                      )}
                     </div>
-                    {hasPickableOptions(warrior) && (
-                      <details>
-                        <summary className="cursor-pointer">Options</summary>
-                        <WargearOptions model={warrior} hero={hero} />
-                      </details>
-                    )}
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
+            )}
+            <div className="mt-2 border border-x-0 border-b-0 border-stone-400 py-2">
+              <AddWarriorsToWarband
+                choices={allowedWarriorsInWarband}
+                hero={hero}
+              />
             </div>
-          )}
-          <div className="mt-2 border border-x-0 border-b-0 border-stone-400 py-2">
-            <AddWarriorsToWarband
-              choices={allowedWarriorsInWarband}
-              hero={hero}
-            />
-          </div>
-        </fieldset>
+          </>
+        </details>
       )}
     </div>
   );

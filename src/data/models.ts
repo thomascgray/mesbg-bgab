@@ -6279,18 +6279,32 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
     profiles: [
       {
         key: "UrukHaiAssaultBallistaSiegeEngineCrewWithSword",
-        name: "SiegeEngineCrewWithSword",
+        name: "Crew w/ Sword",
         wargear: [options.Sword],
       },
       {
         key: "UrukHaiAssaultBallistaSiegeEngineCrewWithDagger",
-        name: "SiegeEngineCrewWithDagger",
+        name: "Crew w/ Dagger",
         wargear: [options.Dagger],
       },
       {
         key: "UrukHaiAssaultBallistaSiegeEngineCrewWithPike",
-        name: "SiegeEngineCrewWithPike",
+        name: "Crew",
         wargear: [options.Pike],
+      },
+      {
+        key: "UrukHaiAssaultBallistaSiegeEngine",
+        name: "SiegeEngine",
+        stats: {
+          Mv: 0,
+          F1: 0,
+          F2: 0,
+          S: 9,
+          D: 10,
+          A: 0,
+          W: 4,
+          C: 0,
+        },
       },
     ],
     wargearOptions: [

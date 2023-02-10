@@ -12,7 +12,7 @@ export interface iState {
 }
 
 export const initialState: iState = {
-  selectedAddForceArmyKey: "Mordor",
+  selectedAddForceArmyKey: "Isengard",
   armyForces: [],
   yourArmyHeroes: [],
 };

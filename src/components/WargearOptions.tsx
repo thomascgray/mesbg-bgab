@@ -14,7 +14,7 @@ export interface iWargearOptionsProps {
 export const WargearOptions = (props: iWargearOptionsProps) => {
   const { model, hero } = props;
   return (
-    <fieldset className="border border-solid border-red-600 px-2 py-2">
+    <fieldset className="px-2 py-2">
       {/* here we need to render out all the choices */}
       {(model.wargear || [])
         .filter((w) => w.choices && w.choices.length >= 1)
