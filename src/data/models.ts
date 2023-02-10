@@ -42,6 +42,7 @@ export interface iModelProfile {
   // - effectiveBowQuantity "overwrites" any other calculation, same as above
   effectiveBowQuantity?: number;
   wargear?: iOption[];
+  wargearOptions?: iOption[]; // any options that the this PROFILE, and this profile only, can take
 }
 
 export interface iModel {
@@ -128,6 +129,7 @@ export enum eHeroLevel {
   Fortitude = 2,
   Minor = 3,
   Independent = 4,
+  Siege = 5,
 }
 
 let _models: { [key: string]: Omit<iModel, "key"> } = {
@@ -6203,6 +6205,98 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
     },
     wargear: [optionChoice.VenemousFangs],
     wargearOptions: [],
+  },
+
+  UrukHaiDemolitionTeam: {
+    name: "UrukHaiDemolitionTeam",
+    cost: 80,
+    effectiveQuantity: 3,
+    profiles: [
+      {
+        key: "UrukHaiDemolitionTeamUrukHaiWarrior",
+        name: "Uruk-Hai Warrior",
+        effectiveQuantity: 2,
+        stats: {
+          Mv: 6,
+          F1: 4,
+          F2: 4,
+          S: 4,
+          D: 5,
+          A: 1,
+          W: 1,
+          C: 3,
+        },
+        wargear: [options.Sword],
+      },
+      {
+        key: "UrukHaiDemolitionTeamUrukHaiBerserker",
+        name: "Uruk-Hai Berserker",
+        effectiveQuantity: 1,
+        stats: {
+          Mv: 6,
+          F1: 4,
+          F2: 4,
+          S: 4,
+          D: 5,
+          A: 2,
+          W: 1,
+          C: 7,
+        },
+        wargear: [options.BerserkerBlade, options.FlamingBrand],
+      },
+      {
+        key: "UrukHaiDemolitionTeamDemolitionCharge",
+        name: "DemolitionCharge",
+        effectiveQuantity: 1,
+        stats: {
+          Mv: 0,
+          F1: 0,
+          F2: 0,
+          S: 0,
+          D: 7,
+          A: 0,
+          W: 3,
+          C: 0,
+        },
+      },
+    ],
+  },
+
+  UrukHaiAssaultBallista: {
+    name: "UrukHaiAssaultBallista",
+    cost: 65,
+    heroLevel: eHeroLevel.Siege,
+    stats: {
+      Mv: 6,
+      F1: 4,
+      F2: 4,
+      S: 4,
+      D: 5,
+      A: 1,
+      W: 1,
+      C: 3,
+    },
+    profiles: [
+      {
+        key: "UrukHaiAssaultBallistaSiegeEngineCrewWithSword",
+        name: "SiegeEngineCrewWithSword",
+        wargear: [options.Sword],
+      },
+      {
+        key: "UrukHaiAssaultBallistaSiegeEngineCrewWithDagger",
+        name: "SiegeEngineCrewWithDagger",
+        wargear: [options.Dagger],
+      },
+      {
+        key: "UrukHaiAssaultBallistaSiegeEngineCrewWithPike",
+        name: "SiegeEngineCrewWithPike",
+        wargear: [options.Pike],
+      },
+    ],
+    wargearOptions: [
+      { ...optionUpgrades.SiegeVeteran, cost: 50 },
+      { ...optionUpgrades.SuperiorConstruction, cost: 15 },
+    ],
   },
 };
 

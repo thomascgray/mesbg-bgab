@@ -259,24 +259,29 @@ export const getProfileActiveData = (
 export const groupHeroes = (heroes: iModel[]) => {
   return [
     {
-      name: "Legend",
+      name: "Heroes of Legend",
       heroes: [...heroes.filter((h) => h.heroLevel === eHeroLevel.Legend)],
     },
     {
-      name: "Valour",
+      name: "Heroes of Valour",
       heroes: [...heroes.filter((h) => h.heroLevel === eHeroLevel.Valour)],
     },
     {
-      name: "Fortitude",
+      name: "Heroes of Fortitude",
       heroes: [...heroes.filter((h) => h.heroLevel === eHeroLevel.Fortitude)],
     },
     {
-      name: "Minor",
+      name: "Minor Heroes",
       heroes: [...heroes.filter((h) => h.heroLevel === eHeroLevel.Minor)],
     },
     {
-      name: "Independent",
+      name: "Independent Heroes",
       heroes: [...heroes.filter((h) => h.heroLevel === eHeroLevel.Independent)],
+    },
+
+    {
+      name: "Siege Engines",
+      heroes: [...heroes.filter((h) => h.heroLevel === eHeroLevel.Siege)],
     },
   ];
 };

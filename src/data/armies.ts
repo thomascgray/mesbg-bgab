@@ -358,6 +358,7 @@ export const armies = {
       models.DunlendingWarrior,
       models.WildManOfDunland,
       models.WargRider,
+      models.UrukHaiAssaultBallista,
     ],
   },
   TheEasterlings: {

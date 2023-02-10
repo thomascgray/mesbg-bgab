@@ -60,8 +60,8 @@ function App() {
     return pv + calculateBowCountForHeroAndWarband(cv as iHeroModelInArmy);
   }, 0);
   return (
-    <div className="container mx-auto text-sm">
-      <div className="mt-4 flex flex-row space-x-4">
+    <div className="container mx-auto py-8 text-sm">
+      <div className="flex flex-row space-x-4">
         <label>
           <span className="block text-sm">Roster Name</span>
           <input
@@ -146,18 +146,14 @@ function App() {
 
       <hr className="my-4" />
 
-      <div className="flex flex-row">
-        <div className="w-1/3 space-y-4">
+      <div className="flex flex-row space-x-3">
+        {/* heroes list */}
+        <div className="w-1/4 space-y-4">
           {allowedHeroes.length >= 1 &&
             groupedHeroes.map((group) => {
               return (
                 <div key={group.name}>
-                  {["Minor", "Independent"].includes(group.name) && (
-                    <span>{group.name} Heroes</span>
-                  )}
-                  {!(
-                    group.name === "Minor" || group.name === "Independent"
-                  ) && <span>Heroes of {group.name}</span>}
+                  <span>{group.name}</span>
                   <div className="space-y-2">
                     {group.heroes &&
                       group.heroes.map((hero) => {
@@ -174,7 +170,8 @@ function App() {
             })}
         </div>
 
-        <div className="w-2/3 space-y-2 pl-4">
+        {/* actual army */}
+        <div className="w-2/4 space-y-2">
           {stateView.yourArmyHeroes.length >= 1 && (
             <React.Fragment>
               <table className="table-fixed">
@@ -215,6 +212,15 @@ function App() {
               />
             );
           })}
+        </div>
+
+        {/* army list rendering */}
+        <div className="w-1/4 space-y-4">
+          <p className="whitespace-pre">{`
+            captain
+
+            10 soliders with bows
+            `}</p>
         </div>
       </div>
     </div>

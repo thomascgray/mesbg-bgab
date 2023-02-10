@@ -219,6 +219,7 @@ export const options: { [key: string]: iOption } = {
   SmokeBombs: { key: "SmokeBombs", name: "SmokeBombs" },
   Pavise: { key: "Pavise", name: "Pavise" },
   Knife: { key: "Knife", name: "Knife" },
+  FlamingBrand: { key: "FlamingBrand", name: "FlamingBrand" },
 };
 
 export const optionSwaps: { [key: string]: iOption } = {
@@ -374,6 +375,26 @@ export const optionUpgrades: { [key: string]: any } = {
     isUpgrade: true,
     changes: {
       name: "VenomBackSpider",
+      // todo gets a new special rule
+    },
+  },
+
+  SiegeVeteran: {
+    key: "SiegeVeteran",
+    name: "SiegeVeteran",
+    isUpgrade: true,
+    changes: {
+      name: "SiegeVeteran",
+      // todo gets a new special rule
+    },
+  },
+
+  SuperiorConstruction: {
+    key: "SuperiorConstruction",
+    name: "SuperiorConstruction",
+    isUpgrade: true,
+    changes: {
+      name: "SuperiorConstruction",
       // todo gets a new special rule
     },
   },
