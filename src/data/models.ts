@@ -6312,6 +6312,22 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
       { ...optionUpgrades.SuperiorConstruction, cost: 15 },
     ],
   },
+
+  UrukHaiAssaultBallistaCrew: {
+    name: "UrukHaiAssaultBallistaCrew",
+    cost: 65,
+    stats: {
+      Mv: 6,
+      F1: 4,
+      F2: 4,
+      S: 4,
+      D: 5,
+      A: 1,
+      W: 1,
+      C: 3,
+    },
+    wargear: [options.HeavyArmour, options.Sword],
+  },
 };
 
 let modelsWithKeys: { [key: string]: iModel } = {};
@@ -6389,6 +6405,11 @@ modelsWithKeys.Mauhur = {
       wargearUpgrades: [{ ...optionUpgrades.UrukHaiScoutMarauder, cost: 1 }],
     },
   ],
+};
+
+modelsWithKeys.UrukHaiAssaultBallista = {
+  ...modelsWithKeys.UrukHaiAssaultBallista,
+  mayField: [modelsWithKeys.UrukHaiAssaultBallistaCrew],
 };
 
 export const models = modelsWithKeys;

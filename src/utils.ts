@@ -307,6 +307,8 @@ export const getMaxUnitsForHero = (model: iHeroModelInArmy) => {
       return 12;
     case eHeroLevel.Minor:
       return 6;
+    case eHeroLevel.Siege:
+      return 20;
     default:
       return 0;
   }
