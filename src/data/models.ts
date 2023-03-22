@@ -4,6 +4,7 @@ import {
   optionSwaps,
   optionChoice,
   optionUpgrades,
+  iOptionWithQuantity,
 } from "./wargear";
 
 // if a model has "profiles" it means that the model
@@ -85,6 +86,8 @@ export interface iModel {
   allowPurchaseMi?: boolean; // can this hero purchase increases to its Mi, Wi and Fa?
   allowPurchaseWi?: boolean; // can this hero purchase increases to its Mi, Wi and Fa?
   allowPurchaseFa?: boolean; // can this hero purchase increases to its Mi, Wi and Fa?
+
+  wargearPoolOptions?: iOptionWithQuantity[]; // wargear options that can be taken more than once, basically
 
   // functions like army may fields, allows heroes to field armies from other lists
   // if a hero has a mayField or a unit that it is already allowed to field, the heros
@@ -6260,6 +6263,14 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
         },
       },
     ],
+    wargearPoolOptions: [
+      {
+        ...options.FlamingBrand,
+        name: "Flaming Brand for Uruk-Hai Warrior",
+        cost: 1,
+        quantity: 0,
+      },
+    ],
   },
 
   UrukHaiAssaultBallista: {
@@ -6289,7 +6300,7 @@ let _models: { [key: string]: Omit<iModel, "key"> } = {
       },
       {
         key: "UrukHaiAssaultBallistaSiegeEngineCrewWithPike",
-        name: "Crew",
+        name: "Crew w/ Pike",
         wargear: [options.Pike],
       },
       {

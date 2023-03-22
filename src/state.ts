@@ -2,7 +2,7 @@ import { proxy } from "valtio";
 import { ArmyKey } from "./data/armies";
 import { iHeroModelInArmy, iModel, iModelInArmy } from "./data/models";
 import { nanoid } from "nanoid";
-import { iOption } from "./data/wargear";
+import { iOption, iOptionWithQuantity } from "./data/wargear";
 import { getDefaultChoiceWargearChoices } from "./utils";
 
 export interface iState {
@@ -80,6 +80,43 @@ export const toggleUpgradeToHero = (
   }
 };
 
+export const toggleUpgradeToWarbandWarrior = (
+  isOn: boolean,
+  wargear: iOption,
+  warbandWarrior: iModelInArmy,
+  hero: iHeroModelInArmy
+) => {
+  const heroIndex = state.yourArmyHeroes.findIndex((h) => h.id === hero.id);
+  const warbandWarriorIndex = state.yourArmyHeroes[heroIndex].warband.findIndex(
+    (x) => x.id === warbandWarrior.id
+  );
+
+  // if this model doesn't have upgrades yet, create it
+  if (
+    state.yourArmyHeroes[heroIndex].warband[warbandWarriorIndex]
+      .wargearFromUpgrades === undefined
+  ) {
+    state.yourArmyHeroes[heroIndex].warband[
+      warbandWarriorIndex
+    ].wargearFromUpgrades = [];
+  }
+
+  // if we're adding it, add it
+  if (isOn) {
+    state.yourArmyHeroes[heroIndex].warband[
+      warbandWarriorIndex
+    ].wargearFromUpgrades!.push({
+      ...wargear,
+    });
+  } else {
+    state.yourArmyHeroes[heroIndex].warband[
+      warbandWarriorIndex
+    ].wargearFromUpgrades = state.yourArmyHeroes[heroIndex].warband[
+      warbandWarriorIndex
+    ].wargearFromUpgrades!.filter((w) => w.name !== wargear.name);
+  }
+};
+
 export const toggleWargearToWarbandWarrior = (
   isOn: boolean,
   wargear: iOption,
@@ -103,41 +140,6 @@ export const toggleWargearToWarbandWarrior = (
     ].equippedWargear = state.yourArmyHeroes[heroIndex].warband[
       warbandWarriorIndex
     ].equippedWargear.filter((w) => w.name !== wargear.name);
-  }
-};
-
-export const toggleUpgradeToWarbandWarrior = (
-  isOn: boolean,
-  wargear: iOption,
-  warbandWarrior: iModelInArmy,
-  hero: iHeroModelInArmy
-) => {
-  const heroIndex = state.yourArmyHeroes.findIndex((h) => h.id === hero.id);
-  const warbandWarriorIndex = state.yourArmyHeroes[heroIndex].warband.findIndex(
-    (x) => x.id === warbandWarrior.id
-  );
-
-  if (
-    state.yourArmyHeroes[heroIndex].warband[warbandWarriorIndex]
-      .wargearFromUpgrades === undefined
-  ) {
-    state.yourArmyHeroes[heroIndex].warband[
-      warbandWarriorIndex
-    ].wargearFromUpgrades = [];
-  }
-
-  if (isOn) {
-    state.yourArmyHeroes[heroIndex].warband[
-      warbandWarriorIndex
-    ].wargearFromUpgrades!.push({
-      ...wargear,
-    });
-  } else {
-    state.yourArmyHeroes[heroIndex].warband[
-      warbandWarriorIndex
-    ].wargearFromUpgrades = state.yourArmyHeroes[heroIndex].warband[
-      warbandWarriorIndex
-    ].wargearFromUpgrades!.filter((w) => w.name !== wargear.name);
   }
 };
 
@@ -344,5 +346,58 @@ export const decreaseHeroicStat = (
   }
   if (state.yourArmyHeroes[heroIndex].extraFa! < 0) {
     state.yourArmyHeroes[heroIndex].extraFa = 0;
+  }
+};
+
+export const increaseWargearPoolOptionOnWarband = (
+  wgpo: iOptionWithQuantity,
+  warrior: iModelInArmy,
+  hero: iHeroModelInArmy
+) => {
+  // get the hero
+  const heroIndex = state.yourArmyHeroes.findIndex((h) => h.id === hero.id);
+
+  //...then get the warband inside the hero
+  const warbandWarriorIndex = state.yourArmyHeroes[heroIndex].warband.findIndex(
+    (x) => x.id === warrior.id
+  );
+
+  // ... THEN get the wargear pool option inside the warband
+  const wargearPoolOptionIndex = (
+    state.yourArmyHeroes[heroIndex].warband[warbandWarriorIndex]
+      .wargearPoolOptions || []
+  ).findIndex((x) => x.key === wgpo.key);
+
+  state.yourArmyHeroes[heroIndex].warband[
+    warbandWarriorIndex
+  ].wargearPoolOptions![wargearPoolOptionIndex].quantity! += 1;
+};
+
+// does basically the same as the above, but decreases the quantity instead
+export const decreaseWargearPoolOptionOnWarband = (
+  wgpo: iOptionWithQuantity,
+  warrior: iModelInArmy,
+  hero: iHeroModelInArmy
+) => {
+  const heroIndex = state.yourArmyHeroes.findIndex((h) => h.id === hero.id);
+  const warbandWarriorIndex = state.yourArmyHeroes[heroIndex].warband.findIndex(
+    (x) => x.id === warrior.id
+  );
+  const wargearPoolOptionIndex = (
+    state.yourArmyHeroes[heroIndex].warband[warbandWarriorIndex]
+      .wargearPoolOptions || []
+  ).findIndex((x) => x.key === wgpo.key);
+
+  state.yourArmyHeroes[heroIndex].warband[
+    warbandWarriorIndex
+  ].wargearPoolOptions![wargearPoolOptionIndex].quantity! -= 1;
+
+  if (
+    state.yourArmyHeroes[heroIndex].warband[warbandWarriorIndex]
+      .wargearPoolOptions![wargearPoolOptionIndex].quantity! < 0
+  ) {
+    state.yourArmyHeroes[heroIndex].warband[
+      warbandWarriorIndex
+    ].wargearPoolOptions![wargearPoolOptionIndex].quantity = 0;
   }
 };

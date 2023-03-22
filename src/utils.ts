@@ -215,19 +215,6 @@ export const getModelActiveData = (
     });
   }
 
-  // console.log("baseModel", JSON.stringify(baseModel, null, 2));
-
-  // // extra heroic stats
-  // if (model.extraMi != null) {
-  //   baseModel.stats!.Mi = (baseModel.stats!.Mi || 0) + model.extraMi;
-  // }
-  // if (model.extraWi != null) {
-  //   baseModel.stats!.Wi = (baseModel.stats!.Wi || 0) + model.extraWi;
-  // }
-  // if (model.extraFa != null) {
-  //   baseModel.stats!.Fa = (baseModel.stats!.Fa || 0) + model.extraFa;
-  // }
-
   return baseModel;
 };
 
@@ -235,25 +222,38 @@ export const getProfileActiveData = (
   profile: iModelProfile,
   model: iHeroModelInArmy | iModelInArmy
 ): iHeroModelInArmy | iModelInArmy => {
-  let baseModel = getModelActiveData(model);
+  let effectiveModel = getModelActiveData(model);
 
   if (profile.stats) {
-    baseModel.stats = {
-      ...baseModel.stats,
+    effectiveModel.stats = {
+      ...effectiveModel.stats,
       ...profile.stats,
     };
   }
   if (profile.effectiveQuantity != null) {
-    baseModel.effectiveQuantity = profile.effectiveQuantity;
+    effectiveModel.effectiveQuantity = profile.effectiveQuantity;
   }
   if (profile.name) {
-    baseModel.name = profile.name;
+    effectiveModel.name = profile.name;
   }
   if (profile.wargear) {
-    baseModel.wargear = profile.wargear;
+    effectiveModel.wargear = profile.wargear;
   }
 
-  return baseModel;
+  console.log(
+    "profile.wargearOptions",
+    JSON.stringify(profile.wargearOptions, null, 2)
+  );
+  if (profile.wargearOptions) {
+    effectiveModel.wargearOptions = profile.wargearOptions;
+  } else {
+    //otherwise, the effectivelModel has gotten its wargear options from the model
+    // in this specific case, it SHOULDNT - profiles should ONLY have wargear options if those wargear
+    // options are very specifically set against the __profile__ and not the model
+    effectiveModel.wargearOptions = undefined;
+  }
+
+  return effectiveModel;
 };
 
 export const groupHeroes = (heroes: iModel[]) => {
@@ -290,7 +290,8 @@ export const hasPickableOptions = (model: iModelInArmy) => {
   return (
     (model.wargearOptions && model.wargearOptions.length >= 1) ||
     (model.wargearFromChoices && model.wargearFromChoices.length >= 1) ||
-    (model.wargearUpgrades && model.wargearUpgrades.length >= 1)
+    (model.wargearUpgrades && model.wargearUpgrades.length >= 1) ||
+    (model.wargearPoolOptions && model.wargearPoolOptions.length >= 1)
   );
 };
 

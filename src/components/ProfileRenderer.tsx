@@ -11,11 +11,14 @@ import classnames from "classnames";
 import { PlusCircle, ChevronUp, ChevronDown } from "../icons";
 export interface iProfileRendererProps {
   model: iHeroModelInArmy | iModelInArmy;
+  hero?: iHeroModelInArmy;
 }
 import * as State from "../state";
+import { WargearOptions } from "./WargearOptions";
 
 interface iSingleProfileProps {
   model: iHeroModelInArmy | iModelInArmy;
+  hero?: iHeroModelInArmy;
   activeModelData: iModelInArmy;
 }
 
@@ -169,7 +172,7 @@ export const SingleProfile = (props: iSingleProfileProps) => {
 };
 
 export const ProfileRenderer = (props: iProfileRendererProps) => {
-  const { model } = props;
+  const { model, hero } = props;
   const activeWargearNames = getActiveWargear(model, {
     excludeDefault: true,
   }).map((w) => w.name);
@@ -210,6 +213,7 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
       {model.profiles &&
         model.profiles.map((profile) => {
           const profileData = getProfileActiveData(profile, model);
+
           return (
             <React.Fragment key={profile.key}>
               <span>{profileData.name}</span>
@@ -218,6 +222,21 @@ export const ProfileRenderer = (props: iProfileRendererProps) => {
                   <span> * {profile.effectiveQuantity}</span>
                 )}
               <SingleProfile model={model} activeModelData={profileData} />
+
+              {/* todo finish this */}
+              {profileData.wargearOptions && (
+                <details className="ml-2 bg-red-200">
+                  <summary
+                    className="cursor-pointer"
+                    title={`"Profile Options" only apply to this specific profile (${profileData.name}), not the whole warband`}
+                  >
+                    Profile Options
+                  </summary>
+                  {profileData.wargearOptions && (
+                    <WargearOptions model={profileData} hero={hero} />
+                  )}
+                </details>
+              )}
             </React.Fragment>
           );
         })}

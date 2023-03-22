@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { armies, ArmyKey } from "./data/armies";
 import classnames from "classnames";
 
@@ -59,10 +59,15 @@ function App() {
   const totalBowCount = stateView.yourArmyHeroes.reduce((pv, cv) => {
     return pv + calculateBowCountForHeroAndWarband(cv as iHeroModelInArmy);
   }, 0);
+
+  // TODO finish this
+  // need to check its set, json parse it, blah blah
+  const rosterName = localStorage.getItem("MESBG_BGAB_rosters");
+
   return (
     <div className="container mx-auto py-8 text-sm">
       <div className="flex flex-row space-x-4">
-        <label>
+        {/* <label>
           <span className="block text-sm">Roster Name</span>
           <input
             className="border border-solid border-stone-300 px-4 py-2"
@@ -77,7 +82,7 @@ function App() {
             placeholder="0"
             type="number"
           />
-        </label>
+        </label> */}
 
         <label>
           <span className="block text-sm">Add Faction to Roster</span>
@@ -102,7 +107,7 @@ function App() {
               disabled={stateView.armyForces.includes(
                 stateView.selectedAddForceArmyKey
               )}
-              className="bg-stone-200 px-4 py-2 text-center disabled:cursor-not-allowed disabled:text-stone-500"
+              className="bg-stone-200 px-4 py-2 text-center hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:text-stone-500"
               onClick={() => {
                 State.state.armyForces = [
                   ...stateView.armyForces,
@@ -114,6 +119,35 @@ function App() {
             </button>
           </div>
         </label>
+
+        {/* saving and loading armies */}
+        <div className="border-l border-solid border-gray-400 pl-4">
+          <span className="block text-sm">Save Controls</span>
+
+          <div className="flex flex-row space-x-5">
+            <button
+              className="bg-stone-200 px-4 py-2 text-center hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:text-stone-500"
+              onClick={() => {
+                const rosterName = window.prompt(
+                  "Enter roster name\n(This is the name you'll referece this roster by in future)"
+                );
+
+                window.localStorage.setItem(
+                  `roster_${rosterName}`,
+                  JSON.stringify(stateView.yourArmyHeroes)
+                );
+              }}
+            >
+              Save Roster
+            </button>
+
+            <select className="border border-solid border-stone-300 px-4 py-2">
+              <option value="">xxx</option>
+              <option value="">xxx</option>
+              <option value="">xxx</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       <hr className="my-4" />
@@ -129,7 +163,7 @@ function App() {
         {stateView.armyForces.length >= 1 &&
           stateView.armyForces.map((af) => (
             <button
-              className="hover:shad block bg-stone-200 px-4 py-2 text-sm hover:scale-105 hover:bg-stone-300 active:scale-95"
+              className="block bg-stone-200 px-4 py-2 text-sm hover:scale-105 hover:bg-stone-300 active:scale-95"
               key={af}
               onClick={() => {
                 State.state.armyForces = stateView.armyForces.filter(

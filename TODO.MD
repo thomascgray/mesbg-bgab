@@ -69,6 +69,8 @@ some way to represent buying a siege engine captain (and having him be a hero? a
 
 [ ] profiles having their own wargear options
 
+- e.g uruk hai demolition team - each of the warriors can take a flaming brand, and this needs to be handled separately for the purpose of building TTS data
+
 [ ] urukhai demolition team and uruk hai assault ballista
 
 [ ] include khandish chariot in descriptions somehow
@@ -78,6 +80,12 @@ some way to represent buying a siege engine captain (and having him be a hero? a
 [ ] mumak of far harad needs to copy mumak of harad with beast master thing preselected always
 
 [ ] saving and loading armies and army data management
+
+x] siege engines need a thing where the ONLY warband they list out is on their profiles or something
+
+[] siege engines need a thing where they can select the captain upgrade thing
+
+[] the profile specific options need to apply to JUST the profile, not the whole model
 **Things I Know Are Missing (For Now!):**
 
     - siege engines

@@ -5,12 +5,16 @@ import {
   isWargearUpgradeSelected,
 } from "../utils";
 import * as State from "../state";
+import { PlusCircle } from "../icons";
 
 export interface iWargearOptionsProps {
   model: iHeroModelInArmy | iModelInArmy;
   hero?: iHeroModelInArmy;
 }
 
+// TODO
+// basically, the model here might be a PROFILE, not actually a model. and in that case, we need to account for that
+// im thinking we need to pass a boolean of "the model is actually a profile" and then we can do some logic to figure out what to do
 export const WargearOptions = (props: iWargearOptionsProps) => {
   const { model, hero } = props;
   return (
@@ -117,6 +121,66 @@ export const WargearOptions = (props: iWargearOptionsProps) => {
               {wgo.name} - {wgo.cost}pts
             </span>
           </label>
+        );
+      })}
+      {(model.wargearPoolOptions || []).map((wgpo) => {
+        return (
+          <div
+            key={wgpo.key}
+            className="flex cursor-pointer flex-row items-center space-x-2 bg-green-400"
+          >
+            <div className="flex flex-row items-center space-x-2">
+              <span>
+                {wgpo.quantity} * {wgpo.name} - {wgpo.cost}pts
+              </span>
+              {/* increase */}
+              <button
+                onClick={() => {
+                  State.increaseWargearPoolOptionOnWarband(wgpo, model, hero!);
+                }}
+                className="block rounded-full bg-stone-300 p-1 text-sm hover:scale-105 hover:bg-stone-400 active:scale-95"
+              >
+                {/* <PlusCircle /> */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="h-4 w-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+              </button>
+
+              {/* decrease */}
+              <button
+                onClick={() => {
+                  State.decreaseWargearPoolOptionOnWarband(wgpo, model, hero!);
+                }}
+                className="block rounded-full bg-stone-300 p-1 text-sm hover:scale-105 hover:bg-stone-400 active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="h-4 w-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 12h-15"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
         );
       })}
     </fieldset>

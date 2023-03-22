@@ -12,6 +12,10 @@ export interface iOption {
   countsAsBow?: boolean; // for the purpose of calculating army bow limits, etc.
 }
 
+export interface iOptionWithQuantity extends iOption {
+  quantity?: number;
+}
+
 export const options: { [key: string]: iOption } = {
   Aiglos: { key: "Aiglos", name: "Aiglos" },
 

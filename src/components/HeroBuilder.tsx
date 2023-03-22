@@ -1,5 +1,10 @@
 import React from "react";
-import { iHeroModelInArmy, iModel, iModelInArmy } from "../data/models";
+import {
+  eHeroLevel,
+  iHeroModelInArmy,
+  iModel,
+  iModelInArmy,
+} from "../data/models";
 import {
   calculateModelCountForWarband,
   calculatePointsForWarband,
@@ -89,6 +94,8 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
             {hero.warband.length <= 0 && (
               <span className="italic text-stone-400">No warband</span>
             )}
+
+            {/* if we've got warriors in the warband, render them out */}
             {hero.warband.length >= 1 && (
               <div className="mb-3 space-y-3">
                 {hero.warband.map((warrior) => {
@@ -98,9 +105,11 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
                       className="bg-zinc-300 p-1 text-sm"
                     >
                       <div className="flex flex-row items-center ">
-                        <ProfileRenderer model={warrior} />
+                        {/* the ProfileRenderer can render out 1 to many profiles - each of which might have pickable options */}
+                        <ProfileRenderer model={warrior} hero={hero} />
                         <WarriorButtons model={warrior} hero={hero} />
                       </div>
+                      {/* these pickable options are for the warrior overall */}
                       {hasPickableOptions(warrior) && (
                         <details>
                           <summary className="cursor-pointer">Options</summary>
@@ -112,9 +121,17 @@ export const HeroBuilder = (props: iHeroBuilderProps) => {
                 })}
               </div>
             )}
+
+            {/* the widget that allows us to add new warriors to the warband */}
             <div className="mt-2 border border-x-0 border-b-0 border-stone-400 py-2">
               <AddWarriorsToWarband
-                choices={allowedWarriorsInWarband}
+                choices={
+                  // Siege Engine bullshit
+                  // basically, siege engines can ONLY add the specific stuff they've been set to field
+                  hero.heroLevel === eHeroLevel.Siege
+                    ? [...(hero.mayField || [])]
+                    : allowedWarriorsInWarband
+                }
                 hero={hero}
               />
             </div>
